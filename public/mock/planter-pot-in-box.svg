@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 1000" width="800" height="1000">
+<defs>
+  <linearGradient id="wall" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f4f1ec"/><stop offset="1" stop-color="#ebe6de"/></linearGradient>
+  <linearGradient id="desk" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#dcc9ae"/><stop offset="1" stop-color="#cdb594"/></linearGradient>
+  <linearGradient id="white" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#c9c5bd"/><stop offset=".3" stop-color="#f4f2ee"/><stop offset=".5" stop-color="#ffffff"/><stop offset=".78" stop-color="#e8e5df"/><stop offset="1" stop-color="#c3bfb6"/></linearGradient>
+  <linearGradient id="charcoal" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#2a2a2a"/><stop offset=".35" stop-color="#4b4b4b"/><stop offset=".6" stop-color="#3d3d3d"/><stop offset="1" stop-color="#242424"/></linearGradient>
+  <linearGradient id="charcoalTop" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#5a5a5a"/><stop offset="1" stop-color="#454545"/></linearGradient>
+  <linearGradient id="soil" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#4b4137"/><stop offset="1" stop-color="#6a5c4d"/></linearGradient>
+  <pattern id="layers" width="10" height="7" patternUnits="userSpaceOnUse"><rect y="5" width="10" height="2" fill="#000" opacity=".055"/></pattern>
+  <pattern id="layersBig" width="20" height="16" patternUnits="userSpaceOnUse"><rect y="11" width="20" height="5" fill="#000" opacity=".07"/><rect y="9" width="20" height="2" fill="#fff" opacity=".35"/></pattern>
+  <filter id="blur" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="16"/></filter>
+  <filter id="blurS" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="6"/></filter>
+  
+</defs>
+<rect width="800" height="1000" fill="url(#wall)"/><g transform="translate(400 840)"><polygon points="-250,-190 -200,-270 200,-270 250,-190" fill="#b99869"/><rect x="-250" y="-200" width="500" height="60" fill="#a8885c"/></g><g transform="translate(400 810) scale(0.9)">
+  <ellipse cx="0" cy="12" rx="205" ry="26" fill="#000" opacity=".28" filter="url(#blur)"/>
+  <ellipse cx="0" cy="4" rx="178" ry="22" fill="#ece9e3" stroke="#d8d4cc"/>
+  <path id="potBody" d="M-160 -330 L-120 0 Q0 28 120 0 L160 -330 Z" fill="url(#white)"/>
+  <path d="M-160 -330 L-120 0 Q0 28 120 0 L160 -330 Z" fill="url(#layers)"/>
+  <ellipse cx="0" cy="-330" rx="160" ry="30" fill="#fbfaf8" stroke="#dedad3"/>
+  <ellipse cx="0" cy="-330" rx="143" ry="23" fill="url(#soil)"/>
+  <ellipse cx="0" cy="-326" rx="143" ry="19" fill="#000" opacity=".12"/></g>
+  <g transform="translate(400 840)">
+    <rect x="-250" y="-170" width="500" height="170" fill="#cdae83"/>
+    <rect x="-250" y="-170" width="500" height="10" fill="#000" opacity=".1"/>
+    <rect x="-40" y="-100" width="80" height="36" rx="4" fill="#f4efe6" opacity=".9"/>
+  </g>
+</svg>

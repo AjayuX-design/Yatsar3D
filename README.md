@@ -1,36 +1,41 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Yatsar 3D storefront
 
-## Getting Started
+Next.js (App Router) + Tailwind v4. Shopify will be the backend later. Sample data only for now.
 
-First, run the development server:
+## Run locally
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open http://localhost:3000. Pages built so far, all on sample data:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- `/` homepage
+- `/collections/all`, `/collections/desk`, `/collections/seasonal` (empty state)
+- `/products/desk-organiser` and four other sample products
+- cart drawer (opens from the header, or after Add to cart; sample code `WELCOME10`)
+- `/preview` every token, component and state
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Not built yet: Custom prints, Delivery, FAQ and policy pages. Their links in the header and footer lead to a 404 for now.
 
-## Learn More
+## Checks
 
-To learn more about Next.js, take a look at the following resources:
+```bash
+npm run lint
+npm run check:tokens   # preview colours match app/globals.css
+npm run check:select   # variant selection, spec rows and formatting logic
+npm run build
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Where things live
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- `app/globals.css` colour, radius and type tokens (light mode only)
+- `components/ui` buttons, chips, price, stepper, accordion, info card
+- `components/enquiry` WhatsApp button and enquiry card, block and link
+- `components/layout` header, mobile menu, footer, announcement bar
+- `components/cart` cart drawer, lines, discount field. `lib/cart` holds the cart rules and a sample client cart.
+- `components/collection` sort control
+- `components/product` product card, gallery, variant selector, fulfilment box, spec table, sticky buy bar
+- `lib/types.ts` the product shape the UI uses. A Shopify mapper will fill it later.
+- `lib/sample-data.ts`, `lib/sample-products.ts` placeholder data. Replace with Shopify data later.

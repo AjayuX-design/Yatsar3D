@@ -1,0 +1,107 @@
+import type { Metadata } from "next";
+import { notFound } from "next/navigation";
+import { Suspense } from "react";
+import { SortControl } from "@/components/collection/SortControl";
+import { EnquiryCta } from "@/components/enquiry/EnquiryCta";
+import { ProductCard } from "@/components/product/ProductCard";
+import { Breadcrumb } from "@/components/ui/Breadcrumb";
+import { Button } from "@/components/ui/Button";
+import { isSortKey, sortProducts } from "@/lib/product/sort";
+import { sampleStore } from "@/lib/sample-data";
+import { sampleCollections } from "@/lib/sample-collections";
+import { sampleProducts } from "@/lib/sample-products";
+import { generalEnquiryMessage } from "@/lib/whatsapp";
+
+export function generateStaticParams() {
+  return sampleCollections.map((c) => ({ handle: c.handle }));
+}
+
+export async function generateMetadata(props: PageProps<"/collections/[handle]">): Promise<Metadata> {
+  const { handle } = await props.params;
+  const c = sampleCollections.find((x) => x.handle === handle);
+  return { title: c ? `${c.title} | Yatsar 3D` : "Collection not found", robots: { index: false, follow: false } };
+}
+
+export default function CollectionPage(props: PageProps<"/collections/[handle]">) {
+  return (
+    <main className="mx-auto w-full max-w-[1200px] px-4 pt-2 md:px-6 lg:px-8">
+      <Suspense fallback={<CollectionSkeleton />}>
+        <CollectionContent params={props.params} searchParams={props.searchParams} />
+      </Suspense>
+    </main>
+  );
+}
+
+async function CollectionContent({
+  params,
+  searchParams,
+}: {
+  params: PageProps<"/collections/[handle]">["params"];
+  searchParams: PageProps<"/collections/[handle]">["searchParams"];
+}) {
+  const [{ handle }, query] = await Promise.all([params, searchParams]);
+  const collection = sampleCollections.find((c) => c.handle === handle);
+  if (!collection) notFound();
+
+  const sort = isSortKey(query.sort) ? query.sort : "featured";
+  const products = sortProducts(
+    collection.productHandles
+      .map((h) => sampleProducts.find((p) => p.handle === h))
+      .filter((p): p is NonNullable<typeof p> => !!p),
+    sort,
+  );
+  const count = products.length;
+
+  return (
+    <>
+      <Breadcrumb items={[{ label: "Home", href: "/" }, { label: collection.title }]} />
+      <header className="mt-2 pb-6">
+        <h1 className="t-h1 text-ink">{collection.title}</h1>
+        <p className="mt-2 max-w-[560px] t-body text-graphite">{collection.description}</p>
+      </header>
+
+      {count > 0 && (
+        <div className="sticky top-14 z-20 -mx-4 flex items-center justify-between border-b border-line bg-surface/95 px-4 py-2 backdrop-blur-md md:-mx-6 md:px-6 lg:top-[72px] lg:-mx-8 lg:px-8">
+          <p className="t-small text-graphite [font-variant-numeric:tabular-nums]">
+            {count} {count === 1 ? "product" : "products"}
+          </p>
+          <SortControl current={sort} />
+        </div>
+      )}
+
+      {count === 0 ? (
+        <div className="mx-auto max-w-[480px] py-16 text-center">
+          <p className="t-h3 text-ink">Nothing here yet</p>
+          <p className="mt-2 t-small text-graphite">This collection has no products right now.</p>
+          <Button href="/collections/all" className="mt-6">
+            Shop all products
+          </Button>
+          <EnquiryCta variant="link" className="mt-2" number={sampleStore.whatsappNumber} message={generalEnquiryMessage} />
+        </div>
+      ) : (
+        <div className="mt-6 grid grid-cols-2 gap-x-3 gap-y-8 lg:grid-cols-4 lg:gap-x-6 lg:gap-y-10">
+          {products.map((p, i) => (
+            <ProductCard key={p.handle} product={p} priority={i < 2} />
+          ))}
+        </div>
+      )}
+    </>
+  );
+}
+
+function CollectionSkeleton() {
+  return (
+    <div aria-busy="true" aria-label="Loading products">
+      <div className="mt-4 h-8 w-1/2 rounded-ctl bg-mist" />
+      <div className="mt-8 grid grid-cols-2 gap-x-3 gap-y-8 lg:grid-cols-4 lg:gap-x-6">
+        {[0, 1, 2, 3].map((i) => (
+          <div key={i}>
+            <div className="aspect-[4/5] rounded-card bg-mist" />
+            <div className="mt-3 h-4 w-3/4 rounded-ctl bg-mist" />
+            <div className="mt-2 h-4 w-1/3 rounded-ctl bg-mist" />
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}

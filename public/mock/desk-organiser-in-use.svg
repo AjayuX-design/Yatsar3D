@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 1000" width="800" height="1000">
+<defs>
+  <linearGradient id="wall" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f4f1ec"/><stop offset="1" stop-color="#ebe6de"/></linearGradient>
+  <linearGradient id="desk" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#dcc9ae"/><stop offset="1" stop-color="#cdb594"/></linearGradient>
+  <linearGradient id="white" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#c9c5bd"/><stop offset=".3" stop-color="#f4f2ee"/><stop offset=".5" stop-color="#ffffff"/><stop offset=".78" stop-color="#e8e5df"/><stop offset="1" stop-color="#c3bfb6"/></linearGradient>
+  <linearGradient id="charcoal" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#2a2a2a"/><stop offset=".35" stop-color="#4b4b4b"/><stop offset=".6" stop-color="#3d3d3d"/><stop offset="1" stop-color="#242424"/></linearGradient>
+  <linearGradient id="charcoalTop" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#5a5a5a"/><stop offset="1" stop-color="#454545"/></linearGradient>
+  <linearGradient id="soil" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#4b4137"/><stop offset="1" stop-color="#6a5c4d"/></linearGradient>
+  <pattern id="layers" width="10" height="7" patternUnits="userSpaceOnUse"><rect y="5" width="10" height="2" fill="#000" opacity=".055"/></pattern>
+  <pattern id="layersBig" width="20" height="16" patternUnits="userSpaceOnUse"><rect y="11" width="20" height="5" fill="#000" opacity=".07"/><rect y="9" width="20" height="2" fill="#fff" opacity=".35"/></pattern>
+  <filter id="blur" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="16"/></filter>
+  <filter id="blurS" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="6"/></filter>
+  
+</defs>
+<rect width="800" height="1000" fill="url(#wall)"/><rect y="720" width="800" height="280" fill="url(#desk)"/><rect y="716" width="800" height="6" fill="#000" opacity=".06"/><g transform="translate(400 780) scale(1.05)">
+  <ellipse cx="0" cy="14" rx="285" ry="30" fill="#000" opacity=".3" filter="url(#blur)"/>
+  <polygon points="215,-190 255,-250 255,-60 215,0" fill="#262626"/>
+  <rect x="-215" y="-190" width="430" height="190" rx="10" fill="url(#charcoal)"/>
+  <rect x="-215" y="-190" width="430" height="190" rx="10" fill="url(#layers)"/>
+  <polygon points="-215,-190 -175,-250 255,-250 215,-190" fill="url(#charcoalTop)"/>
+  <polygon points="-185,-198 -158,-240 -62,-240 -62,-198" fill="#151515"/>
+  <polygon points="-48,-198 -48,-240 82,-240 82,-198" fill="#151515"/>
+  <polygon points="96,-198 96,-240 232,-240 205,-198" fill="#151515"/>
+  <rect x="-215" y="-196" width="430" height="6" fill="#fff" opacity=".08"/>
+  <g>
+    <rect x="-150" y="-330" width="12" height="130" rx="6" fill="#c8501f" transform="rotate(-8 -144 -200)"/>
+    <rect x="-118" y="-345" width="12" height="150" rx="6" fill="#e8e4dc" transform="rotate(-2 -112 -200)"/>
+    <rect x="130" y="-300" width="14" height="100" rx="7" fill="#2f6b4f" transform="rotate(6 137 -200)"/>
+  </g></g>
+</svg>

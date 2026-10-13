@@ -1,0 +1,104 @@
+import type { Metadata } from "next";
+import Link from "next/link";
+import { FactStrip } from "@/components/content/FactStrip";
+import { NumberedSteps } from "@/components/content/NumberedSteps";
+import { WhatsAppButton } from "@/components/enquiry/WhatsAppButton";
+import { ProductCard } from "@/components/product/ProductCard";
+import { Button } from "@/components/ui/Button";
+import { ImagePlaceholder } from "@/components/ui/ImagePlaceholder";
+import { InfoCard } from "@/components/ui/InfoCard";
+import { sampleStore } from "@/lib/sample-data";
+import { sampleProducts } from "@/lib/sample-products";
+import { generalEnquiryMessage } from "@/lib/whatsapp";
+
+export const metadata: Metadata = { title: "Yatsar 3D", robots: { index: false, follow: false } };
+
+// Placeholder wording. The headline and steps are still open decisions.
+const steps = [
+  { title: "Message us", text: "Tell us on WhatsApp what you want printed." },
+  { title: "Share the details", text: "Send a photo or sketch, a rough size and your city." },
+  { title: "Get a quote", text: "We reply with a price and timing before you pay." },
+  { title: "Approve and pay", text: "Once you approve the quote, we start printing." },
+];
+
+const section = "mt-16 lg:mt-24";
+
+/**
+ * Required sections only: hero, fact strip, featured products, delivery area,
+ * custom-print steps. Optional sections (collection tiles, materials, maker
+ * note, FAQ preview) are left out until their real content exists.
+ */
+export default function HomePage() {
+  const featured = sampleProducts.slice(0, 4);
+  const heroAlt = sampleProducts[1].images[0].alt;
+
+  return (
+    <main className="mx-auto w-full max-w-[1200px] px-4 pt-4 md:px-6 lg:px-8 lg:pt-8">
+      {/* Hero */}
+      <section className="lg:grid lg:grid-cols-12 lg:items-center lg:gap-16">
+        <div className="relative aspect-square overflow-hidden rounded-card bg-mist lg:order-2 lg:col-span-7 lg:aspect-[6/5]">
+          <ImagePlaceholder src="/mock/hero-planter.svg" alt={heroAlt} label="Photo coming soon" priority sizes="(min-width: 1024px) 700px, 100vw" />
+        </div>
+        <div className="mt-8 lg:order-1 lg:col-span-5 lg:mt-0 lg:pr-4">
+          <h1 className="t-display text-balance text-ink">Made layer by layer.</h1>
+          <p className="mt-4 max-w-[420px] t-body-l text-graphite">
+            3D-printed products for your desk and home, with the size, material and timing shown on every page.
+          </p>
+          <div className="mt-8 flex flex-col items-start gap-2 sm:flex-row sm:items-center sm:gap-6">
+            <Button href="/collections/all" block className="sm:w-auto">
+              Shop all products
+            </Button>
+            <Button href="/custom-print" variant="text" className="-ml-1 decoration-kiln-deep/40! sm:ml-0">
+              Ask for a custom print
+            </Button>
+          </div>
+        </div>
+      </section>
+
+      <section className="mt-8 lg:mt-12" aria-label="What to expect">
+        <FactStrip />
+      </section>
+
+      {/* Featured */}
+      <section className={section} aria-labelledby="featured">
+        <div className="flex items-baseline justify-between gap-4">
+          <h2 id="featured" className="t-h2 text-ink">
+            Featured
+          </h2>
+          <Link href="/collections/all" className="inline-flex min-h-11 items-center t-label text-kiln-deep underline underline-offset-[3px] hover:no-underline">
+            View all
+          </Link>
+        </div>
+        <div className="mt-6 grid grid-cols-2 gap-x-3 gap-y-8 lg:grid-cols-4 lg:gap-x-6 lg:gap-y-10">
+          {featured.map((p, i) => (
+            <ProductCard key={p.handle} product={p} priority={i < 2} />
+          ))}
+        </div>
+      </section>
+
+      {/* Delivery area */}
+      <section className={section} aria-label="Delivery area">
+        <div className="mx-auto max-w-[720px]">
+          <InfoCard variant="slate" title="Delivery area">
+            {sampleStore.deliveryAreaText} Most orders arrive within a few days of dispatch.{" "}
+            <Link href="/delivery" className="font-medium text-ink underline underline-offset-[3px]">
+              How delivery works
+            </Link>
+          </InfoCard>
+        </div>
+      </section>
+
+      {/* Custom printing */}
+      <section className={section} aria-labelledby="custom">
+        <h2 id="custom" className="t-h2 text-ink">
+          How custom printing works
+        </h2>
+        <NumberedSteps steps={steps} className="mt-8" />
+        <div className="mt-8 max-w-[420px]">
+          <WhatsAppButton number={sampleStore.whatsappNumber} message={generalEnquiryMessage} />
+          <p className="mt-3 t-small text-graphite">No payment before you approve the quote.</p>
+        </div>
+      </section>
+    </main>
+  );
+}

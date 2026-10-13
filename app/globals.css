@@ -1,26 +1,217 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/*
+  Yatsar 3D design tokens (v1.0, light mode only).
+  Source: yatsar3d-final-spec.md, section B and C.
+  Colours and radii are closed sets: Tailwind defaults are cleared so only
+  these tokens can be used. Spacing uses Tailwind's 4px scale (1 = 4px).
+  Allowed steps: 1, 2, 3, 4, 6, 8, 12, 16, 24 (4, 8, 12, 16, 24, 32, 48, 64, 96 px).
+*/
+
+@theme {
+  --color-*: initial;
+  --color-transparent: transparent;
+  --color-current: currentColor;
+
+  /* White base. Separation comes from mist (light grey) and line (hairline). */
+  --color-page: #ffffff;
+  --color-surface: #ffffff;
+  --color-mist: #f4f4f3;
+  --color-line: #e5e5e3;
+  --color-ink: #171717;
+  --color-ink-hover: #000000;
+  --color-ink-pressed: #2e2e2e;
+  --color-graphite: #5b5b5b;
+  --color-kiln: #c8501f;
+  --color-kiln-deep: #a33e14;
+  --color-moss: #2f6b4f;
+  --color-moss-tint: #e4eee8;
+  --color-amber-text: #8a5a12;
+  --color-amber-dot: #b7791f;
+  --color-amber-tint: #f6ecd8;
+  --color-slate: #3b5b73;
+  --color-slate-tint: #e3eaf0;
+  --color-error: #b3261e;
+  --color-error-tint: #f8e4e2;
+
+  --radius-*: initial;
+  --radius-ctl: 8px;
+  --radius-card: 12px;
+  --radius-sheet: 16px;
+  --radius-pill: 999px;
+
+  --breakpoint-*: initial;
+  --breakpoint-sm: 40rem;
+  --breakpoint-md: 48rem;
+  --breakpoint-lg: 64rem;
+  --breakpoint-xl: 80rem;
 }
 
+/* Font variables are set by next/font in app/layout.tsx */
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-heading: var(--font-bricolage), ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@layer base {
+  html {
+    color-scheme: light;
+  }
+
+  body {
+    background: var(--color-page);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    font-size: 16px;
+    line-height: 24px;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-kiln);
+    outline-offset: 2px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    ::before,
+    ::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/*
+  Type scale (size / line height / weight). Mobile first, desktop at lg.
+  Bricolage Grotesque for headings only. Inter for everything else.
+  Prices, dimensions, weights, quantities and lead times use tabular numerals.
+*/
+
+@utility t-display {
+  letter-spacing: -0.02em;
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: 32px;
+  line-height: 36px;
+  @media (min-width: 64rem) {
+    font-size: 48px;
+    line-height: 52px;
+  }
 }
+
+@utility t-h1 {
+  letter-spacing: -0.015em;
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: 28px;
+  line-height: 32px;
+  @media (min-width: 64rem) {
+    font-size: 36px;
+    line-height: 40px;
+  }
+}
+
+@utility t-h2 {
+  letter-spacing: -0.01em;
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: 22px;
+  line-height: 28px;
+  @media (min-width: 64rem) {
+    font-size: 28px;
+    line-height: 34px;
+  }
+}
+
+@utility t-h3 {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: 18px;
+  line-height: 24px;
+  @media (min-width: 64rem) {
+    font-size: 20px;
+    line-height: 26px;
+  }
+}
+
+@utility t-body-l {
+  font-weight: 400;
+  font-size: 17px;
+  line-height: 26px;
+  @media (min-width: 64rem) {
+    font-size: 18px;
+    line-height: 28px;
+  }
+}
+
+@utility t-body {
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 24px;
+}
+
+@utility t-label {
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 20px;
+}
+
+@utility t-small {
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 20px;
+}
+
+@utility t-caption {
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 16px;
+}
+
+@utility t-price-l {
+  font-weight: 600;
+  font-size: 24px;
+  line-height: 28px;
+  font-variant-numeric: tabular-nums;
+  @media (min-width: 64rem) {
+    font-size: 28px;
+    line-height: 32px;
+  }
+}
+
+@utility t-price-s {
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 24px;
+  font-variant-numeric: tabular-nums;
+}
+
+@utility t-value {
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 24px;
+  font-variant-numeric: tabular-nums;
+}
+
+@utility t-spec {
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 20px;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Sheets: native <dialog>. Slide in 250ms, backdrop fades. */
+@keyframes sheet-up { from { transform: translateY(100%); } to { transform: none; } }
+@keyframes sheet-left { from { transform: translateX(-100%); } to { transform: none; } }
+@keyframes sheet-right { from { transform: translateX(100%); } to { transform: none; } }
+@keyframes backdrop-in { from { opacity: 0; } to { opacity: 1; } }
+
+dialog.sheet[open] { animation: 250ms ease-out both sheet-up; }
+dialog.sheet-menu[open] { animation-name: sheet-left; }
+@media (min-width: 64rem) {
+  dialog.sheet-cart[open] { animation-name: sheet-right; }
+}
+dialog.sheet[open]::backdrop { animation: 250ms ease-out both backdrop-in; }
