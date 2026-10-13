@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "eslint",
     "check:tokens": "node scripts/check-tokens.mjs",
-    "check:select": "tsx scripts/check-select.ts"
+    "check:select": "tsx scripts/check-select.ts",
+    "check:shopify": "tsx --env-file=.env.local scripts/check-shopify.ts"
   },
   "dependencies": {
     "lucide-react": "^1.56.0",

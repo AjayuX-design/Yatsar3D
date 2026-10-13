@@ -6,6 +6,7 @@ import { buildSpecRows } from "@/lib/product/spec";
 import { formatDays } from "@/lib/format/leadtime";
 import { formatDimensions } from "@/lib/format/dimensions";
 import { sampleProducts } from "@/lib/sample-products";
+import { normaliseDomain, readShopifyConfig } from "@/lib/shopify/config";
 import { sortProducts } from "@/lib/product/sort";
 import { addLine, cartTotals, checkCode, hasMixedFulfilment, lineFromProduct, lineTotals, setQuantity } from "@/lib/cart/cart";
 
@@ -72,4 +73,10 @@ if (coded.ok) {
 assert.equal(checkCode("nope", { WELCOME10: 10 }).ok, false);
 assert.equal(setQuantity(lines, potLine.id, 0).length, 1, "quantity 0 removes the line");
 
-console.log("select, spec, format, sort and cart checks passed");
+// Shopify config
+assert.equal(normaliseDomain(" https://Store.myshopify.com/ "), "store.myshopify.com");
+assert.deepEqual(readShopifyConfig({}), { ok: false, missing: ["SHOPIFY_STORE_DOMAIN", "SHOPIFY_STOREFRONT_PRIVATE_TOKEN"] });
+const cfg = readShopifyConfig({ SHOPIFY_STORE_DOMAIN: "a.myshopify.com", SHOPIFY_STOREFRONT_PRIVATE_TOKEN: "x" });
+assert.ok(cfg.ok && cfg.config.apiVersion === "2026-07");
+
+console.log("select, spec, format, sort, cart and shopify config checks passed");
