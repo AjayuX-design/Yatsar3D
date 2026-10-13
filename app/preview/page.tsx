@@ -407,7 +407,7 @@ export default function PreviewPage() {
               ["planter-pot", "Made to order, two options, price steps, one sold-out combination"],
               ["phone-stand", "Sold out, no options"],
               ["wall-mounted-headphone-and-cable-hanger-with-adjustable-arm", "Long title, ready to ship"],
-              ["bookmark-set", "No photos, no custom card, no scale image"],
+              ["bookmark-set", "No custom card, no compare-at price"],
             ].map(([handle, note]) => (
               <li key={handle}>
                 <a
@@ -436,7 +436,7 @@ export default function PreviewPage() {
               </Demo>
             ))}
             <Demo label="No photo, no compare-at">
-              <ProductCard product={sampleProducts[4]} />
+              <ProductCard product={{ ...sampleProducts[4], images: [] }} />
             </Demo>
           </div>
 

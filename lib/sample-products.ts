@@ -5,8 +5,8 @@ import { inr } from "./sample-data";
   SAMPLE PRODUCTS ONLY. Invented to exercise every product state.
   Names, prices, sizes, lead times and wording are placeholders.
   Real data will come from Shopify and `yatsar.*` metafields.
-  No photography exists yet. Four products use generated mock images
-  (see scripts/make-mock-images.mjs). Bookmark set has none, to test the empty state.
+  No photography exists yet. All five products use generated mock images
+  (see scripts/make-mock-images.mjs). Every sample product has a full set.
 */
 
 // mock: handle of a product that has generated mock imagery in /public/mock.
@@ -123,7 +123,7 @@ export const sampleProducts: Product[] = [
     customAvailable: false,
     collection: { handle: "desk", title: "Desk" },
     options: [],
-    images: images("Phone stand", "phone-stand").slice(0, 1),
+    images: images("Phone stand", "phone-stand"),
     variants: [
       {
         id: "v-stand",
@@ -154,7 +154,7 @@ export const sampleProducts: Product[] = [
     customAvailable: true,
     collection: { handle: "desk", title: "Desk" },
     options: [],
-    images: images("Headphone hanger", "wall-mounted-headphone-and-cable-hanger-with-adjustable-arm").slice(0, 1),
+    images: images("Headphone hanger", "wall-mounted-headphone-and-cable-hanger-with-adjustable-arm"),
     variants: [
       {
         id: "v-hanger",
@@ -180,7 +180,7 @@ export const sampleProducts: Product[] = [
     customAvailable: false,
     collection: { handle: "gifts", title: "Gifts" },
     options: [],
-    images: [],
+    images: images("Bookmark set", "bookmark-set"),
     variants: [
       {
         id: "v-bookmarks",

@@ -130,9 +130,50 @@ const scenes = {
   },
 };
 
-scenes["phone-stand"] = { hero: svg(backdrop + place(phoneStand(), 400, 760, 1.25)) };
-scenes["wall-mounted-headphone-and-cable-hanger-with-adjustable-arm"] = {
+const bookmarks = () => `
+  <ellipse cx="0" cy="10" rx="170" ry="20" fill="#000" opacity=".25" filter="url(#blur)"/>
+  <g transform="rotate(-14 0 0)"><rect x="-150" y="-380" width="96" height="380" rx="10" fill="#3a3a3a"/><rect x="-150" y="-380" width="96" height="380" rx="10" fill="url(#layers)"/><circle cx="-102" cy="-350" r="9" fill="#e9e6e1"/></g>
+  <g transform="rotate(14 0 0)"><rect x="54" y="-380" width="96" height="380" rx="10" fill="#c9633a"/><rect x="54" y="-380" width="96" height="380" rx="10" fill="url(#layers)"/><circle cx="102" cy="-350" r="9" fill="#e9e6e1"/></g>
+  <rect x="-48" y="-410" width="96" height="410" rx="10" fill="#f1e6d6" stroke="#d9cbb6"/><rect x="-48" y="-410" width="96" height="410" rx="10" fill="url(#layers)"/><circle cx="0" cy="-380" r="9" fill="#e9e6e1"/>`;
+
+const book = () => `
+  <ellipse cx="0" cy="12" rx="200" ry="22" fill="#000" opacity=".25" filter="url(#blur)"/>
+  <rect x="-150" y="-300" width="300" height="300" rx="10" fill="#e8dfd0" stroke="#d3c7b3"/>
+  <rect x="-150" y="-300" width="22" height="300" rx="8" fill="#cdbfa7"/>
+  <rect x="-70" y="-420" width="62" height="130" rx="8" fill="#c9633a"/>`;
+
+const headphones = () => `
+  <path d="M-70 -250 C-70 -340 70 -340 70 -250" fill="none" stroke="#2b2b2b" stroke-width="16" stroke-linecap="round"/>
+  <rect x="-96" y="-262" width="44" height="86" rx="20" fill="#3a3a3a"/>
+  <rect x="52" y="-262" width="44" height="86" rx="20" fill="#3a3a3a"/>`;
+
+const whiteTexture = `<rect width="${W}" height="${H}" fill="url(#white)"/><rect width="${W}" height="${H}" fill="url(#layersBig)"/><ellipse cx="400" cy="200" rx="520" ry="150" fill="#fff" opacity=".35" filter="url(#blur)"/><rect x="710" y="0" width="90" height="${H}" fill="#000" opacity=".12" filter="url(#blur)"/>`;
+const darkTexture = `<rect width="${W}" height="${H}" fill="url(#charcoal)"/><rect width="${W}" height="${H}" fill="url(#layersBig)"/><ellipse cx="400" cy="200" rx="520" ry="150" fill="#fff" opacity=".14" filter="url(#blur)"/><rect x="710" y="0" width="90" height="${H}" fill="#000" opacity=".25" filter="url(#blur)"/>`;
+const terracottaTexture = `<rect width="${W}" height="${H}" fill="#c9633a"/><rect width="${W}" height="${H}" fill="url(#layersBig)"/><ellipse cx="400" cy="200" rx="520" ry="150" fill="#fff" opacity=".18" filter="url(#blur)"/>`;
+
+scenes["phone-stand"] = {
+  hero: svg(backdrop + place(phoneStand(), 400, 760, 1.25)),
+  scale: svg(room + place(phoneStand(), 285, 790, 0.95) + place(mug(), 650, 790, 1.2)),
+  closeup: svg(whiteTexture),
+  "in-use": svg(room + place(phoneStand(), 400, 780, 1.1)),
+  "in-box": svg(backdrop + kraftBack(400, 840) + place(phoneStand(), 400, 810, 0.85) + kraftFront(400, 840)),
+};
+
+const HANGER = "wall-mounted-headphone-and-cable-hanger-with-adjustable-arm";
+scenes[HANGER] = {
   hero: svg(`<rect width="${W}" height="${H}" fill="url(#wall)"/>` + place(hanger(), 360, 800, 1.1)),
+  scale: svg(room + place(hanger(), 300, 722, 0.8) + place(mug(), 650, 790, 1.2)),
+  closeup: svg(darkTexture),
+  "in-use": svg(room + place(hanger(), 330, 722, 0.95) + place(headphones(), 458, 560, 0.95)),
+  "in-box": svg(backdrop + kraftBack(400, 840) + place(hanger(), 400, 800, 0.62) + kraftFront(400, 840)),
+};
+
+scenes["bookmark-set"] = {
+  hero: svg(backdrop + place(bookmarks(), 400, 790, 1.2)),
+  scale: svg(room + place(book(), 290, 790, 0.95) + place(mug(), 650, 790, 1.2)),
+  closeup: svg(terracottaTexture),
+  "in-use": svg(room + place(book(), 400, 780, 1.1)),
+  "in-box": svg(backdrop + kraftBack(400, 840) + place(bookmarks(), 400, 830, 0.7) + kraftFront(400, 840)),
 };
 
 for (const [product, views] of Object.entries(scenes)) {
