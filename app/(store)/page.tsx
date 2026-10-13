@@ -4,11 +4,13 @@ import { FactStrip } from "@/components/content/FactStrip";
 import { NumberedSteps } from "@/components/content/NumberedSteps";
 import { WhatsAppButton } from "@/components/enquiry/WhatsAppButton";
 import { ProductCard } from "@/components/product/ProductCard";
+import { StatePanel } from "@/components/ui/StatePanel";
+import { getProducts } from "@/lib/data";
+import { Suspense } from "react";
 import { Button } from "@/components/ui/Button";
 import { ImagePlaceholder } from "@/components/ui/ImagePlaceholder";
 import { InfoCard } from "@/components/ui/InfoCard";
 import { sampleStore } from "@/lib/sample-data";
-import { sampleProducts } from "@/lib/sample-products";
 import { generalEnquiryMessage } from "@/lib/whatsapp";
 
 export const metadata: Metadata = { title: "Yatsar 3D", robots: { index: false, follow: false } };
@@ -29,8 +31,7 @@ const section = "mt-16 lg:mt-24";
  * note, FAQ preview) are left out until their real content exists.
  */
 export default function HomePage() {
-  const featured = sampleProducts.slice(0, 4);
-  const heroAlt = sampleProducts[1].images[0].alt;
+  const heroAlt = "A white 3D-printed planter on a plain background";
 
   return (
     <main className="mx-auto w-full max-w-[1200px] px-4 pt-4 md:px-6 lg:px-8 lg:pt-8">
@@ -69,11 +70,9 @@ export default function HomePage() {
             View all
           </Link>
         </div>
-        <div className="mt-6 grid grid-cols-2 gap-x-3 gap-y-8 lg:grid-cols-4 lg:gap-x-6 lg:gap-y-10">
-          {featured.map((p, i) => (
-            <ProductCard key={p.handle} product={p} priority={i < 2} />
-          ))}
-        </div>
+        <Suspense fallback={<FeaturedSkeleton />}>
+          <Featured />
+        </Suspense>
       </section>
 
       {/* Delivery area */}
@@ -100,5 +99,45 @@ export default function HomePage() {
         </div>
       </section>
     </main>
+  );
+}
+
+/** Four products from the store. Loading, empty and error states included. */
+async function Featured() {
+  const r = await getProducts(4);
+  if (r.state === "error") {
+    return (
+      <StatePanel tone="error" title="Products could not be loaded" className="mt-6" action={<Button href="/" variant="secondary">Try again</Button>}>
+        {r.message}
+      </StatePanel>
+    );
+  }
+  if (r.data.length === 0) {
+    return (
+      <StatePanel title="Products are coming soon" className="mt-6">
+        Our first prints are being added. Ask us on WhatsApp if you want something made.
+      </StatePanel>
+    );
+  }
+  return (
+    <div className="mt-6 grid grid-cols-2 gap-x-3 gap-y-8 lg:grid-cols-4 lg:gap-x-6 lg:gap-y-10">
+      {r.data.map((p, i) => (
+        <ProductCard key={p.handle} product={p} priority={i < 2} />
+      ))}
+    </div>
+  );
+}
+
+function FeaturedSkeleton() {
+  return (
+    <div aria-busy="true" aria-label="Loading products" className="mt-6 grid grid-cols-2 gap-x-3 gap-y-8 lg:grid-cols-4 lg:gap-x-6">
+      {[0, 1, 2, 3].map((i) => (
+        <div key={i}>
+          <div className="aspect-[4/5] rounded-card bg-mist" />
+          <div className="mt-3 h-4 w-3/4 rounded-ctl bg-mist" />
+          <div className="mt-2 h-4 w-1/3 rounded-ctl bg-mist" />
+        </div>
+      ))}
+    </div>
   );
 }

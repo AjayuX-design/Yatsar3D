@@ -7,19 +7,21 @@ import { ProductCard } from "@/components/product/ProductCard";
 import { Breadcrumb } from "@/components/ui/Breadcrumb";
 import { Button } from "@/components/ui/Button";
 import { isSortKey, sortProducts } from "@/lib/product/sort";
+import { StatePanel } from "@/components/ui/StatePanel";
+import { getCollection, getSource } from "@/lib/data";
 import { sampleStore } from "@/lib/sample-data";
-import { sampleCollections } from "@/lib/sample-collections";
-import { sampleProducts } from "@/lib/sample-products";
 import { generalEnquiryMessage } from "@/lib/whatsapp";
 
+// "all" is built ahead. Other collections are built on first visit.
 export function generateStaticParams() {
-  return sampleCollections.map((c) => ({ handle: c.handle }));
+  return [{ handle: "all" }];
 }
 
 export async function generateMetadata(props: PageProps<"/collections/[handle]">): Promise<Metadata> {
   const { handle } = await props.params;
-  const c = sampleCollections.find((x) => x.handle === handle);
-  return { title: c ? `${c.title} | Yatsar 3D` : "Collection not found", robots: { index: false, follow: false } };
+  const r = await getCollection(handle);
+  const title = r.state === "ok" && r.data ? `${r.data.title} | Yatsar 3D` : "Collection | Yatsar 3D";
+  return { title, robots: getSource() === "sample" ? { index: false, follow: false } : undefined };
 }
 
 export default function CollectionPage(props: PageProps<"/collections/[handle]">) {
@@ -40,16 +42,29 @@ async function CollectionContent({
   searchParams: PageProps<"/collections/[handle]">["searchParams"];
 }) {
   const [{ handle }, query] = await Promise.all([params, searchParams]);
-  const collection = sampleCollections.find((c) => c.handle === handle);
+  const result = await getCollection(handle);
+
+  if (result.state === "error") {
+    return (
+      <StatePanel
+        tone="error"
+        title="Products could not be loaded"
+        className="mt-10"
+        action={
+          <Button href={`/collections/${handle}`} variant="secondary">
+            Try again
+          </Button>
+        }
+      >
+        {result.message}
+      </StatePanel>
+    );
+  }
+  const collection = result.data;
   if (!collection) notFound();
 
   const sort = isSortKey(query.sort) ? query.sort : "featured";
-  const products = sortProducts(
-    collection.productHandles
-      .map((h) => sampleProducts.find((p) => p.handle === h))
-      .filter((p): p is NonNullable<typeof p> => !!p),
-    sort,
-  );
+  const products = sortProducts(collection.products, sort);
   const count = products.length;
 
   return (

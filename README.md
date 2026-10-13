@@ -39,3 +39,14 @@ npm run build
 - `components/product` product card, gallery, variant selector, fulfilment box, spec table, sticky buy bar
 - `lib/types.ts` the product shape the UI uses. A Shopify mapper will fill it later.
 - `lib/sample-data.ts`, `lib/sample-products.ts` placeholder data. Replace with Shopify data later.
+
+## Where the data comes from
+
+`lib/data/index.ts` decides, using environment variables:
+
+- Shopify settings present: real products from Shopify.
+- `SHOPIFY_USE_SAMPLE_DATA=true`: built-in sample products, for building the interface.
+- No Shopify settings on a preview or on your machine: sample products.
+- No Shopify settings on Vercel Production: an error state. It never shows fake prices.
+
+Copy `.env.example` to `.env.local` to configure. Never commit `.env.local`.

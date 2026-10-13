@@ -7,6 +7,8 @@ import { formatDays } from "@/lib/format/leadtime";
 import { formatDimensions } from "@/lib/format/dimensions";
 import { sampleProducts } from "@/lib/sample-products";
 import { normaliseDomain, readShopifyConfig } from "@/lib/shopify/config";
+import { mapProduct } from "@/lib/shopify/mappers";
+import { noOptionsFixture, planterFixture } from "./fixtures";
 import { sortProducts } from "@/lib/product/sort";
 import { addLine, cartTotals, checkCode, hasMixedFulfilment, lineFromProduct, lineTotals, setQuantity } from "@/lib/cart/cart";
 
@@ -79,4 +81,27 @@ assert.deepEqual(readShopifyConfig({}), { ok: false, missing: ["SHOPIFY_STORE_DO
 const cfg = readShopifyConfig({ SHOPIFY_STORE_DOMAIN: "a.myshopify.com", SHOPIFY_STOREFRONT_PRIVATE_TOKEN: "x" });
 assert.ok(cfg.ok && cfg.config.apiVersion === "2026-07");
 
-console.log("select, spec, format, sort, cart and shopify config checks passed");
+// Shopify response to Product
+const mapped = mapProduct(planterFixture);
+assert.equal(mapped.fulfilment, "made_to_order");
+assert.deepEqual(mapped.productionDays, { min: 2, max: 3 });
+assert.equal(mapped.deliveryDays, undefined);
+assert.deepEqual(mapped.dimensions, { lengthMm: 100, widthMm: 100, heightMm: 110 });
+assert.deepEqual(mapped.included, ["1 planter pot", "1 drip tray"]);
+assert.equal(mapped.customAvailable, true);
+assert.deepEqual(mapped.paragraphs, ["A small planter.", "Printed in PETG."]);
+assert.equal(mapped.variants[0].weightG, 280, "kg to g");
+assert.equal(mapped.variants[1].availableForSale, false);
+assert.equal(mapped.variants[1].compareAt?.amount, "1999.00");
+assert.deepEqual(mapped.images.map((i) => i.kind), ["hero", "scale"], "empty media skipped, order kept");
+assert.equal(mapped.images[1].alt, "Planter pot, image 2", "alt falls back when missing");
+assert.equal(mapped.collection.handle, "living");
+const plain = mapProduct(noOptionsFixture);
+assert.deepEqual(plain.options, [], "Default Title option is hidden");
+assert.deepEqual(plain.variants[0].selectedOptions, []);
+assert.equal(plain.fulfilment, "ready_stock");
+assert.equal(plain.collection.handle, "all", "no collection falls back to all");
+assert.equal(plain.paragraphs.length, 0);
+assert.equal(mapProduct({ ...noOptionsFixture, metafields: [] }).fulfilment, "made_to_order", "missing field defaults to the safer claim");
+
+console.log("select, spec, format, sort, cart, shopify config and mapper checks passed");
