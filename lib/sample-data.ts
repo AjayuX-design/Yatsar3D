@@ -9,9 +9,9 @@ import type { Money } from "@/lib/format/money";
 export const sampleStore = {
   // Placeholder. The real number is still an open decision.
   whatsappNumber: "919999999999",
-  deliveryAreaText: "We currently deliver to [area].",
+  deliveryAreaText: "We currently deliver in Hyderabad.",
   // Placeholder wording. Shown only when there is a useful message.
-  announcementText: "Delivering to [area]. Custom quotes on WhatsApp.",
+  announcementText: "Delivering in Hyderabad. Custom quotes on WhatsApp.",
   responseHours: "Replies within [hours]",
   mixedCartNote:
     "Placeholder. Ready items wait for made-to-order items unless you ask us to split the order.",
