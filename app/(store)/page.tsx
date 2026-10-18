@@ -133,7 +133,7 @@ function FeaturedSkeleton() {
     <div aria-busy="true" aria-label="Loading products" className="mt-6 grid grid-cols-2 gap-x-3 gap-y-8 lg:grid-cols-4 lg:gap-x-6">
       {[0, 1, 2, 3].map((i) => (
         <div key={i}>
-          <div className="aspect-[4/5] rounded-card bg-mist" />
+          <div className="aspect-square rounded-card bg-mist" />
           <div className="mt-3 h-4 w-3/4 rounded-ctl bg-mist" />
           <div className="mt-2 h-4 w-1/3 rounded-ctl bg-mist" />
         </div>

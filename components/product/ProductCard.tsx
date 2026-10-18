@@ -36,7 +36,7 @@ export function ProductCard({ product, priority = false }: { product: Product; p
       href={`/products/${product.handle}`}
       className="group flex h-full flex-col rounded-card outline-offset-4"
     >
-      <div className="relative aspect-[4/5] overflow-hidden rounded-card bg-mist">
+      <div className="relative aspect-square overflow-hidden rounded-card bg-mist">
         <div
           className={cn(
             "absolute inset-0 transition-opacity duration-150",

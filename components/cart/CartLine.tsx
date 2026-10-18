@@ -32,7 +32,7 @@ export function CartLine({
       <Link
         href={`/products/${line.handle}`}
         onClick={onNavigate}
-        className="relative block aspect-[4/5] w-[72px] shrink-0 self-start overflow-hidden rounded-ctl bg-mist"
+        className="relative block aspect-square w-[72px] shrink-0 self-start overflow-hidden rounded-ctl bg-mist"
         aria-hidden="true"
         tabIndex={-1}
       >
