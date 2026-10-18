@@ -4,7 +4,7 @@ import { inr } from "./sample-data";
 /*
   SAMPLE PRODUCTS ONLY. Invented to exercise every product state.
   Names, prices, sizes, lead times and wording are placeholders.
-  Real data will come from Shopify and `yatsar.*` metafields.
+  Real data will come from Shopify and `custom.*` metafields.
   No photography exists yet. All five products use generated mock images
   (see scripts/make-mock-images.mjs). Every sample product has a full set.
 */

@@ -3,10 +3,11 @@ import type { Days, Product, ProductImage, ProductVariant } from "../types";
 /*
   Turns Storefront API data into the Product shape the interface uses.
   Pure functions, so they can be checked with a saved sample response.
-  Custom fields are read from the `yatsar` metafield namespace.
+  Custom fields are read from the `custom` metafield namespace.
 */
 
-export const METAFIELD_NAMESPACE = "yatsar";
+// The Shopify admin form puts new product fields under the "custom" namespace.
+export const METAFIELD_NAMESPACE = "custom";
 export const METAFIELD_KEYS = [
   "fulfilment_type",
   "production_days_min",
@@ -44,7 +45,7 @@ export type ShopifyVariant = {
 export type ShopifyProduct = {
   handle: string;
   title: string;
-  description: string;
+  descriptionHtml: string;
   publishedAt: string;
   options: { name: string; values: string[] }[];
   variants: { nodes: ShopifyVariant[] };
@@ -60,6 +61,22 @@ const toGrams = (w: number | null, unit: ShopifyVariant["weightUnit"]) => {
   const factor = { GRAMS: 1, KILOGRAMS: 1000, OUNCES: 28.3495, POUNDS: 453.592 }[unit];
   return Math.round(w * factor);
 };
+
+/** Shopify's description is HTML. One paragraph per <p>, <br> or line break. Tags are dropped. */
+export function htmlToParagraphs(html: string): string[] {
+  return html
+    .replace(/<\/(p|div|li|h[1-6])>|<br\s*\/?>/gi, "\n")
+    .replace(/<[^>]+>/g, "")
+    .replace(/&nbsp;/g, " ")
+    .replace(/&amp;/g, "&")
+    .replace(/&lt;/g, "<")
+    .replace(/&gt;/g, ">")
+    .replace(/&quot;/g, '"')
+    .replace(/&#39;|&#x27;/g, "'")
+    .split(/\n+/)
+    .map((s) => s.trim())
+    .filter(Boolean);
+}
 
 const num = (v?: string) => {
   const n = Number(v);
@@ -122,7 +139,7 @@ export function mapProduct(p: ShopifyProduct): Product {
     handle: p.handle,
     title: p.title,
     publishedAt: p.publishedAt,
-    paragraphs: p.description.split(/\n{2,}/).map((s) => s.trim()).filter(Boolean),
+    paragraphs: htmlToParagraphs(p.descriptionHtml),
     fulfilment,
     productionDays: days(meta.get("production_days_min"), meta.get("production_days_max")),
     deliveryDays: days(meta.get("delivery_days_min"), meta.get("delivery_days_max")),

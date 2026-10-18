@@ -6,7 +6,7 @@ const money = (a: string) => ({ amount: a, currencyCode: "INR" });
 export const planterFixture: ShopifyProduct = {
   handle: "planter-pot",
   title: "Planter pot",
-  description: "A small planter.\n\nPrinted in PETG.",
+  descriptionHtml: "<p>A small planter.</p><p>Printed in PETG.</p>",
   publishedAt: "2026-09-12T00:00:00Z",
   options: [{ name: "Size", values: ["Small", "Large"] }],
   variants: {
@@ -60,7 +60,7 @@ export const planterFixture: ShopifyProduct = {
 export const noOptionsFixture: ShopifyProduct = {
   handle: "bookmark-set",
   title: "Bookmark set",
-  description: "",
+  descriptionHtml: "",
   publishedAt: "2026-10-02T00:00:00Z",
   options: [{ name: "Title", values: ["Default Title"] }],
   variants: {

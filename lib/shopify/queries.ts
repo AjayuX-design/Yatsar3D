@@ -11,7 +11,7 @@ const PRODUCT_FIELDS = `
   fragment ProductFields on Product {
     handle
     title
-    description
+    descriptionHtml
     publishedAt
     options { name values }
     variants(first: 100) {

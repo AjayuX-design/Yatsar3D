@@ -93,6 +93,7 @@ assert.deepEqual(mapped.dimensions, { lengthMm: 100, widthMm: 100, heightMm: 110
 assert.deepEqual(mapped.included, ["1 planter pot", "1 drip tray"]);
 assert.equal(mapped.customAvailable, true);
 assert.deepEqual(mapped.paragraphs, ["A small planter.", "Printed in PETG."]);
+assert.deepEqual(mapProduct({ ...planterFixture, descriptionHtml: "<p>One &amp; more.</p><p>Two.<br>Three.</p>" }).paragraphs, ["One & more.", "Two.", "Three."], "html paragraphs, entities and line breaks");
 assert.equal(mapped.variants[0].weightG, 280, "kg to g");
 assert.equal(mapped.variants[1].availableForSale, false);
 assert.equal(mapped.variants[1].compareAt?.amount, "1999.00");

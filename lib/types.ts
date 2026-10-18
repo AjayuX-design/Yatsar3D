@@ -2,7 +2,7 @@ import type { Money } from "./format/money";
 
 /*
   UI-side product shape. A Shopify mapper (later) turns Storefront API data and
-  `yatsar.*` metafields into this. Components only ever see these types.
+  `custom.*` metafields into this. Components only ever see these types.
 */
 
 export type Fulfilment = "ready_stock" | "made_to_order";
