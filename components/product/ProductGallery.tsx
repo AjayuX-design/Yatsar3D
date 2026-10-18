@@ -28,7 +28,7 @@ export function ProductGallery({ images, title }: { images: ProductImage[]; titl
 
   if (!images.length) {
     return (
-      <div className="relative aspect-[4/5] overflow-hidden rounded-card bg-mist">
+      <div className="relative aspect-square overflow-hidden rounded-card bg-mist">
         <ImagePlaceholder alt={title} label="Photos coming soon" />
       </div>
     );
@@ -46,13 +46,13 @@ export function ProductGallery({ images, title }: { images: ProductImage[]; titl
               aria-label={`Show image ${i + 1}: ${img.alt}`}
               aria-current={i === index}
               className={cn(
-                "relative aspect-[4/5] overflow-hidden rounded-ctl bg-mist outline-offset-2 transition-opacity duration-150",
+                "relative aspect-square overflow-hidden rounded-ctl bg-mist outline-offset-2 transition-opacity duration-150",
                 i === index
                   ? "outline outline-1 outline-ink"
                   : "opacity-60 hover:opacity-100",
               )}
             >
-              <ImagePlaceholder src={img.src} alt="" label="" sizes="64px" onWhite={img.onWhite} whole={img.fit === "whole"} />
+              <ImagePlaceholder src={img.src} alt="" label="" sizes="64px" onWhite={img.onWhite} whole />
             </button>
           ))}
         </div>
@@ -78,9 +78,9 @@ export function ProductGallery({ images, title }: { images: ProductImage[]; titl
                 role="group"
                 aria-roledescription="slide"
                 aria-label={`${i + 1} of ${images.length}`}
-                className="relative aspect-[4/5] w-full shrink-0 snap-center overflow-hidden bg-mist"
+                className="relative aspect-square w-full shrink-0 snap-center overflow-hidden bg-mist"
               >
-                <ImagePlaceholder src={img.src} alt={img.alt} label={labels[img.kind]} priority={i === 0} onWhite={img.onWhite} whole={img.fit === "whole"} />
+                <ImagePlaceholder src={img.src} alt={img.alt} label={labels[img.kind]} priority={i === 0} onWhite={img.onWhite} whole />
               </div>
             ))}
           </div>

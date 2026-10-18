@@ -69,7 +69,7 @@ export function Accordion({
               )}
             >
               <div className="overflow-hidden">
-                <div className="pb-6 pr-8 t-body text-graphite lg:max-w-[640px] lg:pb-8">{item.content}</div>
+                <div className="pb-6 pr-8 t-body text-graphite lg:pb-8 lg:text-[17px] lg:leading-7">{item.content}</div>
               </div>
             </div>
           </div>

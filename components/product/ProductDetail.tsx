@@ -9,14 +9,11 @@ import { QuantityStepper } from "@/components/ui/QuantityStepper";
 import { Check } from "@/components/ui/Icons";
 import { EnquiryCta } from "@/components/enquiry/EnquiryCta";
 import { FulfilmentBox } from "@/components/product/FulfilmentBox";
-import { IncludedList } from "@/components/product/IncludedList";
 import { ProductGallery } from "@/components/product/ProductGallery";
-import { ScaleImage } from "@/components/product/ScaleImage";
-import { SpecTable } from "@/components/product/SpecTable";
 import { StickyBuyBar } from "@/components/product/StickyBuyBar";
 import { VariantSelector } from "@/components/product/VariantSelector";
 import { defaultSelection, findVariant } from "@/lib/product/select";
-import { buildSpecRows } from "@/lib/product/spec";
+import { formatDays } from "@/lib/format/leadtime";
 import { productEnquiryMessage } from "@/lib/whatsapp";
 import { useCart } from "@/lib/cart/CartProvider";
 import type { Days, Product } from "@/lib/types";
@@ -109,37 +106,101 @@ export function ProductDetail({ product, store }: { product: Product; store: Sto
     <Price size="l" price={variant.price} compareAt={variant.compareAt} />
   ) : null;
 
+  const d = product.dimensions;
+  const size = d?.lengthMm && d.widthMm && d.heightMm ? `${d.lengthMm} × ${d.widthMm} × ${d.heightMm} mm` : null;
+  const delivery = product.deliveryDays ?? store.defaultDeliveryDays;
+  const production = variant?.productionDays ?? product.productionDays;
+  const weight = variant?.weightG ?? product.weightG;
+  const bullets = (items: string[]) => (
+    <ul className="space-y-1.5">
+      {items.map((i) => (
+        <li key={i}>{i}</li>
+      ))}
+    </ul>
+  );
+
   const accordionItems: AccordionItem[] = [
     {
-      id: "material",
-      title: product.material ? "Material and care" : "Care",
-      content: product.careNote ?? "Care notes are added per product.",
+      id: "about",
+      title: "Description",
+      content: (
+        <div className="space-y-3">
+          {product.paragraphs.map((p) => (
+            <p key={p}>{p}</p>
+          ))}
+        </div>
+      ),
     },
     {
-      id: "finish",
-      title: "About the print finish",
-      content:
-        product.printNote ??
-        "Fine layer lines are part of a printed surface. Small variations between prints are normal.",
+      id: "details",
+      title: "Size and what is included",
+      content: (
+        <div className="space-y-4">
+          {(size || weight) && (
+            <p className="text-ink">
+              {[size && `Size: ${size}`, weight && `Weight: ${weight} g`].filter(Boolean).join(". ")}
+            </p>
+          )}
+          {product.included.length > 0 && (
+            <div>
+              <p className="mb-1.5 t-label text-ink">In the box</p>
+              {bullets(product.included)}
+            </div>
+          )}
+          {product.notIncluded.length > 0 && (
+            <div>
+              <p className="mb-1.5 t-label text-ink">Not included</p>
+              {bullets(product.notIncluded)}
+            </div>
+          )}
+        </div>
+      ),
+    },
+    {
+      id: "care",
+      title: "Care and print finish",
+      content: (
+        <div className="space-y-3">
+          <p>{product.careNote ?? "Wipe with a dry or slightly damp cloth. Keep away from direct sunlight and heat."}</p>
+          <p>
+            {product.printNote ??
+              "Fine layer lines are part of a printed surface. Small variations between prints are normal."}
+          </p>
+        </div>
+      ),
     },
     {
       id: "delivery",
-      // Placeholder wording. Final delivery and returns text is a pending business decision.
+      // Draft wording. Final delivery and returns policy is a pending business decision.
       title: "Delivery and returns",
-      content: "Placeholder text. Final delivery and returns wording is pending.",
+      content: (
+        <div className="space-y-3">
+          <p>
+            {product.fulfilment === "ready_stock" ? "Ships in" : "Printed to order in"}{" "}
+            {production ? formatDays(production) : "a few days"}.
+            {delivery && ` Delivery takes ${formatDays(delivery)} after dispatch.`}
+          </p>
+          <p>{store.deliveryAreaText} Delivery charges are shown at checkout.</p>
+          <p>
+            Returns: if your item arrives damaged or is not what you ordered, message us on WhatsApp within 48
+            hours with photos. We will replace it or refund you.
+          </p>
+          {product.customAvailable && <p>Custom orders are made for you and cannot be returned.</p>}
+        </div>
+      ),
     },
   ];
 
   return (
     <>
-      <div className="lg:grid lg:grid-cols-12 lg:gap-12">
-        <div className="lg:col-span-7">
+      <div className="lg:grid lg:grid-cols-2 lg:items-start lg:gap-12 xl:gap-16">
+        <div>
           <div className="lg:sticky lg:top-6">
             <ProductGallery images={product.images} title={product.title} />
           </div>
         </div>
 
-        <div className="mt-6 space-y-8 lg:col-span-5 lg:mt-0">
+        <div className="mt-6 space-y-6 lg:mt-0 lg:space-y-8">
           <header>
             <h1 className="t-h1 text-ink">{product.title}</h1>
             {(product.material || product.finish) && (
@@ -188,34 +249,11 @@ export function ProductDetail({ product, store }: { product: Product; store: Sto
             whatsappNumber={store.whatsappNumber}
           />
 
-          <div className="pt-4">
-            <SpecTable rows={buildSpecRows(product, variant)} />
-          </div>
+          <Accordion items={accordionItems} defaultOpenId="about" single={false} />
         </div>
       </div>
 
-      {/* Rhythm: 64px between groups, 48px inside the facts group, 16px from a heading to its content. */}
-      <div className="mt-16 space-y-16 lg:mx-auto lg:max-w-[960px]">
-        <ScaleImage
-          image={product.images.find((i) => i.kind === "scale")}
-          caption={product.scaleCaption}
-        />
-        <div className="grid gap-12 md:grid-cols-2 md:gap-x-16 lg:gap-x-24">
-          <IncludedList included={product.included} notIncluded={product.notIncluded} />
-          <section aria-labelledby="about">
-            <h2 id="about" className="t-h3 text-ink">
-              About this product
-            </h2>
-            <div className="mt-4 space-y-4">
-              {product.paragraphs.map((p) => (
-                <p key={p} className="max-w-[56ch] t-body text-graphite lg:t-body-l">
-                  {p}
-                </p>
-              ))}
-            </div>
-          </section>
-        </div>
-        <Accordion items={accordionItems} />
+      <div className="mt-12 space-y-16 lg:mx-auto lg:max-w-[960px]">
         {product.customAvailable && (
           <EnquiryCta
             variant="card"
