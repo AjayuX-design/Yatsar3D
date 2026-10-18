@@ -112,7 +112,7 @@ export function ProductDetail({ product, store }: { product: Product; store: Sto
   const accordionItems: AccordionItem[] = [
     {
       id: "material",
-      title: "Material and care",
+      title: product.material ? "Material and care" : "Care",
       content: product.careNote ?? "Care notes are added per product.",
     },
     {

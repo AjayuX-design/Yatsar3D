@@ -25,6 +25,8 @@ export const metadata: Metadata = {
   robots: { index: false, follow: false },
 };
 
+const byHandle = (h: string) => sampleProducts.find((p) => p.handle === h)!;
+
 const nav = [
   ["colour", "Colour"],
   ["type", "Type"],
@@ -403,6 +405,7 @@ export default function PreviewPage() {
           <SubHead>Sample product pages</SubHead>
           <ul className="grid gap-2 md:grid-cols-2">
             {[
+              ["fear-not-fridge-magnet", "Single product, ₹199, two photos, ready to ship"],
               ["desk-organiser", "Ready to ship, PETG sold out, compare-at price"],
               ["planter-pot", "Made to order, two options, price steps, one sold-out combination"],
               ["phone-stand", "Sold out, no options"],
@@ -423,7 +426,7 @@ export default function PreviewPage() {
 
           <SubHead>Product card</SubHead>
           <div className="grid grid-cols-2 gap-x-3 gap-y-8 md:grid-cols-4 lg:gap-x-6 lg:gap-y-10">
-            {sampleProducts.slice(0, 4).map((p) => (
+            {["desk-organiser", "planter-pot", "phone-stand", "wall-mounted-headphone-and-cable-hanger-with-adjustable-arm"].map(byHandle).map((p) => (
               <Demo
                 key={p.handle}
                 label={
@@ -436,7 +439,7 @@ export default function PreviewPage() {
               </Demo>
             ))}
             <Demo label="No photo, no compare-at">
-              <ProductCard product={{ ...sampleProducts[4], images: [] }} />
+              <ProductCard product={{ ...byHandle("bookmark-set"), images: [] }} />
             </Demo>
           </div>
 
@@ -477,16 +480,16 @@ export default function PreviewPage() {
           <SubHead>Spec table and included list</SubHead>
           <div className="grid gap-8 md:grid-cols-2">
             <Demo label="All rows">
-              <SpecTable rows={buildSpecRows(sampleProducts[0], sampleProducts[0].variants[0])} />
+              <SpecTable rows={buildSpecRows(byHandle("desk-organiser"), byHandle("desk-organiser").variants[0])} />
             </Demo>
             <Demo label="Some rows missing (hidden)">
-              <SpecTable rows={buildSpecRows(sampleProducts[4])} />
+              <SpecTable rows={buildSpecRows(byHandle("bookmark-set"))} />
             </Demo>
             <Demo label="Included and not included">
-              <IncludedList included={sampleProducts[1].included} notIncluded={sampleProducts[1].notIncluded} />
+              <IncludedList included={byHandle("planter-pot").included} notIncluded={byHandle("planter-pot").notIncluded} />
             </Demo>
             <Demo label="Only included (other list hidden)">
-              <IncludedList included={sampleProducts[2].included} notIncluded={[]} />
+              <IncludedList included={byHandle("phone-stand").included} notIncluded={[]} />
             </Demo>
           </div>
         </Section>

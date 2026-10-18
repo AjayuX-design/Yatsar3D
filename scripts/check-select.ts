@@ -48,8 +48,8 @@ assert.equal(formatDimensions({ lengthMm: 180, widthMm: 95, heightMm: 42 })!.cm,
 assert.equal(formatDimensions({ lengthMm: 180 }), null);
 
 // Sorting
-assert.deepEqual(sortProducts(sampleProducts, "price-asc").map((p) => p.handle).slice(0, 2), ["bookmark-set", "phone-stand"]);
-assert.equal(sortProducts(sampleProducts, "newest")[0].handle, "bookmark-set");
+assert.deepEqual(sortProducts(sampleProducts, "price-asc").map((p) => p.handle).slice(0, 3), ["fear-not-fridge-magnet", "bookmark-set", "phone-stand"]);
+assert.equal(sortProducts(sampleProducts, "newest")[0].handle, "fear-not-fridge-magnet");
 assert.equal(sortProducts(sampleProducts, "featured")[0].handle, sampleProducts[0].handle);
 
 // Cart
@@ -80,6 +80,9 @@ assert.equal(normaliseDomain(" https://Store.myshopify.com/ "), "store.myshopify
 assert.deepEqual(readShopifyConfig({}), { ok: false, missing: ["SHOPIFY_STORE_DOMAIN", "SHOPIFY_STOREFRONT_PRIVATE_TOKEN"] });
 const cfg = readShopifyConfig({ SHOPIFY_STORE_DOMAIN: "a.myshopify.com", SHOPIFY_STOREFRONT_PRIVATE_TOKEN: "x" });
 assert.ok(cfg.ok && cfg.config.apiVersion === "2026-07");
+assert.ok(cfg.ok && cfg.config.tokenKind === "public", "32-char token is public");
+const priv = readShopifyConfig({ SHOPIFY_STORE_DOMAIN: "a.myshopify.com", SHOPIFY_STOREFRONT_PRIVATE_TOKEN: "shpat_abc" });
+assert.ok(priv.ok && priv.config.tokenKind === "private");
 
 // Shopify response to Product
 const mapped = mapProduct(planterFixture);
@@ -103,5 +106,13 @@ assert.equal(plain.fulfilment, "ready_stock");
 assert.equal(plain.collection.handle, "all", "no collection falls back to all");
 assert.equal(plain.paragraphs.length, 0);
 assert.equal(mapProduct({ ...noOptionsFixture, metafields: [] }).fulfilment, "made_to_order", "missing field defaults to the safer claim");
+
+// The Fear Not magnet: price, size, one variant, no options
+const magnet = sampleProducts.find((p) => p.handle === "fear-not-fridge-magnet")!;
+assert.equal(magnet.variants[0].price.amount, "199");
+assert.deepEqual(magnet.options, []);
+assert.equal(buildSpecRows(magnet, magnet.variants[0]).find((r) => r.label === "Dimensions")!.value, "64 x 70 x 5 mm");
+assert.equal(buildSpecRows(magnet, magnet.variants[0]).some((r) => r.label === "Material"), false, "no material shown");
+assert.match(magnet.careNote ?? "", /direct sunlight/);
 
 console.log("select, spec, format, sort, cart, shopify config and mapper checks passed");

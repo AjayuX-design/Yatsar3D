@@ -19,6 +19,8 @@ export function ImagePlaceholder({
   label,
   sizes = "(min-width: 1024px) 600px, 100vw",
   priority = false,
+  onWhite = false,
+  whole = false,
   className,
 }: {
   src?: string;
@@ -26,6 +28,10 @@ export function ImagePlaceholder({
   label: string;
   sizes?: string;
   priority?: boolean;
+  /** Blend a white-background photo into the grey backing. */
+  onWhite?: boolean;
+  /** Show the whole photo (letterboxed) instead of filling and cropping. */
+  whole?: boolean;
   className?: string;
 }) {
   if (src) {
@@ -38,7 +44,7 @@ export function ImagePlaceholder({
         priority={priority}
         // SVG mock images do not go through the image optimiser.
         unoptimized={src.endsWith(".svg")}
-        className={cn("object-cover", className)}
+        className={cn(whole ? "object-contain" : "object-cover", onWhite && "mix-blend-multiply", className)}
       />
     );
   }

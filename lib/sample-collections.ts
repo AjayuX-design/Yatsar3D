@@ -7,6 +7,7 @@ export const sampleCollections: Collection[] = [
     title: "All products",
     description: "Everything we print, with size, material and timing on every page.",
     productHandles: [
+      "fear-not-fridge-magnet",
       "desk-organiser",
       "planter-pot",
       "phone-stand",
@@ -25,7 +26,7 @@ export const sampleCollections: Collection[] = [
     ],
   },
   { handle: "home", title: "Living", description: "Prints for shelves, windowsills and walls.", productHandles: ["planter-pot"] },
-  { handle: "gifts", title: "Gifts", description: "Small, light and easy to post.", productHandles: ["bookmark-set"] },
+  { handle: "gifts", title: "Gifts", description: "Small, light and easy to post.", productHandles: ["fear-not-fridge-magnet", "bookmark-set"] },
   // Deliberately empty, to design the empty state.
   { handle: "seasonal", title: "Seasonal", description: "Limited prints for the season.", productHandles: [] },
 ];

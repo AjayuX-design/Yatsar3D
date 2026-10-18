@@ -49,6 +49,7 @@ export function ProductCard({ product, priority = false }: { product: Product; p
             label="Photo coming soon"
             sizes="(min-width: 1024px) 280px, 50vw"
             priority={priority}
+            onWhite={hero?.onWhite}
           />
         </div>
         <StatusChip status={status} tone="overlay" className="absolute left-2.5 top-2.5" />

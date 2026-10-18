@@ -1,8 +1,8 @@
-import { Layers, MapPin, Ruler, WhatsAppIcon } from "@/components/ui/Icons";
+import { Clock, MapPin, Ruler, WhatsAppIcon } from "@/components/ui/Icons";
 
 // Four facts that are true at launch. Update this list if any stops being true.
 const facts = [
-  { icon: <Layers className="size-5" />, label: "Material named on every product" },
+  { icon: <Clock className="size-5" />, label: "Timing shown on every product" },
   { icon: <Ruler className="size-5" />, label: "Size shown on every product" },
   { icon: <MapPin className="size-5" />, label: "Delivery area stated" },
   { icon: <WhatsAppIcon className="size-5" />, label: "WhatsApp support" },

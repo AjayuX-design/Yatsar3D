@@ -29,6 +29,58 @@ const para = [
 
 export const sampleProducts: Product[] = [
   {
+    handle: "fear-not-fridge-magnet",
+    title: "Fear Not fridge magnet",
+    publishedAt: "2026-10-15",
+    // SAMPLE copy written for layout testing. Replace with your own wording.
+    paragraphs: [
+      "A stamp-shaped fridge magnet with the words FEAR NOT and the verse reference ISAIAH 41:10, in raised lettering. A white shield with a cross sits beside the text.",
+      "A small reminder for the fridge, a locker or a metal board. Printed in two colours, with a plum face and a cream stamp edge.",
+    ],
+    fulfilment: "ready_stock",
+    productionDays: { min: 1, max: 2 },
+    // Width 64 mm, height 70 mm, total thickness 5 mm (back to top of the raised text).
+    dimensions: { lengthMm: 64, widthMm: 70, heightMm: 5 },
+    finish: "Matte",
+    colour: "Plum and cream",
+    included: ["1 Fear Not fridge magnet"],
+    notIncluded: [],
+    printNote: "Raised lettering and fine layer lines are part of a printed surface. Colours can vary slightly between prints.",
+    careNote: "Do not keep it in direct sunlight or near heat. Wipe with a dry or slightly damp cloth.",
+    scaleCaption: "Shown on a fridge door, next to the handle",
+    customAvailable: true,
+    collection: { handle: "gifts", title: "Gifts" },
+    options: [],
+    images: [
+      {
+        id: "1",
+        kind: "hero",
+        alt: "Fear Not, Isaiah 41:10, a stamp-shaped plum and cream 3D-printed fridge magnet with a shield and cross",
+        src: "/products/fear-not-magnet-front.jpg",
+        onWhite: true,
+      },
+      {
+        id: "2",
+        kind: "scale",
+        alt: "The Fear Not fridge magnet on a fridge door beside the handle, showing its size",
+        src: "/products/fear-not-magnet-fridge.jpg",
+        fit: "whole",
+        ratio: 1312 / 1199,
+      },
+    ],
+    variants: [
+      {
+        id: "v-fear-not-magnet",
+        title: "Default",
+        selectedOptions: [],
+        price: inr("199"),
+        compareAt: null,
+        availableForSale: true,
+        quantityAvailable: 12,
+      },
+    ],
+  },
+  {
     handle: "desk-organiser",
     title: "Desk organiser",
     publishedAt: "2026-09-01",

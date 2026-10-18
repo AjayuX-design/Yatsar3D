@@ -34,7 +34,7 @@ export async function shopifyFetch<T>({
 
   const cfg = readShopifyConfig(process.env);
   if (!cfg.ok) return { ok: false, error: { kind: "not-configured", missing: cfg.missing } };
-  const { domain, privateToken, apiVersion } = cfg.config;
+  const { domain, privateToken, tokenKind, apiVersion } = cfg.config;
 
   let res: Response;
   try {
@@ -42,8 +42,11 @@ export async function shopifyFetch<T>({
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "Shopify-Storefront-Private-Token": privateToken,
-        ...(buyerIp ? { "Shopify-Storefront-Buyer-IP": buyerIp } : {}),
+        // Private token and public token use different headers.
+        ...(tokenKind === "private"
+          ? { "Shopify-Storefront-Private-Token": privateToken }
+          : { "X-Shopify-Storefront-Access-Token": privateToken }),
+        ...(buyerIp && tokenKind === "private" ? { "Shopify-Storefront-Buyer-IP": buyerIp } : {}),
       },
       body: JSON.stringify({ query, variables }),
     });

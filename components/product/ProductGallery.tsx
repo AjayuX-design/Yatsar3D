@@ -52,7 +52,7 @@ export function ProductGallery({ images, title }: { images: ProductImage[]; titl
                   : "opacity-60 hover:opacity-100",
               )}
             >
-              <ImagePlaceholder src={img.src} alt="" label="" sizes="64px" />
+              <ImagePlaceholder src={img.src} alt="" label="" sizes="64px" onWhite={img.onWhite} whole={img.fit === "whole"} />
             </button>
           ))}
         </div>
@@ -80,7 +80,7 @@ export function ProductGallery({ images, title }: { images: ProductImage[]; titl
                 aria-label={`${i + 1} of ${images.length}`}
                 className="relative aspect-[4/5] w-full shrink-0 snap-center overflow-hidden bg-mist"
               >
-                <ImagePlaceholder src={img.src} alt={img.alt} label={labels[img.kind]} priority={i === 0} />
+                <ImagePlaceholder src={img.src} alt={img.alt} label={labels[img.kind]} priority={i === 0} onWhite={img.onWhite} whole={img.fit === "whole"} />
               </div>
             ))}
           </div>

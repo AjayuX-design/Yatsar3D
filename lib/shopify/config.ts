@@ -7,8 +7,10 @@
 export type ShopifyConfig = {
   /** For example your-store.myshopify.com. No https://, no slash. */
   domain: string;
-  /** Private Storefront API token. Never log it, never expose it. */
+  /** Storefront API token. Never log it. */
   privateToken: string;
+  /** Private tokens start with shpat_. Public tokens are 32 characters. Shopify wants each sent in a different header. */
+  tokenKind: "private" | "public";
   apiVersion: string;
 };
 
@@ -37,6 +39,7 @@ export function readShopifyConfig(env: Record<string, string | undefined>): Conf
     config: {
       domain,
       privateToken,
+      tokenKind: privateToken.startsWith("shpat_") ? "private" : "public",
       apiVersion: (env.SHOPIFY_API_VERSION ?? "").trim() || DEFAULT_API_VERSION,
     },
   };

@@ -13,6 +13,11 @@ export type ProductImage = {
   id: string;
   kind: "hero" | "scale" | "closeup" | "in-use" | "in-box";
   alt: string;
+  /** Photo shot on pure white. It is blended into the grey image backing so it matches other products. */
+  onWhite?: boolean;
+  /** Show the whole photo, never cropped. ratio is width divided by height. */
+  fit?: "whole";
+  ratio?: number;
   /** Missing until real photography exists. A labelled placeholder shows instead. */
   src?: string;
 };
