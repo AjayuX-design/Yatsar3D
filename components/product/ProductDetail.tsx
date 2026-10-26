@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { Accordion, type AccordionItem } from "@/components/ui/Accordion";
 import { Button } from "@/components/ui/Button";
@@ -186,6 +187,15 @@ export function ProductDetail({ product, store }: { product: Product; store: Sto
             hours with photos. We will replace it or refund you.
           </p>
           {product.customAvailable && <p>Custom orders are made for you and cannot be returned.</p>}
+          <p>
+            <Link href="/policies/shipping" className="font-medium text-ink underline underline-offset-[3px]">
+              Shipping policy
+            </Link>
+            {" and "}
+            <Link href="/policies/returns" className="font-medium text-ink underline underline-offset-[3px]">
+              returns policy
+            </Link>
+          </p>
         </div>
       ),
     },
