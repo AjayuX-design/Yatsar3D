@@ -14,13 +14,17 @@ export function Accordion({
   items,
   defaultOpenId = null,
   single = true,
+  headingLevel = "h2",
   className,
 }: {
   items: AccordionItem[];
   defaultOpenId?: string | null;
   single?: boolean;
+  /** Pick the level that fits the page outline, so headings never skip. */
+  headingLevel?: "h2" | "h3";
   className?: string;
 }) {
+  const Heading = headingLevel;
   const uid = useId();
   const [open, setOpen] = useState<string[]>(defaultOpenId ? [defaultOpenId] : []);
 
@@ -41,7 +45,7 @@ export function Accordion({
         const panelId = `${uid}-${item.id}-panel`;
         return (
           <div key={item.id} className="border-t border-line">
-            <h2>
+            <Heading>
               <button
                 id={buttonId}
                 type="button"
@@ -57,7 +61,7 @@ export function Accordion({
                   <Plus className="size-5 shrink-0" aria-hidden="true" />
                 )}
               </button>
-            </h2>
+            </Heading>
             <div
               id={panelId}
               role="region"
