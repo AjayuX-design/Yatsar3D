@@ -23,8 +23,17 @@ export async function generateStaticParams() {
 export async function generateMetadata(props: PageProps<"/products/[handle]">): Promise<Metadata> {
   const { handle } = await props.params;
   const r = await getProduct(handle);
-  const title = r.state === "ok" && r.data ? `${r.data.title} | Yatsar 3D` : "Product | Yatsar 3D";
-  return { title, robots: getSource() === "sample" ? { index: false, follow: false } : undefined };
+  const product = r.state === "ok" ? r.data : null;
+  const title = product ? `${product.title} | Yatsar 3D` : "Product | Yatsar 3D";
+  const description = product?.paragraphs[0];
+  const photo = product?.images.find((i) => i.src)?.src;
+  return {
+    title,
+    description,
+    // The share card uses the product's own photo, so a pasted link shows what it sells.
+    openGraph: product ? { type: "website", title, description, images: photo ? [{ url: photo, alt: product.title }] : undefined } : undefined,
+    robots: getSource() === "sample" ? { index: false, follow: false } : undefined,
+  };
 }
 
 export default function ProductPage(props: PageProps<"/products/[handle]">) {

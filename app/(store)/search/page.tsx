@@ -46,7 +46,7 @@ async function SearchContent({ searchParams }: { searchParams: PageProps<"/searc
             autoComplete="off"
             enterKeyHint="search"
             placeholder="Search products"
-            className="h-12 w-full rounded-ctl border border-line bg-surface pl-10 pr-3 text-[16px] text-ink placeholder:text-graphite/70"
+            className="h-12 w-full rounded-ctl border border-line bg-surface pl-10 pr-3 text-[16px] text-ink placeholder:text-hint"
           />
         </div>
         <Button type="submit">Search</Button>

@@ -65,7 +65,7 @@ export function DiscountField({
             aria-invalid={!!error}
             aria-describedby={error ? `${id}-error` : undefined}
             className={
-              "h-12 min-w-0 flex-1 rounded-ctl border bg-surface px-3 text-[16px] text-ink placeholder:text-graphite/70 " +
+              "h-12 min-w-0 flex-1 rounded-ctl border bg-surface px-3 text-[16px] text-ink placeholder:text-hint " +
               (error ? "border-error" : "border-line")
             }
             placeholder="Enter code"

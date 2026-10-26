@@ -56,7 +56,7 @@ const missingLabels: Record<string, string> = {
 const stepOf: Record<string, 1 | 2 | 3> = { type: 1, size: 2, details: 2, name: 3, phone: 3, city: 3, email: 3 };
 
 const input =
-  "h-12 w-full rounded-ctl border bg-surface px-3 text-[16px] text-ink placeholder:text-graphite/70 aria-[invalid=true]:border-error border-line";
+  "h-12 w-full rounded-ctl border bg-surface px-3 text-[16px] text-ink placeholder:text-hint aria-[invalid=true]:border-error border-line";
 
 const steps = [
   { n: 1, label: "Choose", title: "What do you need?", help: "Pick the one that fits best." },
@@ -202,11 +202,16 @@ function CustomOrderFormInner({ whatsappNumber, onReset }: { whatsappNumber?: st
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state, type, dims]);
 
-  // Keep what the shopper chose, and jump to the first step that has a problem, when the server sends back an error.
-  useEffect(() => {
-    if (values?.type) setType(values.type);
-    if (err) setStep(err.type ? 1 : err.details ? 2 : 3);
-  }, [values, err]);
+  // When the server sends back an error, jump to the first step that has a problem.
+  // Done while drawing (React's pattern for state that follows other state), not in an effect.
+  const [seenState, setSeenState] = useState(state);
+  if (state !== seenState) {
+    setSeenState(state);
+    if (state.status === "error" && state.fieldErrors) {
+      const e = state.fieldErrors;
+      setStep(e.type ? 1 : e.details ? 2 : 3);
+    }
+  }
 
   // After each step change, move focus to the new step's heading so screen readers announce it.
   useEffect(() => {
@@ -376,7 +381,7 @@ function CustomOrderFormInner({ whatsappNumber, onReset }: { whatsappNumber?: st
                 <label
                   key={t.key}
                   className={cn(
-                    "relative flex cursor-pointer items-center gap-4 rounded-card border-2 p-4 transition-colors duration-150 sm:flex-col sm:items-start sm:gap-5 sm:p-5",
+                    "relative flex cursor-pointer items-center gap-4 rounded-card border-2 p-4 transition-colors duration-150 has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-kiln sm:flex-col sm:items-start sm:gap-5 sm:p-5",
                     selected ? "border-ink bg-mist" : "border-line hover:border-graphite/40",
                   )}
                 >
@@ -488,10 +493,10 @@ function CustomOrderFormInner({ whatsappNumber, onReset }: { whatsappNumber?: st
               )}
               {photos.length < MAX_PHOTOS && (
                 <>
-                  <input ref={fileInput} id={`${uid}-photos`} type="file" accept="image/*" multiple className="sr-only" onChange={(e) => void addPhotos(e.target.files)} />
+                  <input ref={fileInput} id={`${uid}-photos`} type="file" accept="image/*" multiple className="peer sr-only" onChange={(e) => void addPhotos(e.target.files)} />
                   <label
                     htmlFor={`${uid}-photos`}
-                    className="inline-flex min-h-11 cursor-pointer items-center gap-2 rounded-ctl border border-line px-4 t-label text-ink hover:border-graphite/50"
+                    className="inline-flex min-h-11 cursor-pointer items-center gap-2 rounded-ctl border border-line px-4 t-label text-ink hover:border-graphite/50 peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-kiln"
                   >
                     <Camera className="size-[18px]" aria-hidden="true" />
                     Add photos

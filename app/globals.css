@@ -22,6 +22,8 @@
   --color-ink-hover: #000000;
   --color-ink-pressed: #2e2e2e;
   --color-graphite: #5b5b5b;
+  /* Placeholder and hint text. 4.5:1 on white and on the grey surfaces. */
+  --color-hint: #6e6e6e;
   --color-kiln: #c8501f;
   --color-kiln-deep: #a33e14;
   --color-moss: #2f6b4f;
@@ -56,6 +58,36 @@
 @layer base {
   html {
     color-scheme: light;
+    /* Anchor links and focus never land under the sticky header. */
+    scroll-padding-top: 88px;
+    scrollbar-color: color-mix(in srgb, var(--color-ink) 28%, transparent) transparent;
+    -webkit-tap-highlight-color: color-mix(in srgb, var(--color-ink) 8%, transparent);
+  }
+
+  /* Browser surfaces, themed from the palette. */
+  ::selection {
+    background: var(--color-ink);
+    color: var(--color-surface);
+  }
+
+  input,
+  textarea,
+  select {
+    caret-color: var(--color-kiln);
+    accent-color: var(--color-ink);
+  }
+
+  button:not(:disabled),
+  summary,
+  label[for],
+  [role="button"]:not([aria-disabled="true"]) {
+    cursor: pointer;
+  }
+
+  h1,
+  h2,
+  h3 {
+    text-wrap: balance;
   }
 
   body {

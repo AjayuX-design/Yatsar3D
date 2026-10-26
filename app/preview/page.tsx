@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { notFound } from "next/navigation";
 import { Accordion } from "@/components/ui/Accordion";
 import { Button, type ButtonVariant } from "@/components/ui/Button";
 import { Chip, StatusChip } from "@/components/ui/Chip";
@@ -52,6 +53,8 @@ const variants: Array<{ v: ButtonVariant; name: string; pressed: string }> = [
 const focusForced = "outline-2 outline-offset-2 outline-kiln";
 
 export default function PreviewPage() {
+  // The internal component gallery is for development and preview builds, not the live shop.
+  if (process.env.VERCEL_ENV === "production") notFound();
   const num = sampleStore.whatsappNumber;
   const productMsg = productEnquiryMessage(sampleProduct);
 

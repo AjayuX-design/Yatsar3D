@@ -41,11 +41,11 @@ export default async function PolicyPage(props: PageProps<"/policies/[slug]">) {
               <div className="mt-3 space-y-3">
                 {s.body.map((b, i) =>
                   typeof b === "string" ? (
-                    <p key={i} className="t-body text-graphite lg:text-[17px] lg:leading-7">
+                    <p key={i} className="max-w-[56ch] t-body text-graphite lg:text-[17px] lg:leading-7">
                       {b}
                     </p>
                   ) : (
-                    <ul key={i} className="list-disc space-y-2 pl-5 t-body text-graphite marker:text-graphite/60 lg:text-[17px] lg:leading-7">
+                    <ul key={i} className="max-w-[56ch] list-disc space-y-2 pl-5 t-body text-graphite marker:text-graphite/60 lg:text-[17px] lg:leading-7">
                       {b.list.map((item) => (
                         <li key={item}>{item}</li>
                       ))}
