@@ -6,7 +6,7 @@ import { policyLinks } from "@/components/layout/nav";
 import { generalEnquiryMessage } from "@/lib/whatsapp";
 import type { Collection } from "@/lib/types";
 
-const linkClass = "inline-flex min-h-11 items-center t-small text-ink underline-offset-[3px] hover:underline";
+const linkClass = "inline-flex min-h-11 min-w-11 items-center t-small text-ink underline-offset-[3px] hover:underline";
 
 /**
  * Brand and WhatsApp first, then link groups (accordions on mobile, columns on

@@ -68,19 +68,11 @@
     text-rendering: optimizeLegibility;
   }
 
+  p, li { text-wrap: pretty; }
+
   :focus-visible {
     outline: 2px solid var(--color-kiln);
     outline-offset: 2px;
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    *,
-    ::before,
-    ::after {
-      animation-duration: 0.01ms !important;
-      animation-iteration-count: 1 !important;
-      transition-duration: 0.01ms !important;
-    }
   }
 }
 
@@ -215,3 +207,18 @@ dialog.sheet-menu[open] { animation-name: sheet-left; }
   dialog.sheet-cart[open] { animation-name: sheet-right; }
 }
 dialog.sheet[open]::backdrop { animation: 250ms ease-out both backdrop-in; }
+
+/*
+  Reduced motion: no sliding or spinning-for-show. Sheets fade in instead of
+  sliding, so opening and closing still reads. The loading spinner keeps turning
+  because it tells the user work is happening. Placed after the sheet rules so
+  it wins (unlayered rules beat the base layer).
+*/
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, ::before, ::after { transition-duration: 0.01ms !important; }
+  dialog.sheet[open],
+  dialog.sheet-menu[open],
+  dialog.sheet-cart[open] { animation: 150ms ease-out both backdrop-in; }
+  dialog.sheet[open]::backdrop { animation-duration: 150ms; }
+}

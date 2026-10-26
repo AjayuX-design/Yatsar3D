@@ -79,8 +79,8 @@ export default function HomePage() {
       <section className={section} aria-label="Delivery area">
         <div className="mx-auto max-w-[720px]">
           <InfoCard variant="slate" title="Delivery area">
-            {sampleStore.deliveryAreaText} Most orders arrive within a few days of dispatch.{" "}
-            <Link href="/delivery" className="font-medium text-ink underline underline-offset-[3px]">
+            {sampleStore.deliveryAreaText} Most orders arrive within a few days of dispatch.
+            <Link href="/delivery" className="-mb-3 flex min-h-11 items-center font-medium text-ink underline underline-offset-[3px]">
               How delivery works
             </Link>
           </InfoCard>
