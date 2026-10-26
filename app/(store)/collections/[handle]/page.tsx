@@ -99,7 +99,7 @@ async function CollectionContent({
       {total === 0 ? (
         <div className="mx-auto max-w-[480px] py-16 text-center">
           <p className="t-h3 text-ink">Nothing here yet</p>
-          <p className="mt-2 t-small text-graphite">This collection has no products right now.</p>
+          <p className="mt-2 t-small text-graphite">Products in this category are coming soon.</p>
           <Button href="/collections/all" className="mt-6">
             Shop all products
           </Button>

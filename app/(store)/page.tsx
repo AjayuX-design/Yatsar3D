@@ -110,7 +110,7 @@ export default function HomePage() {
   );
 }
 
-/** Shop by category: one tile per collection. Hidden when the store has none. */
+/** Shop by category: one tile per category. */
 async function Categories() {
   const found = await getNavCollections();
   // Count products in each category from Shopify. Empty categories are not shown.
@@ -120,8 +120,8 @@ async function Categories() {
       return { ...c, count: r.state === "ok" && r.data ? r.data.products.length : 0 };
     }),
   );
-  // Custom Orders is an enquiry, so it shows without a product count.
-  const collections = counted.filter((c) => c.count > 0 || c.handle === CUSTOM_ORDERS_HANDLE);
+  // Categories with no products yet show "Coming soon". Custom Orders is an enquiry, so it has no count.
+  const collections = counted;
   if (!collections.length) return null;
   return (
     <section className={section} aria-labelledby="categories">
@@ -143,7 +143,11 @@ async function Categories() {
               </span>
               <span className="flex items-center justify-between gap-2 t-small text-graphite">
                 <span className="[font-variant-numeric:tabular-nums]">
-                  {c.handle === CUSTOM_ORDERS_HANDLE ? "Get a quote" : `${c.count} ${c.count === 1 ? "product" : "products"}`}
+                  {c.handle === CUSTOM_ORDERS_HANDLE
+                    ? "Get a quote"
+                    : c.count === 0
+                      ? "Coming soon"
+                      : `${c.count} ${c.count === 1 ? "product" : "products"}`}
                 </span>
                 <ArrowRight aria-hidden="true" className="size-5 text-ink transition-transform duration-150 group-hover:translate-x-0.5" />
               </span>

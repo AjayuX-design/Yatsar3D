@@ -2,6 +2,7 @@ import { cacheLife } from "next/cache";
 import { isShopifyConfigured, shopifyFetch } from "@/lib/shopify/client";
 import { mapProduct, type ShopifyProduct } from "@/lib/shopify/mappers";
 import { COLLECTIONS, COLLECTION_BY_HANDLE, PRODUCTS, PRODUCT_BY_HANDLE } from "@/lib/shopify/queries";
+import { defaultCategories, isDefaultCategory, mergeCategories } from "@/lib/categories";
 import { sampleCollections } from "@/lib/sample-collections";
 import { sampleProducts } from "@/lib/sample-products";
 import type { Collection, Product } from "@/lib/types";
@@ -124,6 +125,11 @@ export async function getCollection(handle: string): Promise<Loaded<CollectionPa
       },
     };
   }
+  if (!c && isDefaultCategory(handle)) {
+    // A planned category that has no Shopify collection yet: an empty shelf, not a 404.
+    const d = defaultCategories.find((x) => x.handle === handle)!;
+    return { state: "ok", data: { handle: d.handle, title: d.title, description: d.description, products: [] } };
+  }
   return {
     state: "ok",
     data: c ? { handle: c.handle, title: c.title, description: c.description, products: c.products.nodes.map(mapProduct) } : null,
@@ -147,10 +153,12 @@ export async function getNavCollections(): Promise<Collection[]> {
   });
   if (!r.ok) {
     cacheLife("seconds");
-    return [];
+    return defaultCategories;
   }
   cacheLife({ stale: 60, revalidate: 300, expire: 3600 });
-  return r.data.collections.nodes
-    .filter((c) => c.handle !== "all" && c.handle !== "frontpage")
-    .map((c) => ({ handle: c.handle, title: c.title, description: c.description, productHandles: [] }));
+  return mergeCategories(
+    r.data.collections.nodes
+      .filter((c) => c.handle !== "all" && c.handle !== "frontpage")
+      .map((c) => ({ handle: c.handle, title: c.title, description: c.description, productHandles: [] })),
+  );
 }
