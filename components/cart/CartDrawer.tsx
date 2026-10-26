@@ -33,7 +33,7 @@ export function CartDrawer({
   whatsappNumber?: string;
   mixedCartNote: string;
 }) {
-  const { lines, discount, totals, open, closeCart, updating, removed, setQuantity, remove, undoRemove, applyCode, removeCode } =
+  const { lines, discount, totals, open, closeCart, updating, removed, error, checkoutUrl: cartCheckoutUrl, setQuantity, remove, undoRemove, applyCode, removeCode } =
     useCart();
   const empty = lines.length === 0;
 
@@ -105,6 +105,12 @@ export function CartDrawer({
           )}
         </div>
 
+        {error && (
+          <p role="alert" className="shrink-0 bg-error-tint px-4 py-2 t-small text-error">
+            {error}
+          </p>
+        )}
+
         {removed && (
           <div className="flex shrink-0 items-center justify-between gap-3 bg-ink px-4 py-2 t-small text-surface">
             <span className="min-w-0 truncate">Removed {removed.title}</span>
@@ -136,7 +142,7 @@ export function CartDrawer({
               Shipping and taxes are calculated at checkout. Secure checkout by Shopify.
             </p>
 
-            <Button href={checkoutUrl} disabled={updating} loading={updating} block>
+            <Button href={cartCheckoutUrl ?? checkoutUrl} disabled={updating} loading={updating} block>
               Check out
             </Button>
             <div className="-mb-1 flex items-center justify-between gap-2">

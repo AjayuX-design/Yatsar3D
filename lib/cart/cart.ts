@@ -23,7 +23,8 @@ export type CartLine = {
   fulfilment: Fulfilment;
 };
 
-export type Discount = { code: string; percent: number };
+/** percent is set for the sample cart only. With Shopify, the discount amount comes from the cart totals. */
+export type Discount = { code: string; percent?: number };
 
 export const money = (n: number): Money => ({
   amount: (Math.round(n * 100) / 100).toString(),
@@ -66,9 +67,17 @@ export function setQuantity(lines: CartLine[], id: string, quantity: number): Ca
     .filter((l) => l.quantity > 0);
 }
 
-export function cartTotals(lines: CartLine[], discount?: Discount | null) {
+export type CartTotals = {
+  count: number;
+  subtotal: Money;
+  discount: Money;
+  total: Money;
+  hasDiscount: boolean;
+};
+
+export function cartTotals(lines: CartLine[], discount?: Discount | null): CartTotals {
   const subtotal = lines.reduce((sum, l) => sum + amount(l.price) * l.quantity, 0);
-  const discountAmount = discount ? Math.round(subtotal * discount.percent) / 100 : 0;
+  const discountAmount = discount?.percent ? Math.round(subtotal * discount.percent) / 100 : 0;
   return {
     count: lines.reduce((n, l) => n + l.quantity, 0),
     subtotal: money(subtotal),
@@ -81,7 +90,7 @@ export function cartTotals(lines: CartLine[], discount?: Discount | null) {
 /** What one line costs after the cart discount. */
 export function lineTotals(line: CartLine, discount?: Discount | null) {
   const full = amount(line.price) * line.quantity;
-  const after = discount ? full - Math.round(full * discount.percent) / 100 : full;
+  const after = discount?.percent ? full - Math.round(full * discount.percent) / 100 : full;
   return { full: money(full), after: money(after), discounted: after < full };
 }
 

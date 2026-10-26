@@ -32,7 +32,7 @@ export function DiscountField({
     <div>
       {discount && (
         <p className="mb-3 inline-flex h-7 items-center gap-1 rounded-pill bg-moss-tint pl-3 pr-1 t-caption text-moss">
-          {discount.code} ({discount.percent}% off)
+          {discount.code}{discount.percent ? ` (${discount.percent}% off)` : ""}
           <button
             type="button"
             onClick={onRemove}

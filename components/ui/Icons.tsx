@@ -13,6 +13,7 @@ export {
   Minus,
   Plus,
   Ruler,
+  Search,
   ShoppingBag,
   Truck,
   X,

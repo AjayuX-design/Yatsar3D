@@ -4,7 +4,7 @@ import { Footer } from "@/components/layout/Footer";
 import { Header } from "@/components/layout/Header";
 import { CartDrawer } from "@/components/cart/CartDrawer";
 import { CartProvider } from "@/lib/cart/CartProvider";
-import { getNavCollections, getProducts } from "@/lib/data";
+import { getNavCollections, getProducts, getSource } from "@/lib/data";
 import { sampleStore } from "@/lib/sample-data";
 import type { Collection } from "@/lib/types";
 
@@ -56,7 +56,7 @@ async function CartSlot() {
 
 export default function StoreLayout({ children }: { children: React.ReactNode }) {
   return (
-    <CartProvider>
+    <CartProvider mode={getSource() === "sample" ? "sample" : "shopify"}>
       <AnnouncementBar text={sampleStore.announcementText} />
       <Suspense fallback={header([])}>
         <HeaderSlot />

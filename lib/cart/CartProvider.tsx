@@ -3,6 +3,16 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import { sampleDiscountCodes } from "@/lib/sample-data";
 import {
+  addToCart,
+  applyDiscount,
+  clearDiscount,
+  getCart,
+  removeLine,
+  setLineQuantity as setLineQuantityAction,
+  type CartResult,
+} from "./actions";
+import type { CartView } from "@/lib/shopify/cart";
+import {
   addLine,
   cartTotals,
   checkCode,
@@ -41,6 +51,10 @@ type CartContextValue = {
   undoRemove: () => void;
   applyCode: (code: string) => Promise<string | null>;
   removeCode: () => void;
+  /** Shopify's checkout address for this cart. Missing in sample mode. */
+  checkoutUrl?: string;
+  /** Short message when the last action failed. */
+  error: string | null;
 };
 
 const CartContext = createContext<CartContextValue | null>(null);
@@ -51,7 +65,99 @@ export function useCart() {
   return ctx;
 }
 
-export function CartProvider({ children }: { children: ReactNode }) {
+/**
+ * shopify: the real cart. Every action is a server action; Shopify is the source
+ *          of truth for lines, prices, stock, discounts and the checkout address.
+ * sample : the browser-only test cart used while building the interface.
+ */
+export function CartProvider({ mode, children }: { mode: "shopify" | "sample"; children: ReactNode }) {
+  return mode === "shopify" ? <ShopifyCartProvider>{children}</ShopifyCartProvider> : <SampleCartProvider>{children}</SampleCartProvider>;
+}
+
+function ShopifyCartProvider({ children }: { children: ReactNode }) {
+  const [cart, setCart] = useState<CartView | null>(null);
+  const [open, setOpen] = useState(false);
+  const [pending, setPending] = useState(0);
+  const [removed, setRemoved] = useState<CartLine | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const undoTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const run = useCallback(async (fn: () => Promise<CartResult>): Promise<CartResult> => {
+    setPending((n) => n + 1);
+    try {
+      const r = await fn();
+      if (r.ok) {
+        setCart(r.cart);
+        setError(null);
+      } else {
+        setError(r.message);
+      }
+      return r;
+    } catch {
+      const message = "We could not update your cart. Please try again.";
+      setError(message);
+      return { ok: false, message };
+    } finally {
+      setPending((n) => n - 1);
+    }
+  }, []);
+
+  // Load the saved cart once, after hydration. The ref stops the dev-mode double
+  // effect from sending two reads at once, where the second cancels the first.
+  const loadedOnce = useRef(false);
+  useEffect(() => {
+    if (loadedOnce.current) return;
+    loadedOnce.current = true;
+    void run(getCart);
+  }, [run]);
+
+  const lines = useMemo(() => cart?.lines ?? [], [cart]);
+  const discount = useMemo<Discount | null>(() => (cart?.discountCode ? { code: cart.discountCode } : null), [cart]);
+
+  const value = useMemo<CartContextValue>(
+    () => ({
+      lines,
+      discount,
+      totals: cart?.totals ?? cartTotals([], null),
+      open,
+      updating: pending > 0,
+      removed,
+      error,
+      checkoutUrl: cart?.checkoutUrl,
+      openCart: () => setOpen(true),
+      closeCart: () => setOpen(false),
+      add: async (_product, variant, quantity) => {
+        await run(() => addToCart(variant.id, quantity));
+      },
+      setQuantity: (id, quantity) => void run(() => (quantity > 0 ? setLineQuantityAction(id, quantity) : removeLine(id))),
+      remove: (id) => {
+        const line = lines.find((l) => l.id === id);
+        void run(() => removeLine(id)).then((r) => {
+          if (!r.ok || !line) return;
+          setRemoved(line);
+          if (undoTimer.current) clearTimeout(undoTimer.current);
+          undoTimer.current = setTimeout(() => setRemoved(null), 5000);
+        });
+      },
+      undoRemove: () => {
+        if (!removed) return;
+        const line = removed;
+        setRemoved(null);
+        void run(() => addToCart(line.variantId, line.quantity));
+      },
+      applyCode: async (code) => {
+        const r = await run(() => applyDiscount(code));
+        return r.ok ? null : r.message;
+      },
+      removeCode: () => void run(clearDiscount),
+    }),
+    [lines, discount, cart, open, pending, removed, error, run],
+  );
+
+  return <CartContext.Provider value={value}>{children}</CartContext.Provider>;
+}
+
+function SampleCartProvider({ children }: { children: ReactNode }) {
   const [lines, setLines] = useState<CartLine[]>([]);
   const [discount, setDiscount] = useState<Discount | null>(null);
   const [open, setOpen] = useState(false);
@@ -99,6 +205,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
       open,
       updating: pending > 0,
       removed,
+      error: null,
       openCart: () => setOpen(true),
       closeCart: () => setOpen(false),
       add: async (product, variant, quantity) => {

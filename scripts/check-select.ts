@@ -1,11 +1,13 @@
 // Runs the variant selection and spec logic against sample products.
 // Run with: npm run check:select
 import assert from "node:assert/strict";
+import { mapCart, type ShopifyCart } from "@/lib/shopify/cart";
 import { defaultSelection, findVariant, valueState } from "@/lib/product/select";
 import { buildSpecRows } from "@/lib/product/spec";
 import { formatDays } from "@/lib/format/leadtime";
 import { formatDimensions } from "@/lib/format/dimensions";
 import { sampleProducts } from "@/lib/sample-products";
+import { searchProducts } from "@/lib/product/search";
 import { normaliseDomain, readShopifyConfig } from "@/lib/shopify/config";
 import { mapProduct } from "@/lib/shopify/mappers";
 import { noOptionsFixture, planterFixture } from "./fixtures";
@@ -116,4 +118,58 @@ assert.equal(buildSpecRows(magnet, magnet.variants[0]).find((r) => r.label === "
 assert.equal(buildSpecRows(magnet, magnet.variants[0]).some((r) => r.label === "Material"), false, "no material shown");
 assert.match(magnet.careNote ?? "", /direct sunlight/);
 
-console.log("select, spec, format, sort, cart, shopify config and mapper checks passed");
+// Shopify cart mapper
+const cartFixture = (total: string, codes: { code: string; applicable: boolean }[]): ShopifyCart => ({
+  id: "gid://shopify/Cart/abc",
+  checkoutUrl: "https://example.myshopify.com/cart/c/abc",
+  totalQuantity: 2,
+  cost: { subtotalAmount: { amount: "398.0", currencyCode: "INR" }, totalAmount: { amount: total, currencyCode: "INR" } },
+  discountCodes: codes,
+  lines: {
+    nodes: [
+      {
+        id: "gid://shopify/CartLine/1",
+        quantity: 2,
+        merchandise: {
+          id: "gid://shopify/ProductVariant/9",
+          title: "Default Title",
+          quantityAvailable: 11,
+          price: { amount: "199.0", currencyCode: "INR" },
+          compareAtPrice: null,
+          image: null,
+          product: {
+            handle: "fear-not-fridge-magnet",
+            title: "Fear Not fridge magnet",
+            options: [{ name: "Title" }],
+            featuredImage: { url: "https://cdn.shopify.com/a.jpg", altText: null },
+            fulfilment: { value: "ready_stock" },
+          },
+        },
+      },
+      { id: "gid://shopify/CartLine/2", quantity: 1, merchandise: null },
+    ],
+  },
+});
+const plainCart = mapCart(cartFixture("398.0", []));
+assert.equal(plainCart.lines.length, 1, "line with no merchandise is dropped");
+assert.equal(plainCart.lines[0].variantTitle, undefined, "Default Title hidden");
+assert.equal(plainCart.lines[0].maxQuantity, 11, "ready stock caps at available quantity");
+assert.equal(plainCart.lines[0].imageSrc, "https://cdn.shopify.com/a.jpg", "falls back to product image");
+assert.equal(plainCart.totals.subtotal.amount, "398");
+assert.equal(plainCart.totals.hasDiscount, false);
+assert.equal(plainCart.discountCode, null);
+const discounted = mapCart(cartFixture("358.2", [{ code: "TEN", applicable: true }]));
+assert.equal(discounted.totals.discount.amount, "39.8", "discount is subtotal minus Shopify total");
+assert.equal(discounted.discountCode, "TEN");
+assert.equal(mapCart(cartFixture("398.0", [{ code: "BAD", applicable: false }])).discountCode, null, "rejected code is not shown as applied");
+
+// Search
+const names = (q: string) => searchProducts(sampleProducts, q).map((p) => p.handle);
+assert.deepEqual(names(""), [], "empty query finds nothing");
+assert.equal(names("magnet")[0], "fear-not-fridge-magnet", "title match");
+assert.equal(names("FEAR not")[0], "fear-not-fridge-magnet", "case and word order do not matter");
+assert.ok(names("petg").includes("planter-pot"), "matches material and option values");
+assert.deepEqual(names("zzzz"), [], "no match gives an empty list");
+assert.deepEqual(names("magnet planter"), [], "every word must match");
+
+console.log("select, spec, format, sort, cart, shopify config, mapper and cart-mapper checks passed");
