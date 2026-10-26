@@ -4,7 +4,7 @@ import { useActionState, useEffect, useId, useRef, useState } from "react";
 import { submitCustomOrder, type CustomOrderState } from "@/app/(store)/custom-print/actions";
 import { WhatsAppButton } from "@/components/enquiry/WhatsAppButton";
 import { Button } from "@/components/ui/Button";
-import { Archive, ArrowLeft, ArrowRight, Briefcase, Camera, Check, Pencil, PenLine, Send, X } from "@/components/ui/Icons";
+import { Archive, ArrowLeft, ArrowRight, Briefcase, Camera, Check, Copy, Pencil, PenLine, Send, ShieldCheck, X } from "@/components/ui/Icons";
 import { cn } from "@/lib/cn";
 import {
   MAX_PHOTOS,
@@ -153,8 +153,18 @@ function Progress({ step }: { step: number }) {
   );
 }
 
+/** Remounts the form to start again, so a second request begins from a clean slate. */
 export function CustomOrderForm({ whatsappNumber }: { whatsappNumber?: string }) {
+  const [round, setRound] = useState(0);
+  return <CustomOrderFormInner key={round} whatsappNumber={whatsappNumber} onReset={() => setRound((r) => r + 1)} />;
+}
+
+type Sent = { typeLabel: string; size?: string; photos: number; city: string; phone: string; quantity?: string };
+
+function CustomOrderFormInner({ whatsappNumber, onReset }: { whatsappNumber?: string; onReset: () => void }) {
   const uid = useId();
+  const [sent, setSent] = useState<Sent | null>(null);
+  const [copied, setCopied] = useState(false);
   const [state, action, pending] = useActionState<CustomOrderState, FormData>(submitCustomOrder, { status: "idle" });
   const [photos, setPhotos] = useState<Photo[]>([]);
   const [photoNote, setPhotoNote] = useState<string | null>(null);
@@ -233,24 +243,75 @@ export function CustomOrderForm({ whatsappNumber }: { whatsappNumber?: string })
   };
 
   if (state.status === "ok") {
+    const rows: Array<[string, string]> = sent
+      ? ([
+          ["You asked for", sent.typeLabel],
+          sent.size ? ["Drawer size", sent.size] : null,
+          sent.quantity ? ["How many", sent.quantity] : null,
+          sent.photos ? ["Photos", `${sent.photos} attached`] : null,
+          ["City", sent.city],
+          ["We will contact", sent.phone],
+        ] as Array<[string, string] | null>).filter((r): r is [string, string] => !!r)
+      : [];
     return (
-      <div ref={successRef} tabIndex={-1} role="status" className="py-4 outline-none">
-        <span aria-hidden="true" className="grid size-14 place-items-center rounded-pill bg-moss-tint text-moss">
-          <Check className="size-7" />
-        </span>
-        <h2 className="mt-5 t-h2 text-ink">Request received</h2>
-        <p className="mt-3 max-w-[480px] t-body-l text-graphite">
-          Your request number is{" "}
-          <strong className="font-semibold text-ink [font-variant-numeric:tabular-nums]">{state.id}</strong>. We will reply with a quote by phone or
-          WhatsApp. You pay nothing until you approve it.
+      <div ref={successRef} tabIndex={-1} role="status" className="my-auto outline-none">
+        <div className="flex items-center gap-4">
+          <span aria-hidden="true" className="grid size-14 shrink-0 place-items-center rounded-pill bg-moss-tint text-moss">
+            <Check className="size-7" />
+          </span>
+          <div>
+            <h2 className="t-h2 text-ink">Request received</h2>
+            <p className="mt-1 t-body text-graphite">We will reply with a quote by phone or WhatsApp.</p>
+          </div>
+        </div>
+
+        <div className="mt-6 flex items-center justify-between gap-4 rounded-card bg-mist p-4 md:p-5">
+          <div>
+            <p className="t-caption text-graphite">Request number</p>
+            <p className="mt-1 font-heading text-[28px] font-semibold leading-8 tracking-tight text-ink [font-variant-numeric:tabular-nums]">{state.id}</p>
+          </div>
+          <button
+            type="button"
+            onClick={() => {
+              void navigator.clipboard?.writeText(state.id).then(() => {
+                setCopied(true);
+                setTimeout(() => setCopied(false), 2000);
+              });
+            }}
+            className="inline-flex min-h-11 shrink-0 items-center gap-2 rounded-ctl border border-line bg-surface px-4 t-label text-ink hover:border-graphite/50"
+          >
+            {copied ? <Check className="size-4" aria-hidden="true" /> : <Copy className="size-4" aria-hidden="true" />}
+            {copied ? "Copied" : "Copy"}
+          </button>
+        </div>
+
+        {rows.length > 0 && (
+          <dl className="mt-6 divide-y divide-line border-y border-line">
+            {rows.map(([k, v]) => (
+              <div key={k} className="flex items-baseline justify-between gap-6 py-3">
+                <dt className="t-small text-graphite">{k}</dt>
+                <dd className="text-right t-value text-ink">{v}</dd>
+              </div>
+            ))}
+          </dl>
+        )}
+
+        <p className="mt-6 flex gap-3 t-small text-graphite">
+          <ShieldCheck className="mt-0.5 size-5 shrink-0 text-moss" aria-hidden="true" />
+          You pay nothing until you approve the quote. Mention this number if you message us.
         </p>
-        <WhatsAppButton
-          number={whatsappNumber}
-          message={`Hi Yatsar 3D, I just sent custom order request ${state.id}. I'm messaging so you have my WhatsApp.`}
-          label="Message us on WhatsApp"
-          block={false}
-          className="mt-6"
-        />
+
+        <div className="mt-6 flex flex-col items-start gap-3 sm:flex-row sm:items-center">
+          <WhatsAppButton
+            number={whatsappNumber}
+            message={`Hi Yatsar 3D, I just sent custom order request ${state.id}. I'm messaging so you have my WhatsApp.`}
+            label="Message us on WhatsApp"
+            block={false}
+          />
+          <button type="button" onClick={onReset} className="inline-flex min-h-11 items-center px-2 t-label text-ink underline underline-offset-[3px]">
+            Send another request
+          </button>
+        </div>
       </div>
     );
   }
@@ -272,6 +333,14 @@ export function CustomOrderForm({ whatsappNumber }: { whatsappNumber?: string })
         }
       }}
       action={(fd) => {
+        setSent({
+          typeLabel: typeLabel ?? "",
+          size: type === "drawers" && dims.l && dims.w && dims.d ? `${dims.l} × ${dims.w} × ${dims.d} mm` : undefined,
+          quantity: String(fd.get("quantity") ?? "").trim() || undefined,
+          photos: photos.length,
+          city: String(fd.get("city") ?? "").trim(),
+          phone: String(fd.get("phone") ?? "").trim(),
+        });
         fd.delete("photos");
         photos.forEach((p) => fd.append("photos", p.file));
         // The three drawer boxes become one line of text, and a company name joins the details.

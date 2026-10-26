@@ -1,6 +1,7 @@
 // One icon library (Lucide, outline, 1.5px stroke). Re-exported here so the
 // whole app imports icons from one place.
 export {
+  Copy,
   ReceiptText,
   Send,
   Pencil,

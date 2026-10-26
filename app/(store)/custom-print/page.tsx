@@ -36,10 +36,10 @@ export default async function CustomPrintPage() {
         </p>
       </header>
 
-      <div className="mt-8 grid gap-10 lg:mt-10 lg:grid-cols-12 lg:items-start lg:gap-12">
+      <div className="mt-8 grid gap-10 lg:mt-10 lg:grid-cols-12 lg:items-stretch lg:gap-12">
         <div className="lg:col-span-7">
           {formReady ? (
-            <div className="rounded-card border border-line bg-surface p-5 shadow-[0_1px_2px_rgba(23,23,23,0.04)] md:p-8">
+            <div className="flex h-full flex-col rounded-card border border-line bg-surface p-5 shadow-[0_1px_2px_rgba(23,23,23,0.04)] md:p-8">
               <CustomOrderForm whatsappNumber={sampleStore.whatsappNumber} />
             </div>
           ) : (
@@ -61,7 +61,7 @@ export default async function CustomPrintPage() {
           )}
         </div>
 
-        <aside className="space-y-6 lg:sticky lg:top-24 lg:col-span-5" aria-label="What happens next">
+        <aside className="space-y-6 lg:sticky lg:top-24 lg:col-span-5 lg:self-start" aria-label="What happens next">
           <section aria-labelledby="next">
             <h2 id="next" className="t-h3 text-ink">
               What happens next
