@@ -107,7 +107,7 @@ function Grid({ products, heading }: { products: Product[]; heading?: string }) 
   return (
     <section className="mt-6" aria-label={heading ?? "Results"}>
       <h2 className={heading ? "mb-4 t-h3 text-ink" : "sr-only"}>{heading ?? "Results"}</h2>
-      <div className="grid grid-cols-2 gap-x-3 gap-y-8 lg:grid-cols-4 lg:gap-x-6 lg:gap-y-10">
+      <div className="grid grid-cols-2 gap-x-3 gap-y-8 md:grid-cols-3 lg:grid-cols-4 lg:gap-x-6 lg:gap-y-10">
         {products.map((p, i) => (
           <ProductCard key={p.handle} product={p} priority={i < 2} />
         ))}

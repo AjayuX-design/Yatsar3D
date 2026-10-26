@@ -114,7 +114,7 @@ async function CollectionContent({
           </Button>
         </div>
       ) : (
-        <div className="mt-6 grid grid-cols-2 gap-x-3 gap-y-8 lg:grid-cols-4 lg:gap-x-6 lg:gap-y-10">
+        <div className="mt-6 grid grid-cols-2 gap-x-3 gap-y-8 md:grid-cols-3 lg:grid-cols-4 lg:gap-x-6 lg:gap-y-10">
           {products.map((p, i) => (
             <ProductCard key={p.handle} product={p} priority={i < 2} />
           ))}
@@ -128,7 +128,7 @@ function CollectionSkeleton() {
   return (
     <div aria-busy="true" aria-label="Loading products">
       <div className="mt-4 h-8 w-1/2 rounded-ctl bg-mist" />
-      <div className="mt-8 grid grid-cols-2 gap-x-3 gap-y-8 lg:grid-cols-4 lg:gap-x-6">
+      <div className="mt-8 grid grid-cols-2 gap-x-3 gap-y-8 md:grid-cols-3 lg:grid-cols-4 lg:gap-x-6">
         {[0, 1, 2, 3].map((i) => (
           <div key={i}>
             <div className="aspect-square rounded-card bg-mist" />

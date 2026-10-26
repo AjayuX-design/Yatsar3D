@@ -34,7 +34,7 @@ export function VariantPill({
       title={available ? undefined : "Sold out"}
       onClick={onSelect}
       className={cn(
-        "relative inline-flex min-h-11 min-w-[4.5rem] items-center justify-center gap-2 rounded-ctl border px-3.5 t-label transition-colors duration-150",
+        "relative inline-flex min-h-11 min-w-[4.5rem] items-center justify-center gap-2 rounded-ctl border px-4 t-label transition-colors duration-150",
         selected
           ? "border-ink bg-mist font-semibold text-ink"
           : "border-line bg-surface text-ink hover:border-graphite/50",

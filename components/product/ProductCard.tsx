@@ -52,13 +52,13 @@ export function ProductCard({ product, priority = false }: { product: Product; p
             onWhite={hero?.onWhite}
           />
         </div>
-        <StatusChip status={status} tone="overlay" className="absolute left-2.5 top-2.5" />
+        <StatusChip status={status} tone="overlay" className="absolute left-3 top-3" />
       </div>
-      <div className="flex flex-1 flex-col px-0.5 pt-2.5">
+      <div className="flex flex-1 flex-col pt-3">
         <h3 className="line-clamp-2 text-[15px] font-medium leading-5 text-ink group-hover:underline group-hover:underline-offset-[3px]">
           {product.title}
         </h3>
-        {spec && <p className="mt-0.5 t-small text-graphite">{spec}</p>}
+        {spec && <p className="mt-1 t-small text-graphite">{spec}</p>}
         <Price
           className="mt-auto pt-2"
           from={hasRange}

@@ -30,7 +30,7 @@ export function Header({
 
   return (
     <header className="sticky top-0 z-40 border-b border-line bg-surface/95 backdrop-blur-md">
-      <div className="mx-auto grid h-14 max-w-[1200px] grid-cols-[44px_1fr_88px] items-center px-2 md:px-4 lg:flex lg:h-[72px] lg:px-8">
+      <div className="mx-auto grid h-14 max-w-[1200px] grid-cols-[88px_1fr_88px] items-center px-2 md:px-3 lg:flex lg:h-[72px] lg:px-8">
         <button
           type="button"
           aria-label="Open menu"

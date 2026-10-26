@@ -33,7 +33,7 @@ export function StickyBuyBar({
       <div className="mx-auto flex max-w-[1200px] items-center gap-3">
         <div className="min-w-0 flex-1 leading-none">
           {price}
-          {summary && <p className="mt-0.5 truncate t-caption text-graphite">{summary}</p>}
+          {summary && <p className="mt-1 truncate t-caption text-graphite">{summary}</p>}
         </div>
         <div className="shrink-0">{children}</div>
       </div>

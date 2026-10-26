@@ -36,7 +36,7 @@ export function FilterControl({
 
   const chip = (selected: boolean) =>
     cn(
-      "inline-flex min-h-11 items-center gap-2 rounded-pill border pl-3.5 pr-4 t-label transition-colors duration-150",
+      "inline-flex min-h-11 items-center gap-2 rounded-pill border pl-3 pr-4 t-label transition-colors duration-150",
       selected ? "border-ink bg-ink text-surface" : "border-line text-ink hover:border-graphite/50",
     );
 

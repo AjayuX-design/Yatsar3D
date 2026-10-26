@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { categoryHref } from "@/lib/categories";
+import { CUSTOM_ORDERS_HANDLE, categoryHref } from "@/lib/categories";
 import { Sheet } from "@/components/ui/Sheet";
 import { X } from "@/components/ui/Icons";
 import { Wordmark } from "@/components/layout/Wordmark";
@@ -45,7 +45,9 @@ export function MobileMenu({
           <Link href="/collections/all" className={row} onClick={onClose}>
             Shop all
           </Link>
-          {collections.map((c) => (
+          {collections
+            .filter((c) => c.handle !== CUSTOM_ORDERS_HANDLE) // Custom orders is listed below with the other links
+            .map((c) => (
             <Link key={c.handle} href={categoryHref(c.handle)} className={`${row} pl-4 font-normal text-graphite`} onClick={onClose}>
               {c.title}
             </Link>

@@ -122,7 +122,7 @@ export function CartDrawer({
 
         {!empty && (
           <div className="shrink-0 space-y-3 border-t border-line bg-surface px-4 pb-[calc(12px+env(safe-area-inset-bottom))] pt-4">
-            <dl className="space-y-1.5 t-small">
+            <dl className="space-y-2 t-small">
               <div className={row}>
                 <dt className="text-graphite">Subtotal</dt>
                 <dd className="t-value text-ink">{formatMoney(totals.subtotal)}</dd>

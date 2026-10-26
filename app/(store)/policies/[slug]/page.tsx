@@ -58,7 +58,7 @@ export default async function PolicyPage(props: PageProps<"/policies/[slug]">) {
         </div>
       </article>
 
-      <nav aria-label="Other policies" className="mt-14 max-w-[720px] border-t border-line pt-6">
+      <nav aria-label="Other policies" className="mt-12 max-w-[720px] border-t border-line pt-6">
         <h2 className="t-label text-graphite">Other policies</h2>
         <ul className="mt-2 flex flex-wrap gap-x-6">
           {policies

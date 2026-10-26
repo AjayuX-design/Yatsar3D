@@ -73,7 +73,7 @@ export default function HomePage() {
 
       {/* Delivery area */}
       <section className={section} aria-label="Delivery area">
-        <div className="mx-auto max-w-[720px]">
+        <div className="max-w-[720px]">
           <InfoCard variant="slate" title="Delivery area">
             {sampleStore.deliveryAreaText} Most orders arrive within a few days of dispatch.
             <Link href="/delivery" className="-mb-3 flex min-h-11 items-center font-medium text-ink underline underline-offset-[3px]">
@@ -91,10 +91,10 @@ export default function HomePage() {
         <NumberedSteps steps={customSteps} className="mt-8" />
         <div className="mt-8 max-w-[420px]">
           <WhatsAppButton number={sampleStore.whatsappNumber} message={generalEnquiryMessage} />
+          <p className="mt-3 t-small text-graphite">No payment before you approve the quote.</p>
           <Link href="/custom-print" className="mt-1 inline-flex min-h-11 items-center t-label text-ink underline underline-offset-[3px]">
             See what we can make
           </Link>
-          <p className="mt-3 t-small text-graphite">No payment before you approve the quote.</p>
         </div>
       </section>
     </main>
@@ -119,14 +119,14 @@ async function Categories() {
       <h2 id="categories" className="t-h2 text-ink">
         Shop by category
       </h2>
-      <ul className="mt-6 grid grid-cols-2 gap-3 lg:grid-cols-4 lg:gap-6">
+      <ul className="mt-6 grid grid-cols-2 gap-3 md:grid-cols-4 lg:gap-6">
         {collections.map((c) => (
           <li key={c.handle} className="col-span-1 [&:last-child:nth-child(odd)]:col-span-2 lg:[&:last-child:nth-child(odd)]:col-span-1">
             <Link
               href={categoryHref(c.handle)}
-              className="group flex h-full min-h-[120px] flex-col justify-between gap-3 rounded-card bg-mist p-4 transition-colors duration-150 hover:bg-line/60 lg:p-5"
+              className="group flex h-full min-h-[144px] flex-col justify-between gap-4 rounded-card bg-mist p-4 transition-colors duration-150 hover:bg-line/60 lg:p-5"
             >
-              <span className="flex items-center gap-3">
+              <span className="flex flex-col items-start gap-3">
                 <span aria-hidden="true" className="grid size-10 shrink-0 place-items-center rounded-pill bg-surface text-ink">
                   <CategoryIcon handle={c.handle} title={c.title} className="size-5" />
                 </span>
@@ -168,7 +168,7 @@ async function Featured() {
     );
   }
   return (
-    <div className="mt-6 grid grid-cols-2 gap-x-3 gap-y-8 lg:grid-cols-4 lg:gap-x-6 lg:gap-y-10">
+    <div className="mt-6 grid grid-cols-2 gap-x-3 gap-y-8 md:grid-cols-4 lg:gap-x-6 lg:gap-y-10">
       {r.data.map((p, i) => (
         <ProductCard key={p.handle} product={p} priority={i < 2} />
       ))}
@@ -178,7 +178,7 @@ async function Featured() {
 
 function FeaturedSkeleton() {
   return (
-    <div aria-busy="true" aria-label="Loading products" className="mt-6 grid grid-cols-2 gap-x-3 gap-y-8 lg:grid-cols-4 lg:gap-x-6">
+    <div aria-busy="true" aria-label="Loading products" className="mt-6 grid grid-cols-2 gap-x-3 gap-y-8 md:grid-cols-4 lg:gap-x-6">
       {[0, 1, 2, 3].map((i) => (
         <div key={i}>
           <div className="aspect-square rounded-card bg-mist" />

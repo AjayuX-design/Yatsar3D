@@ -113,7 +113,7 @@ export function ProductDetail({ product, store }: { product: Product; store: Sto
   const production = variant?.productionDays ?? product.productionDays;
   const weight = variant?.weightG ?? product.weightG;
   const bullets = (items: string[]) => (
-    <ul className="space-y-1.5">
+    <ul className="space-y-2">
       {items.map((i) => (
         <li key={i}>{i}</li>
       ))}
@@ -144,13 +144,13 @@ export function ProductDetail({ product, store }: { product: Product; store: Sto
           )}
           {product.included.length > 0 && (
             <div>
-              <p className="mb-1.5 t-label text-ink">In the box</p>
+              <p className="mb-2 t-label text-ink">In the box</p>
               {bullets(product.included)}
             </div>
           )}
           {product.notIncluded.length > 0 && (
             <div>
-              <p className="mb-1.5 t-label text-ink">Not included</p>
+              <p className="mb-2 t-label text-ink">Not included</p>
               {bullets(product.notIncluded)}
             </div>
           )}
@@ -203,18 +203,18 @@ export function ProductDetail({ product, store }: { product: Product; store: Sto
 
   return (
     <>
-      <div className="lg:grid lg:grid-cols-2 lg:items-start lg:gap-12 xl:gap-16">
+      <div className="md:grid md:grid-cols-2 md:items-start md:gap-8 lg:gap-12 xl:gap-16">
         <div>
-          <div className="lg:sticky lg:top-6">
+          <div className="md:sticky md:top-20 lg:top-24">
             <ProductGallery images={product.images} title={product.title} />
           </div>
         </div>
 
-        <div className="mt-6 space-y-6 lg:mt-0 lg:space-y-8">
+        <div className="mt-6 space-y-6 md:mt-0 lg:space-y-8">
           <header>
             <h1 className="t-h1 text-ink">{product.title}</h1>
             {(product.material || product.finish) && (
-              <p className="mt-1.5 t-small text-graphite">
+              <p className="mt-2 t-small text-graphite">
                 {[product.material, product.finish].filter(Boolean).join(", ")}
               </p>
             )}

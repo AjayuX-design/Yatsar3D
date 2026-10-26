@@ -7,7 +7,7 @@ export const mainNav = [
 
 export const policyLinks = [
   { label: "Shipping", href: "/policies/shipping" },
-  { label: "Returns and damage", href: "/policies/returns" },
+  { label: "Returns", href: "/policies/returns" },
   { label: "Privacy", href: "/policies/privacy" },
   { label: "Terms", href: "/policies/terms" },
 ];

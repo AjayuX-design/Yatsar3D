@@ -84,7 +84,7 @@ export function FulfilmentBox({
               href={whatsappUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="-mb-3 mt-0.5 inline-flex min-h-11 items-center gap-1.5 t-label text-moss underline-offset-[3px] hover:underline"
+              className="-mb-3 mt-1 inline-flex min-h-11 items-center gap-2 t-label text-moss underline-offset-[3px] hover:underline"
             >
               <WhatsAppIcon className="size-4" />
               Other area? Ask on WhatsApp

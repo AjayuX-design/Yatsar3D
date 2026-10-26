@@ -95,7 +95,7 @@ async function ProductContent({ params }: { params: PageProps<"/products/[handle
           <h2 id="related" className="t-h2 text-ink">
             You may also like
           </h2>
-          <div className="mt-6 grid grid-cols-2 gap-x-3 gap-y-8 lg:grid-cols-4 lg:gap-x-6 lg:gap-y-10">
+          <div className="mt-6 grid grid-cols-2 gap-x-3 gap-y-8 md:grid-cols-4 lg:gap-x-6 lg:gap-y-10">
             {related.map((p) => (
               <ProductCard key={p.handle} product={p} />
             ))}

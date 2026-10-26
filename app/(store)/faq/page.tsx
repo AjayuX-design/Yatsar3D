@@ -142,7 +142,7 @@ export default function FaqPage() {
         <p className="mt-3 t-body-l text-graphite">Short answers about ordering, delivery, custom orders and your prints.</p>
       </header>
 
-      <div className="mt-10 grid gap-10 lg:max-w-[760px]">
+      <div className="mt-10 grid gap-12 lg:max-w-[760px] lg:gap-16">
         {groups.map((g) => (
           <section key={g.id} aria-labelledby={`faq-${g.id}`}>
             <h2 id={`faq-${g.id}`} className="t-h2 text-ink">

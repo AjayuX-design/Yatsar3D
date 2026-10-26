@@ -43,7 +43,7 @@ export function StatusChip({
     return (
       <span
         className={cn(
-          "inline-flex h-6 items-center gap-1.5 rounded-pill bg-surface px-2.5 t-caption whitespace-nowrap",
+          "inline-flex h-6 items-center gap-2 rounded-pill bg-surface px-3 t-caption whitespace-nowrap",
           status === "sold-out" ? "text-graphite" : "text-ink",
           className,
         )}

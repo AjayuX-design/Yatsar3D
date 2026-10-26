@@ -42,14 +42,6 @@ export const customOptions = [
   },
 ] as const;
 
-export const whatToSend = [
-  "A photo or a rough sketch of what you want",
-  "The size you need, in mm or cm. For a drawer: inside length, width and depth",
-  "Colour, if you have a preference",
-  "How many you need",
-  "Your city, so we can confirm delivery",
-];
-
 export const customFaq = [
   {
     id: "price",
@@ -72,3 +64,10 @@ export const customFaq = [
     content: "Nothing is printed or charged until you approve the quote. You can say no at any point before that.",
   },
 ];
+
+/** Three short steps for the page sidebar. Icons, not numbers, so they do not clash with the form's own steps. */
+export const nextSteps = [
+  { icon: "send", title: "You send your request", text: "It takes about two minutes." },
+  { icon: "quote", title: "We send a quote", text: "A price and timing, by phone or WhatsApp." },
+  { icon: "approve", title: "You approve, then pay", text: "We start printing only after you say yes." },
+] as const;

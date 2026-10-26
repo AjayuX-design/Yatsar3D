@@ -4,7 +4,7 @@ import { Wordmark } from "@/components/layout/Wordmark";
 import { WhatsAppButton } from "@/components/enquiry/WhatsAppButton";
 import { policyLinks } from "@/components/layout/nav";
 import { generalEnquiryMessage } from "@/lib/whatsapp";
-import { categoryHref } from "@/lib/categories";
+import { CUSTOM_ORDERS_HANDLE, categoryHref } from "@/lib/categories";
 import type { Collection } from "@/lib/types";
 
 const linkClass = "inline-flex min-h-11 min-w-11 items-center t-small text-ink underline-offset-[3px] hover:underline";
@@ -33,7 +33,9 @@ export function Footer({
       title: "Shop",
       links: [
         { label: "All products", href: "/collections/all" },
-        ...collections.map((c) => ({ label: c.title, href: categoryHref(c.handle) })),
+        ...collections
+          .filter((c) => c.handle !== CUSTOM_ORDERS_HANDLE) // Custom orders is already under Help
+          .map((c) => ({ label: c.title, href: categoryHref(c.handle) })),
       ],
     },
     {
@@ -69,7 +71,7 @@ export function Footer({
             <p className="mt-3 max-w-[320px] t-small text-graphite">
               Physical 3D-printed products, made in India. Size, material and timing on every page.
             </p>
-            <div className="mt-6 max-w-[320px]">
+            <div className="mt-6 lg:max-w-[320px]">
               <WhatsAppButton number={whatsappNumber} message={generalEnquiryMessage} />
             </div>
           </div>

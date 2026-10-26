@@ -49,7 +49,7 @@ export function CartLine({
             >
               {line.title}
             </Link>
-            {line.variantTitle && <p className="mt-0.5 t-small text-graphite">{line.variantTitle}</p>}
+            {line.variantTitle && <p className="mt-1 t-small text-graphite">{line.variantTitle}</p>}
           </div>
           <p className="shrink-0 text-right t-price-s text-ink">
             {totals.discounted && (
@@ -62,7 +62,7 @@ export function CartLine({
         </div>
 
         <StatusChip
-          className="mt-2 h-6 px-2.5"
+          className="mt-2 h-6 px-3"
           status={line.fulfilment === "made_to_order" ? "made-to-order" : "ready"}
         />
 
