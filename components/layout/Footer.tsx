@@ -103,7 +103,7 @@ export function Footer({
 
         <div className="mt-12 flex flex-col gap-2 border-t border-line pt-6 t-caption text-graphite lg:flex-row lg:justify-between">
           <p>© Yatsar 3D</p>
-          <p>{businessLine}</p>
+          {businessLine && <p>{businessLine}</p>}
         </div>
       </div>
     </footer>

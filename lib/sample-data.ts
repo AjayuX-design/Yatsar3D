@@ -12,12 +12,13 @@ export const sampleStore = {
   deliveryAreaText: "We currently deliver in Hyderabad.",
   // Placeholder wording. Shown only when there is a useful message.
   announcementText: "Delivering in Hyderabad. Custom quotes on WhatsApp.",
-  responseHours: "Replies within [hours]",
+  responseHours: "We reply between 10 am and 10 pm.",
   mixedCartNote:
-    "Placeholder. Ready items wait for made-to-order items unless you ask us to split the order.",
+    "Your cart has ready to ship and made to order items. Made to order items take longer, so check the timing on each product.",
   // Placeholder. The real value is Shopify's checkoutUrl for the cart.
   checkoutUrl: "#checkout-handoff",
-  businessLine: "[Business name, city and GST details to come]",
+  // City, address and GST details are still to be added. Empty hides the line.
+  businessLine: "",
 };
 
 // SAMPLE discount codes for testing the cart. The real ones live in Shopify.

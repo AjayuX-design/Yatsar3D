@@ -91,7 +91,7 @@ export default async function CustomPrintPage() {
 
           <div className="rounded-card border border-line p-4">
             <p className="t-label text-ink">Prefer to chat?</p>
-            <p className="mt-1 t-small text-graphite">Message us on WhatsApp instead.</p>
+            <p className="mt-1 t-small text-graphite">Message us on WhatsApp instead. {sampleStore.responseHours}</p>
             <WhatsAppButton number={sampleStore.whatsappNumber} message={generalEnquiryMessage} label="Chat on WhatsApp" className="mt-4" />
           </div>
         </aside>
