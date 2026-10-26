@@ -2,6 +2,7 @@
 
 import { randomBytes } from "node:crypto";
 import { headers } from "next/headers";
+import nodemailer from "nodemailer";
 import {
   MAX_PHOTOS,
   MAX_PHOTO_BYTES,
@@ -17,7 +18,7 @@ import {
 } from "@/lib/custom-orders/request";
 
 /*
-  Receives a custom order request and emails it, with the photos attached.
+  Receives a custom order request and emails it through the shop mailbox (SMTP), with the photos attached.
   Nothing is stored: the email is the record, so every request arrives complete
   and under one request number. Runs on the server only; the email key never
   reaches the browser.
@@ -31,7 +32,7 @@ export type CustomOrderState =
 const GENERIC = "We could not send your request. Please try again, or message us on WhatsApp.";
 
 // Best-effort limit per visitor. Serverless instances do not share memory, so this
-// slows a casual spammer but is not a hard wall. Resend's own limits are the backstop.
+// slows a casual spammer but is not a hard wall. the mail server's own sending limits are the backstop.
 const recent = new Map<string, number[]>();
 function tooMany(ip: string) {
   const now = Date.now();
@@ -92,28 +93,30 @@ export async function submitCustomOrder(_prev: CustomOrderState, formData: FormD
     return { status: "error", message: GENERIC, values: fields };
   }
 
-  let res: Response;
   try {
-    res = await fetch("https://api.resend.com/emails", {
-      method: "POST",
-      headers: { Authorization: `Bearer ${cfg.config.apiKey}`, "Content-Type": "application/json" },
-      body: JSON.stringify({
-        from: cfg.config.from,
-        to: [cfg.config.to],
-        subject: mail.subject,
-        html: mail.html,
-        text: mail.text,
-        ...(fields.email ? { reply_to: fields.email } : {}),
-        ...(attachments.length ? { attachments } : {}),
-      }),
+    const { host, port, user, password, to, from } = cfg.config;
+    const transport = nodemailer.createTransport({
+      host,
+      port,
+      secure: port === 465,
+      auth: { user, pass: password },
+      connectionTimeout: 10_000,
+      greetingTimeout: 10_000,
+      socketTimeout: 20_000,
+    });
+    await transport.sendMail({
+      from,
+      to,
+      subject: mail.subject,
+      html: mail.html,
+      text: mail.text,
+      ...(fields.email ? { replyTo: fields.email } : {}),
+      attachments: attachments.map((a) => ({ filename: a.filename, content: a.content, encoding: "base64" })),
     });
   } catch (e) {
-    console.error("[custom-order] email network error", e instanceof Error ? e.message : "unknown");
-    return { status: "error", message: GENERIC, values: fields };
-  }
-  if (!res.ok) {
-    // Status only. The response can echo request details.
-    console.error("[custom-order] email failed", res.status);
+    // Error codes only (for example EAUTH for a wrong password). Never the password or the message body.
+    const err = e as { code?: string; responseCode?: number };
+    console.error("[custom-order] email failed", err.code ?? "unknown", err.responseCode ?? "");
     return { status: "error", message: GENERIC, values: fields };
   }
   return { status: "ok", id };

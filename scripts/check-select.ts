@@ -204,8 +204,12 @@ assert.match(mail.subject, /^\[YC-AAAAA\] Custom-fit drawers from Asha \(Hyderab
 assert.equal(whatsappDigits("98765 43210"), "919876543210", "10 digit number gets the country code");
 assert.equal(imageKind(new Uint8Array([0xff, 0xd8, 0xff, 0xe0, 0, 0, 0, 0, 0, 0, 0, 0, 0])), "jpeg");
 assert.equal(imageKind(new TextEncoder().encode("<html>not an image at all</html>")), null, "non-image refused");
-assert.equal(readEmailConfig({}).ok, false);
-const mailCfg = readEmailConfig({ RESEND_API_KEY: "k", CUSTOM_ORDER_TO_EMAIL: "me@x.in" });
-assert.ok(mailCfg.ok && mailCfg.config.from.includes("onboarding@resend.dev"), "default sender until the domain is verified");
+assert.deepEqual(readEmailConfig({ SMTP_USER: "a@b.in" }), { ok: false, missing: ["SMTP_PASSWORD"] }, "password required");
+const mailCfg = readEmailConfig({ SMTP_USER: "hello@yatsar3d.com", SMTP_PASSWORD: "pw" });
+assert.ok(mailCfg.ok && mailCfg.config.host === "smtp.hostinger.com" && mailCfg.config.port === 465, "Hostinger defaults");
+assert.ok(mailCfg.ok && mailCfg.config.to === "hello@yatsar3d.com", "delivers to the mailbox by default");
+assert.ok(mailCfg.ok && mailCfg.config.from === "Yatsar 3D <hello@yatsar3d.com>", "sends as the mailbox");
+const mailCfg2 = readEmailConfig({ SMTP_USER: "hello@yatsar3d.com", SMTP_PASSWORD: "pw", CUSTOM_ORDER_TO_EMAIL: "me@x.in", SMTP_PORT: "587" });
+assert.ok(mailCfg2.ok && mailCfg2.config.to === "me@x.in" && mailCfg2.config.port === 587, "overrides work")
 
 console.log("select, spec, format, sort, cart, shopify config, mapper and cart-mapper checks passed");

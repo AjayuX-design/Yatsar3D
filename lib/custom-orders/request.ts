@@ -129,15 +129,38 @@ export function imageKind(bytes: Uint8Array): "jpeg" | "png" | "webp" | null {
   return null;
 }
 
-export type EmailConfig = { apiKey: string; to: string; from: string };
+export type EmailConfig = {
+  host: string;
+  port: number;
+  user: string;
+  password: string;
+  /** Where requests are delivered. */
+  to: string;
+  /** Hostinger only sends as the mailbox you log in with. */
+  from: string;
+};
 
-/** Reads the email settings. Missing settings mean the form stays hidden. */
-export function readEmailConfig(env: Record<string, string | undefined>): { ok: true; config: EmailConfig } | { ok: false; missing: string[] } {
-  const apiKey = (env.RESEND_API_KEY ?? "").trim();
-  const to = (env.CUSTOM_ORDER_TO_EMAIL ?? "").trim();
-  const missing = [!apiKey && "RESEND_API_KEY", !to && "CUSTOM_ORDER_TO_EMAIL"].filter((x): x is string => !!x);
+/**
+ * Reads the mailbox settings. SMTP_USER and SMTP_PASSWORD are the Hostinger
+ * mailbox login. Missing settings keep the form hidden.
+ */
+export function readEmailConfig(
+  env: Record<string, string | undefined>,
+): { ok: true; config: EmailConfig } | { ok: false; missing: string[] } {
+  const user = (env.SMTP_USER ?? "").trim();
+  const password = env.SMTP_PASSWORD ?? "";
+  const missing = [!user && "SMTP_USER", !password && "SMTP_PASSWORD"].filter((x): x is string => !!x);
   if (missing.length) return { ok: false, missing };
-  // onboarding@resend.dev works until the domain is verified in Resend.
-  const from = (env.CUSTOM_ORDER_FROM_EMAIL ?? "").trim() || "Yatsar 3D <onboarding@resend.dev>";
-  return { ok: true, config: { apiKey, to, from } };
+  const port = Number(env.SMTP_PORT) || 465;
+  return {
+    ok: true,
+    config: {
+      host: (env.SMTP_HOST ?? "").trim() || "smtp.hostinger.com",
+      port,
+      user,
+      password,
+      to: (env.CUSTOM_ORDER_TO_EMAIL ?? "").trim() || user,
+      from: `Yatsar 3D <${user}>`,
+    },
+  };
 }
