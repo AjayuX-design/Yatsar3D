@@ -11,7 +11,7 @@ export default function StoreError({ error, reset }: { error: Error & { digest?:
   }, [error]);
 
   return (
-    <main className="mx-auto max-w-[520px] px-4 py-16 text-center lg:py-24">
+    <main id="main" tabIndex={-1} className="outline-none mx-auto max-w-[520px] px-4 py-16 text-center lg:py-24">
       <h1 className="t-h1 text-ink">Something went wrong</h1>
       <p className="mt-3 t-body text-graphite">We could not show this page. Please try again, or head back to the shop.</p>
       <div className="mt-8 flex flex-col items-stretch gap-3 sm:flex-row sm:justify-center">

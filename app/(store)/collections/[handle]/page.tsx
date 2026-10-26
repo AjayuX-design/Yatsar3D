@@ -29,7 +29,7 @@ export async function generateMetadata(props: PageProps<"/collections/[handle]">
 
 export default function CollectionPage(props: PageProps<"/collections/[handle]">) {
   return (
-    <main className="mx-auto w-full max-w-[1200px] px-4 pt-2 md:px-6 lg:px-8">
+    <main id="main" tabIndex={-1} className="outline-none mx-auto w-full max-w-[1200px] px-4 pt-2 md:px-6 lg:px-8">
       <Suspense fallback={<CollectionSkeleton />}>
         <CollectionContent params={props.params} searchParams={props.searchParams} />
       </Suspense>

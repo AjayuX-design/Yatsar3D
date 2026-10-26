@@ -16,7 +16,7 @@ export default function RootNotFound() {
           <Wordmark />
         </div>
       </header>
-      <main>
+      <main id="main" tabIndex={-1}>
         <NotFoundView />
       </main>
     </>

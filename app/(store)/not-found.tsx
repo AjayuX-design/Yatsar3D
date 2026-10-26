@@ -6,7 +6,7 @@ export const metadata: Metadata = { title: "Page not found | Yatsar 3D", robots:
 /** A missing product or collection, shown inside the normal shop header and footer. */
 export default function StoreNotFound() {
   return (
-    <main>
+    <main id="main" tabIndex={-1}>
       <NotFoundView />
     </main>
   );

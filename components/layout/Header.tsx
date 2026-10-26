@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { Menu, Search, ShoppingBag } from "@/components/ui/Icons";
 import { MobileMenu } from "@/components/layout/MobileMenu";
@@ -24,6 +25,7 @@ export function Header({
 }) {
   const [menuOpen, setMenuOpen] = useState(false);
   const { totals, openCart } = useCart();
+  const pathname = usePathname();
 
   const iconButton =
     "grid size-11 place-items-center rounded-ctl text-ink transition-colors duration-150 hover:bg-mist";
@@ -43,15 +45,20 @@ export function Header({
         <Wordmark className="justify-self-center lg:justify-self-start" />
 
         <nav aria-label="Main" className="ml-12 hidden items-center gap-8 lg:flex">
-          {mainNav.map((l) => (
-            <Link
-              key={l.href}
-              href={l.href}
-              className="inline-flex min-h-11 items-center t-label text-ink underline-offset-[6px] hover:underline"
-            >
-              {l.label}
-            </Link>
-          ))}
+          {mainNav.map((l) => {
+            // "Shop all" also counts for collection and product pages.
+            const active = pathname === l.href || (l.href === "/collections/all" && (pathname.startsWith("/collections/") || pathname.startsWith("/products/")));
+            return (
+              <Link
+                key={l.href}
+                href={l.href}
+                aria-current={active ? "page" : undefined}
+                className={`inline-flex min-h-11 items-center t-label text-ink underline-offset-[6px] decoration-2 hover:underline ${active ? "underline" : ""}`}
+              >
+                {l.label}
+              </Link>
+            );
+          })}
         </nav>
 
         <div className="flex items-center justify-self-end lg:ml-auto lg:gap-3">

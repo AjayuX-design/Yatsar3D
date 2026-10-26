@@ -26,15 +26,15 @@ type AsLink = Common &
 
 const base =
   "relative inline-flex items-center justify-center gap-2 " +
-  "text-[16px] leading-6 transition-colors duration-150 ease-out select-none";
+  "text-[16px] leading-6 transition-[color,background-color,border-color,transform] duration-150 ease-out select-none";
 
 const variants: Record<ButtonVariant, string> = {
   primary:
-    "font-semibold bg-ink text-surface rounded-ctl hover:bg-ink-hover active:bg-ink-pressed",
+    "font-semibold bg-ink text-surface rounded-ctl hover:bg-ink-hover active:scale-[0.98] active:bg-ink-pressed",
   secondary:
-    "font-semibold bg-surface text-ink border border-ink rounded-ctl hover:bg-mist active:bg-line",
+    "font-semibold bg-surface text-ink border border-ink rounded-ctl hover:bg-mist active:scale-[0.98] active:bg-line",
   whatsapp:
-    "font-semibold bg-surface text-moss border border-moss rounded-ctl hover:bg-moss-tint active:bg-moss-tint",
+    "font-semibold bg-surface text-moss border border-moss rounded-ctl hover:bg-moss-tint active:scale-[0.98] active:bg-moss-tint",
   text: "text-kiln-deep underline underline-offset-[3px] hover:no-underline min-h-11 px-1 font-medium",
 };
 

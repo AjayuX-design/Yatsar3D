@@ -48,7 +48,15 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="en" className={`${bricolage.variable} ${inter.variable}`}>
-      <body className="min-h-dvh">{children}</body>
+      <body className="min-h-dvh">
+        <a
+          href="#main"
+          className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-ctl focus:bg-ink focus:px-4 focus:py-3 focus:t-label focus:text-surface"
+        >
+          Skip to main content
+        </a>
+        {children}
+      </body>
     </html>
   );
 }

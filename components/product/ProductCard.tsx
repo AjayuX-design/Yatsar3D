@@ -34,12 +34,12 @@ export function ProductCard({ product, priority = false }: { product: Product; p
   return (
     <Link
       href={`/products/${product.handle}`}
-      className="group flex h-full flex-col rounded-card outline-offset-4"
+      className="group flex h-full flex-col rounded-card outline-offset-4 transition-transform duration-150 ease-out active:scale-[0.99]"
     >
       <div className="relative aspect-square overflow-hidden rounded-card bg-mist">
         <div
           className={cn(
-            "absolute inset-0 transition-opacity duration-150",
+            "absolute inset-0 transition-[opacity,transform] duration-300 ease-out [@media(hover:hover)]:group-hover:scale-[1.03]",
             soldOut && "opacity-70 grayscale",
           )}
         >

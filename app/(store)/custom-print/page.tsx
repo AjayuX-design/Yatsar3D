@@ -26,7 +26,7 @@ const stepIcons = { send: Send, quote: ReceiptText, approve: PackageCheck } as c
 export default async function CustomPrintPage() {
   const formReady = await isCustomOrderFormReady();
   return (
-    <main className="mx-auto w-full max-w-[1200px] px-4 pb-8 pt-2 md:px-6 lg:px-8">
+    <main id="main" tabIndex={-1} className="outline-none mx-auto w-full max-w-[1200px] px-4 pb-8 pt-2 md:px-6 lg:px-8">
       <Breadcrumb items={[{ label: "Home", href: "/" }, { label: "Custom orders" }]} />
 
       <header className="mt-2 max-w-[640px]">

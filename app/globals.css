@@ -77,6 +77,17 @@
     accent-color: var(--color-ink);
   }
 
+  /* Removes the old tap delay on phones, so presses feel immediate. */
+  a,
+  button,
+  input,
+  select,
+  textarea,
+  label,
+  summary {
+    touch-action: manipulation;
+  }
+
   button:not(:disabled),
   summary,
   label[for],
@@ -88,6 +99,12 @@
   h2,
   h3 {
     text-wrap: balance;
+  }
+
+  /* The current page in the phone menu: an ink bar, so it reads without colour alone. */
+  nav[aria-label="Menu"] a[aria-current="page"] {
+    box-shadow: inset 3px 0 0 var(--color-ink);
+    padding-left: 12px;
   }
 
   body {

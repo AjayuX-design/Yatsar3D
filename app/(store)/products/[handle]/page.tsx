@@ -44,7 +44,7 @@ export default function ProductPage(props: PageProps<"/products/[handle]">) {
           Sample data. Names, prices, sizes and wording are placeholders.
         </p>
       )}
-      <main className="mx-auto w-full max-w-[1200px] px-4 pb-32 pt-2 md:px-6 lg:px-8 lg:pb-16">
+      <main id="main" tabIndex={-1} className="outline-none mx-auto w-full max-w-[1200px] px-4 pb-32 pt-2 md:px-6 lg:px-8 lg:pb-16">
         <Suspense fallback={<ProductSkeleton />}>
           <ProductContent params={props.params} />
         </Suspense>
