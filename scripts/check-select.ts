@@ -8,6 +8,7 @@ import { formatDays } from "@/lib/format/leadtime";
 import { formatDimensions } from "@/lib/format/dimensions";
 import { sampleProducts } from "@/lib/sample-products";
 import { searchProducts } from "@/lib/product/search";
+import { filterProducts, filterQuery, parseFilters } from "@/lib/product/filter";
 import { normaliseDomain, readShopifyConfig } from "@/lib/shopify/config";
 import { mapProduct } from "@/lib/shopify/mappers";
 import { noOptionsFixture, planterFixture } from "./fixtures";
@@ -171,5 +172,17 @@ assert.equal(names("FEAR not")[0], "fear-not-fridge-magnet", "case and word orde
 assert.ok(names("petg").includes("planter-pot"), "matches material and option values");
 assert.deepEqual(names("zzzz"), [], "no match gives an empty list");
 assert.deepEqual(names("magnet planter"), [], "every word must match");
+
+// Filters
+const handles = (f: ReturnType<typeof parseFilters>) => filterProducts(sampleProducts, f).map((p) => p.handle);
+assert.equal(handles({}).length, sampleProducts.length, "no filters keeps everything");
+assert.ok(!handles({ stock: "in" }).includes("phone-stand"), "in stock only hides sold out");
+assert.ok(handles({ type: "made_to_order" }).every((h) => h === "planter-pot"), "made to order filter");
+assert.ok(handles({ price: "under-500" }).includes("fear-not-fridge-magnet"), "price under 500");
+assert.ok(!handles({ price: "under-500" }).includes("desk-organiser"), "desk organiser costs more than 500");
+assert.ok(handles({ price: "over-1000" }).includes("desk-organiser"));
+assert.deepEqual(parseFilters({ type: "bogus", price: ["500-1000", "x"], stock: "in" }), { type: undefined, stock: "in", price: "500-1000" }, "unknown values ignored");
+assert.equal(filterQuery({ type: "ready_stock", price: "over-1000" }, "price-asc"), "?sort=price-asc&type=ready_stock&price=over-1000");
+assert.equal(filterQuery({}, "featured"), "");
 
 console.log("select, spec, format, sort, cart, shopify config, mapper and cart-mapper checks passed");

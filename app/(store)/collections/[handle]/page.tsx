@@ -1,14 +1,17 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
+import { CategoryChips } from "@/components/collection/CategoryChips";
+import { FilterControl } from "@/components/collection/FilterControl";
 import { SortControl } from "@/components/collection/SortControl";
 import { EnquiryCta } from "@/components/enquiry/EnquiryCta";
 import { ProductCard } from "@/components/product/ProductCard";
 import { Breadcrumb } from "@/components/ui/Breadcrumb";
 import { Button } from "@/components/ui/Button";
+import { activeFilterCount, filterProducts, parseFilters } from "@/lib/product/filter";
 import { isSortKey, sortProducts } from "@/lib/product/sort";
 import { StatePanel } from "@/components/ui/StatePanel";
-import { getCollection, getSource } from "@/lib/data";
+import { getCollection, getNavCollections, getSource } from "@/lib/data";
 import { sampleStore } from "@/lib/sample-data";
 import { generalEnquiryMessage } from "@/lib/whatsapp";
 
@@ -42,7 +45,7 @@ async function CollectionContent({
   searchParams: PageProps<"/collections/[handle]">["searchParams"];
 }) {
   const [{ handle }, query] = await Promise.all([params, searchParams]);
-  const result = await getCollection(handle);
+  const [result, categories] = await Promise.all([getCollection(handle), getNavCollections()]);
 
   if (result.state === "error") {
     return (
@@ -64,27 +67,36 @@ async function CollectionContent({
   if (!collection) notFound();
 
   const sort = isSortKey(query.sort) ? query.sort : "featured";
-  const products = sortProducts(collection.products, sort);
+  const filters = parseFilters(query);
+  const filtered = filterProducts(collection.products, filters);
+  const products = sortProducts(filtered, sort);
   const count = products.length;
+  const filtering = activeFilterCount(filters) > 0;
+  const total = collection.products.length;
 
   return (
     <>
       <Breadcrumb items={[{ label: "Home", href: "/" }, { label: collection.title }]} />
-      <header className="mt-2 pb-6">
+      <header className="mt-2 pb-4">
         <h1 className="t-h1 text-ink">{collection.title}</h1>
         <p className="mt-2 max-w-[560px] t-body text-graphite">{collection.description}</p>
       </header>
 
-      {count > 0 && (
-        <div className="sticky top-14 z-20 -mx-4 flex items-center justify-between border-b border-line bg-surface/95 px-4 py-2 backdrop-blur-md md:-mx-6 md:px-6 lg:top-[72px] lg:-mx-8 lg:px-8">
-          <p className="t-small text-graphite [font-variant-numeric:tabular-nums]">
+      <CategoryChips collections={categories} current={collection.handle} />
+
+      {total > 0 && (
+        <div className="sticky top-14 z-20 -mx-4 mt-4 flex items-center justify-between gap-3 border-b border-line bg-surface/95 px-4 py-2 backdrop-blur-md md:-mx-6 md:px-6 lg:top-[72px] lg:-mx-8 lg:px-8">
+          <p className="whitespace-nowrap t-small text-graphite [font-variant-numeric:tabular-nums]" role="status">
             {count} {count === 1 ? "product" : "products"}
           </p>
-          <SortControl current={sort} />
+          <div className="flex items-center gap-2">
+            <FilterControl filters={filters} sort={sort} resultCount={count} />
+            <SortControl current={sort} />
+          </div>
         </div>
       )}
 
-      {count === 0 ? (
+      {total === 0 ? (
         <div className="mx-auto max-w-[480px] py-16 text-center">
           <p className="t-h3 text-ink">Nothing here yet</p>
           <p className="mt-2 t-small text-graphite">This collection has no products right now.</p>
@@ -92,6 +104,14 @@ async function CollectionContent({
             Shop all products
           </Button>
           <EnquiryCta variant="link" className="mt-2" number={sampleStore.whatsappNumber} message={generalEnquiryMessage} />
+        </div>
+      ) : count === 0 && filtering ? (
+        <div className="mx-auto max-w-[480px] py-16 text-center">
+          <p className="t-h3 text-ink">No products match these filters</p>
+          <p className="mt-2 t-small text-graphite">Try removing a filter to see more.</p>
+          <Button href={`/collections/${collection.handle}`} variant="secondary" className="mt-6">
+            Clear filters
+          </Button>
         </div>
       ) : (
         <div className="mt-6 grid grid-cols-2 gap-x-3 gap-y-8 lg:grid-cols-4 lg:gap-x-6 lg:gap-y-10">

@@ -5,8 +5,11 @@ import { NumberedSteps } from "@/components/content/NumberedSteps";
 import { WhatsAppButton } from "@/components/enquiry/WhatsAppButton";
 import { ProductCard } from "@/components/product/ProductCard";
 import { StatePanel } from "@/components/ui/StatePanel";
-import { getProducts } from "@/lib/data";
+import { CUSTOM_ORDERS_HANDLE, categoryHref } from "@/lib/categories";
+import { getCollection, getNavCollections, getProducts } from "@/lib/data";
 import { Suspense } from "react";
+import { CategoryIcon } from "@/components/collection/CategoryIcon";
+import { ArrowRight } from "@/components/ui/Icons";
 import { Button } from "@/components/ui/Button";
 import { ImagePlaceholder } from "@/components/ui/ImagePlaceholder";
 import { InfoCard } from "@/components/ui/InfoCard";
@@ -60,6 +63,11 @@ export default function HomePage() {
         <FactStrip />
       </section>
 
+      {/* Shop by category */}
+      <Suspense fallback={null}>
+        <Categories />
+      </Suspense>
+
       {/* Featured */}
       <section className={section} aria-labelledby="featured">
         <div className="flex items-baseline justify-between gap-4">
@@ -99,6 +107,51 @@ export default function HomePage() {
         </div>
       </section>
     </main>
+  );
+}
+
+/** Shop by category: one tile per collection. Hidden when the store has none. */
+async function Categories() {
+  const found = await getNavCollections();
+  // Count products in each category from Shopify. Empty categories are not shown.
+  const counted = await Promise.all(
+    found.map(async (c) => {
+      const r = await getCollection(c.handle);
+      return { ...c, count: r.state === "ok" && r.data ? r.data.products.length : 0 };
+    }),
+  );
+  // Custom Orders is an enquiry, so it shows without a product count.
+  const collections = counted.filter((c) => c.count > 0 || c.handle === CUSTOM_ORDERS_HANDLE);
+  if (!collections.length) return null;
+  return (
+    <section className={section} aria-labelledby="categories">
+      <h2 id="categories" className="t-h2 text-ink">
+        Shop by category
+      </h2>
+      <ul className="mt-6 grid grid-cols-2 gap-3 lg:grid-cols-4 lg:gap-6">
+        {collections.map((c) => (
+          <li key={c.handle} className="col-span-1 [&:last-child:nth-child(odd)]:col-span-2 lg:[&:last-child:nth-child(odd)]:col-span-1">
+            <Link
+              href={categoryHref(c.handle)}
+              className="group flex h-full min-h-[120px] flex-col justify-between gap-3 rounded-card bg-mist p-4 transition-colors duration-150 hover:bg-line/60 lg:p-5"
+            >
+              <span className="flex items-center gap-3">
+                <span aria-hidden="true" className="grid size-10 shrink-0 place-items-center rounded-pill bg-surface text-ink">
+                  <CategoryIcon handle={c.handle} title={c.title} className="size-5" />
+                </span>
+                <span className="t-h3 text-ink">{c.title}</span>
+              </span>
+              <span className="flex items-center justify-between gap-2 t-small text-graphite">
+                <span className="[font-variant-numeric:tabular-nums]">
+                  {c.handle === CUSTOM_ORDERS_HANDLE ? "Get a quote" : `${c.count} ${c.count === 1 ? "product" : "products"}`}
+                </span>
+                <ArrowRight aria-hidden="true" className="size-5 text-ink transition-transform duration-150 group-hover:translate-x-0.5" />
+              </span>
+            </Link>
+          </li>
+        ))}
+      </ul>
+    </section>
   );
 }
 

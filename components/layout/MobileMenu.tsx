@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { categoryHref } from "@/lib/categories";
 import { Sheet } from "@/components/ui/Sheet";
 import { X } from "@/components/ui/Icons";
 import { Wordmark } from "@/components/layout/Wordmark";
@@ -45,7 +46,7 @@ export function MobileMenu({
             Shop all
           </Link>
           {collections.map((c) => (
-            <Link key={c.handle} href={`/collections/${c.handle}`} className={`${row} pl-4 font-normal text-graphite`} onClick={onClose}>
+            <Link key={c.handle} href={categoryHref(c.handle)} className={`${row} pl-4 font-normal text-graphite`} onClick={onClose}>
               {c.title}
             </Link>
           ))}

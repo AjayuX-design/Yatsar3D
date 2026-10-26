@@ -16,17 +16,29 @@ export const sampleCollections: Collection[] = [
     ],
   },
   {
-    handle: "desk",
-    title: "Desk",
-    description: "Small prints that keep a desk in order.",
-    productHandles: [
-      "desk-organiser",
-      "phone-stand",
-      "wall-mounted-headphone-and-cable-hanger-with-adjustable-arm",
-    ],
+    handle: "desk-tech",
+    title: "Desk & Tech",
+    description: "Cable kits, stands and organisers for your desk and devices.",
+    productHandles: ["phone-stand", "wall-mounted-headphone-and-cable-hanger-with-adjustable-arm"],
   },
-  { handle: "home", title: "Living", description: "Prints for shelves, windowsills and walls.", productHandles: ["planter-pot"] },
-  { handle: "gifts", title: "Gifts", description: "Small, light and easy to post.", productHandles: ["fear-not-fridge-magnet", "bookmark-set"] },
+  {
+    handle: "drawers-storage",
+    title: "Drawers & Storage",
+    description: "Standard modules and custom-fit drawer service.",
+    productHandles: ["desk-organiser"],
+  },
+  {
+    handle: "home-essentials",
+    title: "Home Essentials",
+    description: "Everyday organisers for the bedside, living room and entryway.",
+    productHandles: ["fear-not-fridge-magnet", "planter-pot", "bookmark-set"],
+  },
+  {
+    handle: "custom-orders",
+    title: "Custom Orders",
+    description: "Custom drawers, personalisation and business enquiries.",
+    productHandles: [],
+  },
   // Deliberately empty, to design the empty state.
   { handle: "seasonal", title: "Seasonal", description: "Limited prints for the season.", productHandles: [] },
 ];

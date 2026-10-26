@@ -4,6 +4,7 @@ import { Wordmark } from "@/components/layout/Wordmark";
 import { WhatsAppButton } from "@/components/enquiry/WhatsAppButton";
 import { policyLinks } from "@/components/layout/nav";
 import { generalEnquiryMessage } from "@/lib/whatsapp";
+import { categoryHref } from "@/lib/categories";
 import type { Collection } from "@/lib/types";
 
 const linkClass = "inline-flex min-h-11 min-w-11 items-center t-small text-ink underline-offset-[3px] hover:underline";
@@ -32,7 +33,7 @@ export function Footer({
       title: "Shop",
       links: [
         { label: "All products", href: "/collections/all" },
-        ...collections.map((c) => ({ label: c.title, href: `/collections/${c.handle}` })),
+        ...collections.map((c) => ({ label: c.title, href: categoryHref(c.handle) })),
       ],
     },
     {

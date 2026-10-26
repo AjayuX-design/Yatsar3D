@@ -1,22 +1,29 @@
 "use client";
 
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 import { Sheet } from "@/components/ui/Sheet";
-import { Check, X } from "@/components/ui/Icons";
+import { ArrowUpDown, Check, X } from "@/components/ui/Icons";
 import { sortOptions, type SortKey } from "@/lib/product/sort";
 
 /**
  * Mobile: a Sort button that opens a bottom sheet. Desktop: a native select.
  * The choice lives in the URL (?sort=), so the server can sort and links can be shared.
+ * Filters in the URL are kept when the sort changes.
  */
 export function SortControl({ current }: { current: SortKey }) {
   const router = useRouter();
   const pathname = usePathname();
+  const params = useSearchParams();
   const [open, setOpen] = useState(false);
 
   const choose = (key: SortKey) => {
-    router.replace(key === "featured" ? pathname : `${pathname}?sort=${key}`, { scroll: false });
+    // Keep any active filters; only the sort changes.
+    const next = new URLSearchParams(params.toString());
+    if (key === "featured") next.delete("sort");
+    else next.set("sort", key);
+    const qs = next.toString();
+    router.replace(qs ? `${pathname}?${qs}` : pathname, { scroll: false });
     setOpen(false);
   };
   const currentLabel = sortOptions.find((o) => o.key === current)?.label;
@@ -28,8 +35,10 @@ export function SortControl({ current }: { current: SortKey }) {
         onClick={() => setOpen(true)}
         className="inline-flex h-11 items-center gap-2 rounded-ctl border border-line px-4 t-label text-ink hover:border-graphite/50 lg:hidden"
       >
+        <ArrowUpDown className="size-[18px]" aria-hidden="true" />
         Sort
-        <span className="font-normal text-graphite">{currentLabel}</span>
+        {current !== "featured" && <span aria-hidden="true" className="size-1.5 rounded-pill bg-ink" />}
+        <span className="sr-only">{currentLabel}</span>
       </button>
 
       <label className="hidden items-center gap-3 lg:flex">

@@ -49,7 +49,7 @@ export const sampleProducts: Product[] = [
     careNote: "Do not keep it in direct sunlight or near heat. Wipe with a dry or slightly damp cloth.",
     scaleCaption: "Shown on a fridge door, next to the handle",
     customAvailable: true,
-    collection: { handle: "gifts", title: "Gifts" },
+    collection: { handle: "home-essentials", title: "Home Essentials" },
     options: [],
     images: [
       {
@@ -99,7 +99,7 @@ export const sampleProducts: Product[] = [
     careNote: "Wipe with a dry or slightly damp cloth. Keep away from heat above 50 C.",
     scaleCaption: "Shown next to a hand",
     customAvailable: true,
-    collection: { handle: "desk", title: "Desk" },
+    collection: { handle: "drawers-storage", title: "Drawers & Storage" },
     options: [{ name: "Material", values: ["PLA", "PETG"] }],
     images: images("Desk organiser", "desk-organiser"),
     variants: [
@@ -142,7 +142,7 @@ export const sampleProducts: Product[] = [
     careNote: "Safe for indoor use. Rinse with water, no dishwasher.",
     scaleCaption: "Shown next to a coffee mug",
     customAvailable: true,
-    collection: { handle: "home", title: "Living" },
+    collection: { handle: "home-essentials", title: "Home Essentials" },
     options: [
       { name: "Size", values: ["Small", "Medium", "Large"] },
       { name: "Colour", values: ["White", "Grey"], swatches: { White: "#f4f2ee", Grey: "#9a9a98" } },
@@ -173,7 +173,7 @@ export const sampleProducts: Product[] = [
     notIncluded: [],
     scaleCaption: "Shown with a phone",
     customAvailable: false,
-    collection: { handle: "desk", title: "Desk" },
+    collection: { handle: "desk-tech", title: "Desk & Tech" },
     options: [],
     images: images("Phone stand", "phone-stand"),
     variants: [
@@ -204,7 +204,7 @@ export const sampleProducts: Product[] = [
     notIncluded: ["Drill"],
     scaleCaption: "Shown next to a hand",
     customAvailable: true,
-    collection: { handle: "desk", title: "Desk" },
+    collection: { handle: "desk-tech", title: "Desk & Tech" },
     options: [],
     images: images("Headphone hanger", "wall-mounted-headphone-and-cable-hanger-with-adjustable-arm"),
     variants: [
@@ -230,7 +230,7 @@ export const sampleProducts: Product[] = [
     included: ["Set of 3 bookmarks"],
     notIncluded: [],
     customAvailable: false,
-    collection: { handle: "gifts", title: "Gifts" },
+    collection: { handle: "home-essentials", title: "Home Essentials" },
     options: [],
     images: images("Bookmark set", "bookmark-set"),
     variants: [
