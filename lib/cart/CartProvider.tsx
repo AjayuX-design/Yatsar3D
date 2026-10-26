@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
+import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, useSyncExternalStore, type ReactNode } from "react";
 import { sampleDiscountCodes } from "@/lib/sample-data";
 import {
   addToCart,
@@ -59,10 +59,31 @@ type CartContextValue = {
 
 const CartContext = createContext<CartContextValue | null>(null);
 
-export function useCart() {
+const noopSubscribe = () => () => {};
+const emptyTotals = cartTotals([], null);
+
+/**
+ * The server never knows the shopper's cart, so its HTML always shows an empty
+ * one. Until a component has hydrated, this hook shows that same empty cart, then
+ * switches to the real one. Without it, a part of the page that hydrates late
+ * (the header streams in separately) would see the real cart on its first client
+ * render and fail to match the server HTML.
+ */
+export function useCart(): CartContextValue {
   const ctx = useContext(CartContext);
   if (!ctx) throw new Error("useCart must be used inside CartProvider");
-  return ctx;
+  const hydrated = useSyncExternalStore(
+    noopSubscribe,
+    () => true,
+    () => false,
+  );
+  return useMemo(
+    () =>
+      hydrated
+        ? ctx
+        : { ...ctx, lines: [], discount: null, totals: emptyTotals, removed: null, error: null, updating: false, checkoutUrl: undefined },
+    [hydrated, ctx],
+  );
 }
 
 /**
