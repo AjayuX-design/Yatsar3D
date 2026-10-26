@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { FactStrip } from "@/components/content/FactStrip";
 import { NumberedSteps } from "@/components/content/NumberedSteps";
 import { WhatsAppButton } from "@/components/enquiry/WhatsAppButton";
 import { ProductCard } from "@/components/product/ProductCard";
@@ -29,9 +28,9 @@ const steps = [
 const section = "mt-16 lg:mt-24";
 
 /**
- * Required sections only: hero, fact strip, featured products, delivery area,
- * custom-print steps. Optional sections (collection tiles, materials, maker
- * note, FAQ preview) are left out until their real content exists.
+ * Sections: hero, categories, featured products, delivery area, custom-print steps.
+ * The fact strip was removed until delivery, payment and WhatsApp details are settled.
+ * Optional sections (materials, maker note, FAQ preview) wait for their real content.
  */
 export default function HomePage() {
   const heroAlt = "The Fear Not fridge magnet, a stamp-shaped plum and cream 3D print";
@@ -57,10 +56,6 @@ export default function HomePage() {
             </Button>
           </div>
         </div>
-      </section>
-
-      <section className="mt-8 lg:mt-12" aria-label="What to expect">
-        <FactStrip />
       </section>
 
       {/* Shop by category */}
