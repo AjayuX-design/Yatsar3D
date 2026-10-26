@@ -42,7 +42,7 @@ export function Footer({
       links: [
         { label: "FAQ", href: "/faq" },
         { label: "Delivery", href: "/delivery" },
-        { label: "Custom prints", href: "/custom-print" },
+        { label: "Custom orders", href: "/custom-print" },
       ],
     },
     { id: "policies", title: "Policies", links: policyLinks },

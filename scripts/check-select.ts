@@ -8,6 +8,7 @@ import { formatDays } from "@/lib/format/leadtime";
 import { formatDimensions } from "@/lib/format/dimensions";
 import { sampleProducts } from "@/lib/sample-products";
 import { searchProducts } from "@/lib/product/search";
+import { buildEmail, escapeHtml, imageKind, newRequestId, readEmailConfig, readFields, validateFields, whatsappDigits } from "@/lib/custom-orders/request";
 import { filterProducts, filterQuery, parseFilters } from "@/lib/product/filter";
 import { normaliseDomain, readShopifyConfig } from "@/lib/shopify/config";
 import { mapProduct } from "@/lib/shopify/mappers";
@@ -184,5 +185,27 @@ assert.ok(handles({ price: "over-1000" }).includes("desk-organiser"));
 assert.deepEqual(parseFilters({ type: "bogus", price: ["500-1000", "x"], stock: "in" }), { type: undefined, stock: "in", price: "500-1000" }, "unknown values ignored");
 assert.equal(filterQuery({ type: "ready_stock", price: "over-1000" }, "price-asc"), "?sort=price-asc&type=ready_stock&price=over-1000");
 assert.equal(filterQuery({}, "featured"), "");
+
+// Custom order requests
+const ok = readFields((n) => ({ type: "drawers", name: "Asha", phone: "+91 98765 43210", city: "Hyderabad", details: "A drawer organiser for kitchen cutlery." } as Record<string, string>)[n]);
+assert.deepEqual(validateFields(ok), {}, "a complete request is valid");
+const bad = validateFields(readFields(() => "x"));
+assert.ok(bad.type && bad.name && bad.phone && bad.city && bad.details, "empty request lists every required field");
+assert.equal(readFields((n) => (n === "type" ? "hack" : "")).type, "", "unknown type is dropped");
+assert.equal(readFields((n) => (n === "name" ? "a".repeat(500) : "")).name.length, 80, "long input is cut");
+assert.ok(validateFields({ ...ok, email: "nope" }).email, "bad email flagged");
+assert.deepEqual(validateFields({ ...ok, email: "a@b.in" }), {});
+assert.ok(validateFields({ ...ok, phone: "12345" }).phone, "short phone flagged");
+assert.match(newRequestId((n) => new Uint8Array(n).fill(7)), /^YC-[2-9A-HJKMNP-Z]{5}$/, "request number shape");
+assert.equal(escapeHtml(`<b onclick="x">&'`), "&lt;b onclick=&quot;x&quot;&gt;&amp;&#39;", "html is escaped");
+const mail = buildEmail("YC-AAAAA", { ...ok, details: "<script>alert(1)</script>" }, 2);
+assert.ok(!mail.html.includes("<script>"), "shopper text cannot inject html");
+assert.match(mail.subject, /^\[YC-AAAAA\] Custom-fit drawers from Asha \(Hyderabad\)$/);
+assert.equal(whatsappDigits("98765 43210"), "919876543210", "10 digit number gets the country code");
+assert.equal(imageKind(new Uint8Array([0xff, 0xd8, 0xff, 0xe0, 0, 0, 0, 0, 0, 0, 0, 0, 0])), "jpeg");
+assert.equal(imageKind(new TextEncoder().encode("<html>not an image at all</html>")), null, "non-image refused");
+assert.equal(readEmailConfig({}).ok, false);
+const mailCfg = readEmailConfig({ RESEND_API_KEY: "k", CUSTOM_ORDER_TO_EMAIL: "me@x.in" });
+assert.ok(mailCfg.ok && mailCfg.config.from.includes("onboarding@resend.dev"), "default sender until the domain is verified");
 
 console.log("select, spec, format, sort, cart, shopify config, mapper and cart-mapper checks passed");

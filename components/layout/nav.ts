@@ -1,6 +1,6 @@
 export const mainNav = [
   { label: "Shop all", href: "/collections/all" },
-  { label: "Custom prints", href: "/custom-print" },
+  { label: "Custom orders", href: "/custom-print" },
   { label: "Delivery", href: "/delivery" },
   { label: "FAQ", href: "/faq" },
 ];

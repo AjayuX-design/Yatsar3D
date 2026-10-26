@@ -12,18 +12,11 @@ import { ArrowRight } from "@/components/ui/Icons";
 import { Button } from "@/components/ui/Button";
 import { ImagePlaceholder } from "@/components/ui/ImagePlaceholder";
 import { InfoCard } from "@/components/ui/InfoCard";
+import { customSteps } from "@/lib/custom-orders";
 import { sampleStore } from "@/lib/sample-data";
 import { generalEnquiryMessage } from "@/lib/whatsapp";
 
 export const metadata: Metadata = { title: "Yatsar 3D", robots: { index: false, follow: false } };
-
-// Placeholder wording. The headline and steps are still open decisions.
-const steps = [
-  { title: "Message us", text: "Tell us on WhatsApp what you want printed." },
-  { title: "Share the details", text: "Send a photo or sketch, a rough size and your city." },
-  { title: "Get a quote", text: "We reply with a price and timing before you pay." },
-  { title: "Approve and pay", text: "Once you approve the quote, we start printing." },
-];
 
 const section = "mt-16 lg:mt-24";
 
@@ -95,9 +88,12 @@ export default function HomePage() {
         <h2 id="custom" className="t-h2 text-ink">
           How custom printing works
         </h2>
-        <NumberedSteps steps={steps} className="mt-8" />
+        <NumberedSteps steps={customSteps} className="mt-8" />
         <div className="mt-8 max-w-[420px]">
           <WhatsAppButton number={sampleStore.whatsappNumber} message={generalEnquiryMessage} />
+          <Link href="/custom-print" className="mt-1 inline-flex min-h-11 items-center t-label text-ink underline underline-offset-[3px]">
+            See what we can make
+          </Link>
           <p className="mt-3 t-small text-graphite">No payment before you approve the quote.</p>
         </div>
       </section>
