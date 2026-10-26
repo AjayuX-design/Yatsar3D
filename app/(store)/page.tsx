@@ -31,14 +31,14 @@ const section = "mt-16 lg:mt-24";
  * note, FAQ preview) are left out until their real content exists.
  */
 export default function HomePage() {
-  const heroAlt = "A white 3D-printed planter on a plain background";
+  const heroAlt = "The Fear Not fridge magnet, a stamp-shaped plum and cream 3D print";
 
   return (
     <main className="mx-auto w-full max-w-[1200px] px-4 pt-4 md:px-6 lg:px-8 lg:pt-8">
       {/* Hero */}
-      <section className="lg:grid lg:grid-cols-12 lg:items-center lg:gap-16">
+      <section className="lg:grid lg:grid-cols-12 lg:items-center lg:gap-12">
         <div className="relative aspect-square overflow-hidden rounded-card bg-mist lg:order-2 lg:col-span-7 lg:aspect-[6/5]">
-          <ImagePlaceholder src="/mock/hero-planter.svg" alt={heroAlt} label="Photo coming soon" priority sizes="(min-width: 1024px) 700px, 100vw" />
+          <ImagePlaceholder src="/products/square/fear-not-magnet-front-1200.jpg" alt={heroAlt} label="Photo coming soon" priority onWhite sizes="(min-width: 1024px) 700px, 100vw" />
         </div>
         <div className="mt-8 lg:order-1 lg:col-span-5 lg:mt-0 lg:pr-4">
           <h1 className="t-display text-balance text-ink">Made layer by layer.</h1>

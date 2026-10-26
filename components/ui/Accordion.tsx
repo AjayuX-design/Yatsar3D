@@ -41,7 +41,7 @@ export function Accordion({
         const panelId = `${uid}-${item.id}-panel`;
         return (
           <div key={item.id} className="border-t border-line">
-            <h3>
+            <h2>
               <button
                 id={buttonId}
                 type="button"
@@ -57,7 +57,7 @@ export function Accordion({
                   <Plus className="size-5 shrink-0" aria-hidden="true" />
                 )}
               </button>
-            </h3>
+            </h2>
             <div
               id={panelId}
               role="region"
