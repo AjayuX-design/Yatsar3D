@@ -31,7 +31,13 @@ export const sampleCollections: Collection[] = [
     handle: "home-essentials",
     title: "Home Essentials",
     description: "Everyday organisers for the bedside, living room and entryway.",
-    productHandles: ["fear-not-fridge-magnet", "planter-pot", "bookmark-set"],
+    productHandles: ["planter-pot", "bookmark-set"],
+  },
+  {
+    handle: "gifts",
+    title: "Gifts",
+    description: "Small prints made to give, from fridge magnets to keepsakes.",
+    productHandles: ["fear-not-fridge-magnet"],
   },
   {
     handle: "custom-orders",

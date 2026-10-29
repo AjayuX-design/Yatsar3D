@@ -49,7 +49,7 @@ export const sampleProducts: Product[] = [
     careNote: "Do not keep it in direct sunlight or near heat. Wipe with a dry or slightly damp cloth.",
     scaleCaption: "Shown on a fridge door, next to the handle",
     customAvailable: true,
-    collection: { handle: "home-essentials", title: "Home Essentials" },
+    collection: { handle: "gifts", title: "Gifts" },
     options: [],
     images: [
       {

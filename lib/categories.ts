@@ -1,6 +1,6 @@
 /*
-  The shop's four categories (Shopify collections):
-    Desk & Tech, Drawers & Storage, Home Essentials, Custom Orders.
+  The shop's five categories (Shopify collections):
+    Desk & Tech, Drawers & Storage, Home Essentials, Gifts, Custom Orders.
   Custom Orders is an enquiry, not a shelf of products, so it opens the
   custom print page instead of a collection page.
 */
@@ -34,6 +34,12 @@ export const defaultCategories: Collection[] = [
     handle: "home-essentials",
     title: "Home Essentials",
     description: "Everyday organisers for the bedside, living room and entryway.",
+    productHandles: [],
+  },
+  {
+    handle: "gifts",
+    title: "Gifts",
+    description: "Small prints made to give, from fridge magnets to keepsakes.",
     productHandles: [],
   },
   {
