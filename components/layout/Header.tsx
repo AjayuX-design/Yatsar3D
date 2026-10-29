@@ -74,7 +74,7 @@ export function Header({
               autoComplete="off"
               enterKeyHint="search"
               placeholder="Search"
-              className="h-10 w-[200px] rounded-pill border border-line bg-mist/60 pl-9 pr-3 text-[14px] text-ink transition-[width] duration-200 placeholder:text-hint focus:w-[260px] focus:bg-surface"
+              className="h-10 w-[200px] rounded-pill border border-field bg-mist/60 pl-9 pr-3 text-[14px] text-ink transition-[width] duration-200 placeholder:text-hint focus:w-[260px] focus:bg-surface"
             />
           </form>
           <Link href="/search" aria-label="Search" className={`${iconButton} lg:hidden`}>

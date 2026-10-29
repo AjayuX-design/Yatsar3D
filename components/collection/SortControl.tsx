@@ -46,7 +46,7 @@ export function SortControl({ current }: { current: SortKey }) {
         <select
           value={current}
           onChange={(e) => choose(e.target.value as SortKey)}
-          className="h-11 rounded-ctl border border-line bg-surface px-3 text-[16px] text-ink"
+          className="h-11 rounded-ctl border border-field bg-surface px-3 text-[16px] text-ink"
         >
           {sortOptions.map((o) => (
             <option key={o.key} value={o.key}>

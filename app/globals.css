@@ -24,6 +24,8 @@
   --color-graphite: #5b5b5b;
   /* Placeholder and hint text. 4.5:1 on white and on the grey surfaces. */
   --color-hint: #6e6e6e;
+  /* Borders of form fields: 3.7:1 on white, 3.3:1 on grey (WCAG 1.4.11 needs 3:1). */
+  --color-field: #858585;
   --color-kiln: #c8501f;
   --color-kiln-deep: #a33e14;
   --color-moss: #2f6b4f;

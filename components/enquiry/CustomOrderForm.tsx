@@ -56,7 +56,7 @@ const missingLabels: Record<string, string> = {
 const stepOf: Record<string, 1 | 2 | 3> = { type: 1, size: 2, details: 2, name: 3, phone: 3, city: 3, email: 3 };
 
 const input =
-  "h-12 w-full rounded-ctl border bg-surface px-3 text-[16px] text-ink placeholder:text-hint aria-[invalid=true]:border-error border-line";
+  "h-12 w-full rounded-ctl border bg-surface px-3 text-[16px] text-ink placeholder:text-hint aria-[invalid=true]:border-error border-field";
 
 const steps = [
   { n: 1, label: "Choose", title: "What do you need?", help: "Pick the one that fits best." },
