@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
 import { CategoryChips } from "@/components/collection/CategoryChips";
+import { ActiveFilters } from "@/components/collection/ActiveFilters";
 import { FilterControl } from "@/components/collection/FilterControl";
 import { SortControl } from "@/components/collection/SortControl";
 import { EnquiryCta } from "@/components/enquiry/EnquiryCta";
@@ -95,6 +96,8 @@ async function CollectionContent({
           </div>
         </div>
       )}
+
+      {total > 0 && <ActiveFilters filters={filters} sort={sort} path={`/collections/${collection.handle}`} />}
 
       {total === 0 ? (
         <div className="mx-auto max-w-[480px] py-16 text-center">

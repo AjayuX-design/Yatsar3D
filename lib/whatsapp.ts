@@ -28,3 +28,6 @@ export const personalisedEnquiryMessage =
 
 export const businessEnquiryMessage =
   "Hi Yatsar 3D, I'd like to enquire about a business order. Company: __ What we need: __ Quantity: __ Needed by: __ City: __";
+
+export const trackOrderMessage =
+  "Hi Yatsar 3D, I'd like an update on my order. Order number: __ Name: __";

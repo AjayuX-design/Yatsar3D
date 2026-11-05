@@ -9,7 +9,7 @@ import { formatDimensions } from "@/lib/format/dimensions";
 import { sampleProducts } from "@/lib/sample-products";
 import { searchProducts } from "@/lib/product/search";
 import { buildEmail, escapeHtml, imageKind, newRequestId, readEmailConfig, readFields, validateFields, whatsappDigits } from "@/lib/custom-orders/request";
-import { filterProducts, filterQuery, parseFilters } from "@/lib/product/filter";
+import { activeFilterChips, filterProducts, filterQuery, parseFilters } from "@/lib/product/filter";
 import { normaliseDomain, readShopifyConfig } from "@/lib/shopify/config";
 import { mapProduct } from "@/lib/shopify/mappers";
 import { noOptionsFixture, planterFixture } from "./fixtures";
@@ -213,3 +213,12 @@ const mailCfg2 = readEmailConfig({ SMTP_USER: "hello@yatsar3d.com", SMTP_PASSWOR
 assert.ok(mailCfg2.ok && mailCfg2.config.to === "me@x.in" && mailCfg2.config.port === 587, "overrides work")
 
 console.log("select, spec, format, sort, cart, shopify config, mapper and cart-mapper checks passed");
+
+// Active filter chips: one per filter, each removes only itself
+{
+  const chips = activeFilterChips({ stock: "in", price: "under-500" });
+  assert.deepEqual(chips.map((c) => c.label), ["In stock only", "Under ₹500"]);
+  assert.deepEqual(chips[0].without, { stock: undefined, price: "under-500" });
+  assert.equal(activeFilterChips({}).length, 0);
+}
+console.log("active filter chip checks passed");

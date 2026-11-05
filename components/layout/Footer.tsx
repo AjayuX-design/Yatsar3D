@@ -44,6 +44,7 @@ export function Footer({
       links: [
         { label: "FAQ", href: "/faq" },
         { label: "Delivery", href: "/delivery" },
+        { label: "Track order", href: "/track-order" },
         { label: "Custom orders", href: "/custom-print" },
       ],
     },

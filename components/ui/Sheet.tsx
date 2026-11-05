@@ -3,7 +3,7 @@
 import { useEffect, useRef, type ReactNode } from "react";
 import { cn } from "@/lib/cn";
 
-type Variant = "bottom" | "cart" | "menu";
+type Variant = "bottom" | "cart" | "menu" | "full";
 
 const variants: Record<Variant, string> = {
   // Short sheet from the bottom (sort).
@@ -14,6 +14,8 @@ const variants: Record<Variant, string> = {
     "lg:inset-y-0 lg:left-auto lg:right-0 lg:top-0 lg:h-dvh lg:w-[420px] lg:rounded-none",
   // Full-screen menu from the left.
   menu: "sheet sheet-menu inset-0 h-dvh",
+  // Full screen, rising from the bottom (image zoom).
+  full: "sheet inset-0 h-dvh",
 };
 
 /**

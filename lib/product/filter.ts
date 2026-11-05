@@ -66,3 +66,18 @@ export function filterQuery(f: FilterState, sort?: string) {
   const s = q.toString();
   return s ? `?${s}` : "";
 }
+
+/** One removable chip per active filter: its label, and the filters left after removing it. */
+export function activeFilterChips(f: FilterState): { key: string; label: string; without: FilterState }[] {
+  const chips: { key: string; label: string; without: FilterState }[] = [];
+  if (f.stock) chips.push({ key: "stock", label: "In stock only", without: { ...f, stock: undefined } });
+  if (f.type) {
+    const label = typeOptions.find((o) => o.key === f.type)!.label;
+    chips.push({ key: "type", label, without: { ...f, type: undefined } });
+  }
+  if (f.price) {
+    const label = priceOptions.find((o) => o.key === f.price)!.label;
+    chips.push({ key: "price", label, without: { ...f, price: undefined } });
+  }
+  return chips;
+}
