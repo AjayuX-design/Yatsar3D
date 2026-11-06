@@ -12,6 +12,10 @@ export const CUSTOM_ORDERS_HANDLE = "custom-orders";
 export const categoryHref = (handle: string) =>
   handle === CUSTOM_ORDERS_HANDLE ? "/custom-print" : `/collections/${handle}`;
 
+/** Square cover image per default category (AI-made stand-ins until real photos exist). */
+export const categoryImage = (handle: string) =>
+  defaultCategories.some((c) => c.handle === handle) ? `/categories/${handle}.jpg` : undefined;
+
 /**
  * Always shown in the shop navigation, even before the Shopify collection exists
  * or while it is empty. When Shopify has a collection with the same handle, its

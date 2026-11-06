@@ -4,12 +4,13 @@ import { NumberedSteps } from "@/components/content/NumberedSteps";
 import { WhatsAppButton } from "@/components/enquiry/WhatsAppButton";
 import { ProductCard } from "@/components/product/ProductCard";
 import { StatePanel } from "@/components/ui/StatePanel";
-import { CUSTOM_ORDERS_HANDLE, categoryHref } from "@/lib/categories";
+import { CUSTOM_ORDERS_HANDLE, categoryHref, categoryImage } from "@/lib/categories";
 import { getCollection, getNavCollections, getProducts } from "@/lib/data";
 import { Suspense } from "react";
 import { CategoryIcon } from "@/components/collection/CategoryIcon";
 import { ArrowRight } from "@/components/ui/Icons";
 import { Button } from "@/components/ui/Button";
+import { ImagePlaceholder } from "@/components/ui/ImagePlaceholder";
 import { HeroCarousel, type HeroSlide } from "@/components/home/HeroCarousel";
 import { InfoCard } from "@/components/ui/InfoCard";
 import { customSteps } from "@/lib/custom-orders";
@@ -87,14 +88,15 @@ export default function HomePage() {
 /** Shop by category: one tile per category. */
 async function Categories() {
   const found = await getNavCollections();
-  // Count products in each category from Shopify. Empty categories are not shown.
+  // Count products in each category from Shopify. Each default category has its own cover image.
   const counted = await Promise.all(
     found.map(async (c) => {
       const r = await getCollection(c.handle);
-      return { ...c, count: r.state === "ok" && r.data ? r.data.products.length : 0 };
+      const products = r.state === "ok" && r.data ? r.data.products : [];
+      const cover = categoryImage(c.handle);
+      return { ...c, count: products.length, image: cover ? { src: cover, onWhite: false } : products[0]?.images[0] };
     }),
   );
-  // Categories with no products yet show "Coming soon". Custom Orders is an enquiry, so it has no count.
   const collections = counted;
   if (!collections.length) return null;
   return (
@@ -102,28 +104,32 @@ async function Categories() {
       <h2 id="categories" className="t-h2 text-ink">
         Shop by category
       </h2>
-      <ul className="mt-6 grid grid-cols-2 gap-3 md:grid-cols-4 lg:gap-6">
+      <ul className="mt-6 grid grid-cols-2 gap-x-3 gap-y-6 md:grid-cols-3 lg:grid-cols-5 lg:gap-x-6">
         {collections.map((c) => (
-          <li key={c.handle} className="col-span-1 [&:last-child:nth-child(odd)]:col-span-2 lg:[&:last-child:nth-child(odd)]:col-span-1">
-            <Link
-              href={categoryHref(c.handle)}
-              className="group flex h-full min-h-[144px] flex-col justify-between gap-4 rounded-card bg-mist p-4 transition-colors duration-150 hover:bg-line/60 lg:p-5"
-            >
-              <span className="flex flex-col items-start gap-3">
-                <span aria-hidden="true" className="grid size-10 shrink-0 place-items-center rounded-pill bg-surface text-ink">
-                  <CategoryIcon handle={c.handle} title={c.title} className="size-5" />
+          <li key={c.handle}>
+            <Link href={categoryHref(c.handle)} className="group flex h-full flex-col rounded-card outline-offset-4">
+              <span className="relative block aspect-square overflow-hidden rounded-card bg-mist">
+                <span className="absolute inset-0 transition-transform duration-300 ease-out [@media(hover:hover)]:group-hover:scale-[1.03]">
+                  <ImagePlaceholder src={c.image?.src} alt="" label="" sizes="(min-width: 1024px) 220px, 50vw" onWhite={c.image?.onWhite} />
                 </span>
-                <span className="t-h3 text-ink">{c.title}</span>
+                {!c.image?.src && (
+                  <span aria-hidden="true" className="absolute inset-0 grid place-items-center text-graphite">
+                    <CategoryIcon handle={c.handle} title={c.title} className="size-10" />
+                  </span>
+                )}
               </span>
-              <span className="flex items-center justify-between gap-2 t-small text-graphite">
-                <span className="[font-variant-numeric:tabular-nums]">
-                  {c.handle === CUSTOM_ORDERS_HANDLE
-                    ? "Get a quote"
-                    : c.count === 0
-                      ? "Coming soon"
-                      : `${c.count} ${c.count === 1 ? "product" : "products"}`}
+              <span className="mt-3 flex items-start justify-between gap-2">
+                <span>
+                  <span className="block t-h3 text-ink group-hover:underline group-hover:underline-offset-[3px]">{c.title}</span>
+                  <span className="mt-1 block t-small text-graphite [font-variant-numeric:tabular-nums]">
+                    {c.handle === CUSTOM_ORDERS_HANDLE
+                      ? "Get a quote"
+                      : c.count === 0
+                        ? "Coming soon"
+                        : `${c.count} ${c.count === 1 ? "product" : "products"}`}
+                  </span>
                 </span>
-                <ArrowRight aria-hidden="true" className="size-5 text-ink transition-transform duration-150 group-hover:translate-x-0.5" />
+                <ArrowRight aria-hidden="true" className="mt-0.5 size-5 shrink-0 text-ink transition-transform duration-150 group-hover:translate-x-0.5" />
               </span>
             </Link>
           </li>
