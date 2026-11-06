@@ -40,6 +40,7 @@ export {
   SlidersHorizontal,
   ShoppingBag,
   Tag,
+  User,
   Truck,
   Wrench,
   X,

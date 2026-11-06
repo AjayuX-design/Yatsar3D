@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/Button";
 import { Hash, ShoppingBag } from "@/components/ui/Icons";
 import { InfoCard } from "@/components/ui/InfoCard";
 import { CONTACT_EMAIL } from "@/lib/policies";
+import { accountEnabled } from "@/lib/customer/config";
 import { sampleStore } from "@/lib/sample-data";
 import { trackOrderMessage } from "@/lib/whatsapp";
 
@@ -66,6 +67,16 @@ export default function TrackOrderPage() {
           </div>
         </li>
       </ul>
+
+      {accountEnabled() && (
+        <div className="mt-8 max-w-[720px] rounded-card border border-line p-5 lg:p-6">
+          <h2 className="t-h3 text-ink">Have an account?</h2>
+          <p className="mt-2 t-body text-graphite">Sign in to see every order, its status and its tracking in one place.</p>
+          <Button href="/account" className="mt-4">
+            Go to my account
+          </Button>
+        </div>
+      )}
 
       <div className="mt-8 max-w-[720px]">
         <InfoCard variant="slate" title="Where is my order number?">

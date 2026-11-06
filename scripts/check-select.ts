@@ -9,6 +9,11 @@ import { formatDimensions } from "@/lib/format/dimensions";
 import { sampleProducts } from "@/lib/sample-products";
 import { searchProducts } from "@/lib/product/search";
 import { buildEmail, escapeHtml, imageKind, newRequestId, readEmailConfig, readFields, validateFields, whatsappDigits } from "@/lib/custom-orders/request";
+import { mapCustomer } from "@/lib/customer/api";
+import { orderStage } from "@/lib/customer/orders";
+import { endpointsFor, newPkce, safeReturn, idTokenNonce } from "@/lib/customer/oauth";
+import { readAccountConfig } from "@/lib/customer/config";
+import { createHash } from "node:crypto";
 import { summarise, validateReview } from "@/lib/reviews/validate";
 import { activeFilterChips, filterProducts, filterQuery, parseFilters } from "@/lib/product/filter";
 import { normaliseDomain, readShopifyConfig } from "@/lib/shopify/config";
@@ -243,3 +248,46 @@ console.log("active filter chip checks passed");
   assert.equal(summarise([]).average, 0);
 }
 console.log("review checks passed");
+
+// Customer accounts: sign-in helpers and order status
+{
+  const { verifier, challenge } = newPkce();
+  assert.equal(challenge, createHash("sha256").update(verifier).digest("base64url"), "PKCE challenge is the SHA-256 of the verifier");
+  assert.ok(verifier.length >= 43 && verifier.length <= 128);
+  assert.equal(safeReturn("/account/orders/1001"), "/account/orders/1001");
+  assert.equal(safeReturn("https://evil.example"), "/account", "only /account paths are allowed");
+  assert.equal(safeReturn("//evil.example"), "/account");
+  const payload = Buffer.from(JSON.stringify({ nonce: "abc" })).toString("base64url");
+  assert.equal(idTokenNonce(`x.${payload}.y`), "abc");
+  assert.equal(idTokenNonce("garbage"), undefined);
+  assert.ok(!readAccountConfig({ SHOPIFY_STORE_DOMAIN: "a.myshopify.com" }).ok, "client id is required");
+  const cfg = readAccountConfig({ SHOPIFY_STORE_DOMAIN: "https://A.myshopify.com/", SHOPIFY_CUSTOMER_ACCOUNT_CLIENT_ID: "id" });
+  assert.ok(cfg.ok && cfg.config.domain === "a.myshopify.com" && cfg.config.apiVersion === "2026-10");
+  const withId = readAccountConfig({ SHOPIFY_STORE_DOMAIN: "a.myshopify.com", SHOPIFY_CUSTOMER_ACCOUNT_CLIENT_ID: "id", SHOPIFY_SHOP_ID: " 78292451500 " });
+  assert.ok(withId.ok && withId.config.shopId === "78292451500");
+  assert.equal(endpointsFor("78292451500").token_endpoint, "https://shopify.com/authentication/78292451500/oauth/token", "matches the address Shopify shows");
+
+  const ship = (latest?: string) => ({ latest });
+  assert.equal(orderStage({ fulfillmentStatus: "UNFULFILLED", shipments: [] }), "placed");
+  assert.equal(orderStage({ fulfillmentStatus: "FULFILLED", shipments: [ship("IN_TRANSIT")] }), "shipped");
+  assert.equal(orderStage({ fulfillmentStatus: "FULFILLED", shipments: [ship("OUT_FOR_DELIVERY")] }), "out_for_delivery");
+  assert.equal(orderStage({ fulfillmentStatus: "FULFILLED", shipments: [ship("DELIVERED")] }), "delivered");
+  assert.equal(orderStage({ fulfillmentStatus: "FULFILLED", shipments: [ship("DELIVERED"), ship("IN_TRANSIT")] }), "shipped", "delivered only when every shipment is");
+  assert.equal(orderStage({ cancelledAt: "2026-11-01", fulfillmentStatus: "UNFULFILLED", shipments: [] }), "cancelled");
+
+  const c = mapCustomer({
+    displayName: "Asha Rao",
+    firstName: "Asha",
+    emailAddress: { emailAddress: "a@x.com" },
+    orders: { nodes: [{
+      id: "o1", name: "#1001", number: 1001, processedAt: "2026-11-01T10:00:00Z", financialStatus: "PAID", fulfillmentStatus: "FULFILLED", statusPageUrl: "https://x",
+      totalPrice: { amount: "199.0", currencyCode: "INR" },
+      lineItems: { nodes: [{ id: "l1", name: "Magnet", quantity: 2, image: { url: "https://cdn.shopify.com/a.jpg" } }] },
+      fulfillments: { nodes: [{ latestShipmentStatus: "IN_TRANSIT", trackingInformation: [{ company: "Delhivery", number: "123", url: "https://t" }] }] },
+    }] },
+  });
+  assert.equal(c.orders[0].lines[0].image?.alt, "Magnet", "image alt falls back to the product name");
+  assert.equal(c.orders[0].shipments[0].carrier, "Delhivery");
+  assert.equal(c.email, "a@x.com");
+}
+console.log("account checks passed");

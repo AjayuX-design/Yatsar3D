@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
-import { Menu, Search, ShoppingBag } from "@/components/ui/Icons";
+import { Menu, Search, ShoppingBag, User } from "@/components/ui/Icons";
 import { MobileMenu } from "@/components/layout/MobileMenu";
 import { Wordmark } from "@/components/layout/Wordmark";
 import { mainNav } from "@/components/layout/nav";
@@ -18,10 +18,12 @@ export function Header({
   collections,
   whatsappNumber,
   deliveryAreaText,
+  accountEnabled = false,
 }: {
   collections: Collection[];
   whatsappNumber?: string;
   deliveryAreaText: string;
+  accountEnabled?: boolean;
 }) {
   const [menuOpen, setMenuOpen] = useState(false);
   const { totals, openCart } = useCart();
@@ -77,6 +79,11 @@ export function Header({
               className="h-10 w-[200px] rounded-pill border border-field bg-mist/60 pl-9 pr-3 text-[14px] text-ink transition-[width] duration-200 placeholder:text-hint focus:w-[260px] focus:bg-surface"
             />
           </form>
+          {accountEnabled && (
+            <Link href="/account" aria-label="My account" aria-current={pathname.startsWith("/account") ? "page" : undefined} className={`${iconButton} hidden lg:grid`}>
+              <User className="size-6" aria-hidden="true" />
+            </Link>
+          )}
           <Link href="/search" aria-label="Search" className={`${iconButton} lg:hidden`}>
             <Search className="size-6" aria-hidden="true" />
           </Link>
@@ -105,6 +112,7 @@ export function Header({
         collections={collections}
         whatsappNumber={whatsappNumber}
         deliveryAreaText={deliveryAreaText}
+        accountEnabled={accountEnabled}
       />
     </header>
   );

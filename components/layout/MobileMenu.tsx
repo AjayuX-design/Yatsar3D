@@ -20,12 +20,14 @@ export function MobileMenu({
   collections,
   whatsappNumber,
   deliveryAreaText,
+  accountEnabled = false,
 }: {
   open: boolean;
   onClose: () => void;
   collections: Collection[];
   whatsappNumber?: string;
   deliveryAreaText: string;
+  accountEnabled?: boolean;
 }) {
   const pathname = usePathname();
   // The page you are on is marked, so the menu also tells you where you are.
@@ -61,6 +63,11 @@ export function MobileMenu({
               {l.label}
             </Link>
           ))}
+          {accountEnabled && (
+            <Link href="/account" className={row} onClick={onClose} {...current("/account")}>
+              My account
+            </Link>
+          )}
         </nav>
 
         <div className="shrink-0 space-y-3 border-t border-line p-4 pb-[calc(16px+env(safe-area-inset-bottom))]">

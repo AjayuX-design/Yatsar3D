@@ -4,6 +4,7 @@ import { Footer } from "@/components/layout/Footer";
 import { Header } from "@/components/layout/Header";
 import { CartDrawer } from "@/components/cart/CartDrawer";
 import { CartProvider } from "@/lib/cart/CartProvider";
+import { accountEnabled } from "@/lib/customer/config";
 import { getNavCollections, getProducts, getSource } from "@/lib/data";
 import { sampleStore } from "@/lib/sample-data";
 import type { Collection } from "@/lib/types";
@@ -20,6 +21,7 @@ const header = (collections: Collection[]) => (
     collections={collections}
     whatsappNumber={sampleStore.whatsappNumber}
     deliveryAreaText={sampleStore.deliveryAreaText}
+    accountEnabled={accountEnabled()}
   />
 );
 
@@ -30,6 +32,7 @@ const footer = (collections: Collection[]) => (
     deliveryAreaText={sampleStore.deliveryAreaText}
     responseHours={sampleStore.responseHours}
     businessLine={sampleStore.businessLine}
+    accountEnabled={accountEnabled()}
   />
 );
 

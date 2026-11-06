@@ -20,12 +20,14 @@ export function Footer({
   deliveryAreaText,
   responseHours,
   businessLine,
+  accountEnabled = false,
 }: {
   collections: Collection[];
   whatsappNumber?: string;
   deliveryAreaText: string;
   responseHours: string;
   businessLine: string;
+  accountEnabled?: boolean;
 }) {
   const groups = [
     {
@@ -44,6 +46,7 @@ export function Footer({
       links: [
         { label: "FAQ", href: "/faq" },
         { label: "Delivery", href: "/delivery" },
+        ...(accountEnabled ? [{ label: "My account", href: "/account" }] : []),
         { label: "Track order", href: "/track-order" },
         { label: "Custom orders", href: "/custom-print" },
       ],

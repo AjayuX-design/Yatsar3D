@@ -31,3 +31,6 @@ export const businessEnquiryMessage =
 
 export const trackOrderMessage =
   "Hi Yatsar 3D, I'd like an update on my order. Order number: __ Name: __";
+
+export const orderHelpMessage = (orderName: string) =>
+  `Hi Yatsar 3D, I need help with order ${orderName}. My question: __`;
