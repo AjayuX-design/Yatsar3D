@@ -45,7 +45,7 @@ export const policies: Policy[] = [
       },
       {
         heading: "Delivery charges",
-        body: ["If there is a delivery charge, it is shown at checkout before you pay. The price you see at checkout is the price you pay."],
+        body: ["Delivery is free on orders above ₹1,500. Below that, any delivery charge is shown at checkout before you pay. The price you see at checkout is the price you pay."],
       },
       {
         heading: "Your address",

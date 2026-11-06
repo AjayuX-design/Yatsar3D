@@ -76,7 +76,7 @@ const groups: Array<{ id: string; title: string; items: AccordionItem[] }> = [
       {
         id: "charge",
         title: "Is there a delivery charge?",
-        content: "Any charge is shown at checkout, before you pay.",
+        content: "Delivery is free on orders above ₹1,500. Below that, any charge is shown at checkout, before you pay.",
       },
     ],
   },

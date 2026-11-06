@@ -17,8 +17,8 @@ export const metadata: Metadata = {
 
 /*
   Draft wording. Confirmed: the delivery area (Hyderabad). Still to be decided by
-  the shop, so this page makes no promise about them: delivery charges and any
-  free-delivery limit, courier and tracking, and delivery outside Hyderabad.
+  the shop, so this page makes no promise about them: the charge below the
+  free-delivery limit (free above ₹1,500 is confirmed), courier and tracking, and delivery outside Hyderabad.
 */
 
 const section = "mt-12 lg:mt-16";
@@ -97,7 +97,7 @@ export default function DeliveryPage() {
           Delivery charges
         </h2>
         <p className="mt-3 max-w-[640px] t-body text-graphite">
-          Any delivery charge is shown at checkout, before you pay. There are no surprises after that.
+          Delivery is free on orders above ₹1,500. Below that, any delivery charge is shown at checkout, before you pay. There are no surprises after that.
         </p>
       </section>
 

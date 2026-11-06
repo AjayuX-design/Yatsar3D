@@ -8,6 +8,7 @@ import { StatusChip, type Status } from "@/components/ui/Chip";
 import { Price } from "@/components/ui/Price";
 import { QuantityStepper } from "@/components/ui/QuantityStepper";
 import { Check } from "@/components/ui/Icons";
+import { Stars } from "@/components/reviews/Stars";
 import { EnquiryCta } from "@/components/enquiry/EnquiryCta";
 import { FulfilmentBox } from "@/components/product/FulfilmentBox";
 import { ProductGallery } from "@/components/product/ProductGallery";
@@ -17,11 +18,13 @@ import { defaultSelection, findVariant } from "@/lib/product/select";
 import { formatDays } from "@/lib/format/leadtime";
 import { productEnquiryMessage } from "@/lib/whatsapp";
 import { useCart } from "@/lib/cart/CartProvider";
+import type { Rating } from "@/lib/reviews/types";
 import type { Days, Product } from "@/lib/types";
 
 type Store = {
   whatsappNumber?: string;
   deliveryAreaText: string;
+  freeDeliveryText: string;
   defaultDeliveryDays?: Days;
   /** Absolute URL of this product, for the WhatsApp message. */
   productUrl: string;
@@ -34,7 +37,7 @@ type CartState = "idle" | "adding" | "added";
  * Order follows the blueprint: gallery, title and price, variants, button,
  * fulfilment, specs, scale, included, description, accordions, custom card.
  */
-export function ProductDetail({ product, store }: { product: Product; store: Store }) {
+export function ProductDetail({ product, store, rating }: { product: Product; store: Store; rating?: Rating }) {
   const [selection, setSelection] = useState(() => defaultSelection(product));
   const [qty, setQty] = useState(1);
   const [cart, setCart] = useState<CartState>("idle");
@@ -169,7 +172,9 @@ export function ProductDetail({ product, store }: { product: Product; store: Sto
             {production ? formatDays(production) : "a few days"}.
             {delivery && ` Delivery takes ${formatDays(delivery)} after dispatch.`}
           </p>
-          <p>{store.deliveryAreaText} Delivery charges are shown at checkout.</p>
+          <p>
+            {store.deliveryAreaText} {store.freeDeliveryText} Below that, any charge is shown at checkout.
+          </p>
           <p>
             Returns: if your item arrives damaged or is not what you ordered, message us on WhatsApp within 48
             hours with photos. We will replace it or refund you.
@@ -205,6 +210,14 @@ export function ProductDetail({ product, store }: { product: Product; store: Sto
               <p className="mt-2 t-small text-graphite">
                 {[product.material, product.finish].filter(Boolean).join(", ")}
               </p>
+            )}
+            {rating && rating.count > 0 && (
+              <a href="#reviews" className="-mb-1 mt-2 inline-flex min-h-11 items-center gap-2 t-small text-ink">
+                <Stars value={rating.average} />
+                <span className="underline underline-offset-[3px] [font-variant-numeric:tabular-nums]">
+                  {rating.average.toFixed(1)} ({rating.count} {rating.count === 1 ? "review" : "reviews"})
+                </span>
+              </a>
             )}
             <div className="mt-5 flex flex-wrap items-center justify-between gap-x-4 gap-y-3">
               {price}
@@ -244,6 +257,7 @@ export function ProductDetail({ product, store }: { product: Product; store: Sto
             deliveryDays={product.deliveryDays}
             defaultDeliveryDays={store.defaultDeliveryDays}
             deliveryAreaText={store.deliveryAreaText}
+            freeDeliveryText={store.freeDeliveryText}
             whatsappNumber={store.whatsappNumber}
           />
 

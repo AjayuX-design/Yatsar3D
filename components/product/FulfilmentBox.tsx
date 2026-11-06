@@ -1,4 +1,4 @@
-import { Clock, MapPin, Truck, WhatsAppIcon } from "@/components/ui/Icons";
+import { Clock, MapPin, PackageCheck, Truck, WhatsAppIcon } from "@/components/ui/Icons";
 import { formatDays } from "@/lib/format/leadtime";
 import { buildWhatsAppUrl, generalEnquiryMessage } from "@/lib/whatsapp";
 import type { Days, Fulfilment } from "@/lib/types";
@@ -41,6 +41,7 @@ export function FulfilmentBox({
   deliveryDays,
   defaultDeliveryDays,
   deliveryAreaText,
+  freeDeliveryText,
   whatsappNumber,
 }: {
   fulfilment: Fulfilment;
@@ -48,6 +49,7 @@ export function FulfilmentBox({
   deliveryDays?: Days;
   defaultDeliveryDays?: Days;
   deliveryAreaText: string;
+  freeDeliveryText?: string;
   whatsappNumber?: string;
 }) {
   const delivery = deliveryDays ?? defaultDeliveryDays;
@@ -68,6 +70,11 @@ export function FulfilmentBox({
       {delivery && (
         <Row icon={<Truck className="size-[18px]" />} label="Delivery time">
           {formatDays(delivery)} after dispatch
+        </Row>
+      )}
+      {freeDeliveryText && (
+        <Row icon={<PackageCheck className="size-[18px]" />} label="Delivery charge">
+          {freeDeliveryText.replace(/\.$/, "")}
         </Row>
       )}
       <div className="flex gap-4 bg-mist/60 px-4 py-3">

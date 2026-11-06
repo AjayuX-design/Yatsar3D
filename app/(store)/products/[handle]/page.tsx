@@ -8,7 +8,9 @@ import { StatePanel } from "@/components/ui/StatePanel";
 import { ProductCard } from "@/components/product/ProductCard";
 import { ProductDetail } from "@/components/product/ProductDetail";
 import { ProductSkeleton } from "@/components/product/ProductSkeleton";
+import { ReviewsSection } from "@/components/reviews/ReviewsSection";
 import { getProduct, getProducts, getSource } from "@/lib/data";
+import { ratingsFor } from "@/lib/reviews/store";
 import { sampleStore } from "@/lib/sample-data";
 import { siteUrl } from "@/lib/site";
 import { sampleStoreDefaults } from "@/lib/sample-products";
@@ -77,6 +79,7 @@ async function ProductContent({ params }: { params: PageProps<"/products/[handle
   if (!product) notFound();
 
   const related = all.state === "ok" ? all.data.filter((p) => p.handle !== product.handle).slice(0, 4) : [];
+  const ratings = await ratingsFor([product.handle, ...related.map((p) => p.handle)]);
 
   return (
     <>
@@ -90,14 +93,20 @@ async function ProductContent({ params }: { params: PageProps<"/products/[handle
       <div className="mt-2">
         <ProductDetail
           product={product}
+          rating={ratings[product.handle]}
           store={{
             whatsappNumber: sampleStore.whatsappNumber,
             deliveryAreaText: sampleStore.deliveryAreaText,
+            freeDeliveryText: sampleStore.freeDeliveryText,
             defaultDeliveryDays: sampleStoreDefaults.deliveryDays,
             productUrl: `${siteUrl()}/products/${product.handle}`,
           }}
         />
       </div>
+
+      <Suspense fallback={null}>
+        <ReviewsSection handle={product.handle} title={product.title} />
+      </Suspense>
 
       {related.length > 0 && (
         <section aria-labelledby="related" className="mt-16 border-t border-line pt-12">
@@ -106,7 +115,7 @@ async function ProductContent({ params }: { params: PageProps<"/products/[handle
           </h2>
           <div className="mt-6 grid grid-cols-2 gap-x-3 gap-y-8 md:grid-cols-4 lg:gap-x-6 lg:gap-y-10">
             {related.map((p) => (
-              <ProductCard key={p.handle} product={p} />
+              <ProductCard key={p.handle} product={p} rating={ratings[p.handle]} />
             ))}
           </div>
           <p className="sr-only">

@@ -35,6 +35,7 @@ export {
   Printer,
   Ruler,
   Search,
+  Star,
   ShieldCheck,
   SlidersHorizontal,
   ShoppingBag,

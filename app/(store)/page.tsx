@@ -6,6 +6,7 @@ import { ProductCard } from "@/components/product/ProductCard";
 import { StatePanel } from "@/components/ui/StatePanel";
 import { CUSTOM_ORDERS_HANDLE, categoryHref, categoryImage } from "@/lib/categories";
 import { getCollection, getNavCollections, getProducts } from "@/lib/data";
+import { ratingsFor } from "@/lib/reviews/store";
 import { Suspense } from "react";
 import { CategoryIcon } from "@/components/collection/CategoryIcon";
 import { ArrowRight } from "@/components/ui/Icons";
@@ -59,7 +60,7 @@ export default function HomePage() {
       <section className={section} aria-label="Delivery area">
         <div className="max-w-[720px]">
           <InfoCard variant="slate" title="Delivery area">
-            {sampleStore.deliveryAreaText} Most orders arrive within a few days of dispatch.
+            {sampleStore.deliveryAreaText} {sampleStore.freeDeliveryText} Most orders arrive within a few days of dispatch.
             <Link href="/delivery" className="-mb-3 flex min-h-11 items-center font-medium text-ink underline underline-offset-[3px]">
               How delivery works
             </Link>
@@ -189,10 +190,11 @@ async function Featured() {
       </StatePanel>
     );
   }
+  const ratings = await ratingsFor(r.data.map((p) => p.handle));
   return (
     <div className="mt-6 grid grid-cols-2 gap-x-3 gap-y-8 md:grid-cols-4 lg:gap-x-6 lg:gap-y-10">
       {r.data.map((p, i) => (
-        <ProductCard key={p.handle} product={p} priority={i < 2} />
+        <ProductCard key={p.handle} product={p} priority={i < 2} rating={ratings[p.handle]} />
       ))}
     </div>
   );

@@ -9,6 +9,7 @@ import { formatDimensions } from "@/lib/format/dimensions";
 import { sampleProducts } from "@/lib/sample-products";
 import { searchProducts } from "@/lib/product/search";
 import { buildEmail, escapeHtml, imageKind, newRequestId, readEmailConfig, readFields, validateFields, whatsappDigits } from "@/lib/custom-orders/request";
+import { summarise, validateReview } from "@/lib/reviews/validate";
 import { activeFilterChips, filterProducts, filterQuery, parseFilters } from "@/lib/product/filter";
 import { normaliseDomain, readShopifyConfig } from "@/lib/shopify/config";
 import { mapProduct } from "@/lib/shopify/mappers";
@@ -222,3 +223,23 @@ console.log("select, spec, format, sort, cart, shopify config, mapper and cart-m
   assert.equal(activeFilterChips({}).length, 0);
 }
 console.log("active filter chip checks passed");
+
+// Reviews: rules and the average
+{
+  const ok = validateReview({ name: "  Asha  ", rating: "5", title: "", body: "Lovely little magnet, sits well on the fridge." });
+  assert.ok(ok.ok && ok.value.name === "Asha" && ok.value.rating === 5);
+  const bad = validateReview({ name: "A", rating: 0, title: "x", body: "short" });
+  assert.ok(!bad.ok && bad.errors.name && bad.errors.rating && bad.errors.body, "name, rating and body are checked");
+  const spam = validateReview({ name: "Raj", rating: 4, body: "Great, visit www.spam.com now for deals" });
+  assert.ok(!spam.ok && spam.errors.body, "links are blocked");
+  const s = summarise([
+    { rating: 5, status: "live" },
+    { rating: 4, status: "live" },
+    { rating: 1, status: "hidden" },
+  ]);
+  assert.equal(s.count, 2);
+  assert.equal(s.average, 4.5);
+  assert.deepEqual(s.counts, [0, 0, 0, 1, 1]);
+  assert.equal(summarise([]).average, 0);
+}
+console.log("review checks passed");

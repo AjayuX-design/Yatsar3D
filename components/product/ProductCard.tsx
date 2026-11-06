@@ -4,6 +4,8 @@ import { StatusChip, type Status } from "@/components/ui/Chip";
 import { ImagePlaceholder } from "@/components/ui/ImagePlaceholder";
 import { longestSideCm } from "@/lib/format/dimensions";
 import { cn } from "@/lib/cn";
+import { Stars } from "@/components/reviews/Stars";
+import type { Rating } from "@/lib/reviews/types";
 import type { Product } from "@/lib/types";
 
 function cardStatus(p: Product): Status {
@@ -17,7 +19,7 @@ function cardStatus(p: Product): Status {
  * max), one spec line, price pinned to the bottom so prices align across a row.
  * The whole card is one link.
  */
-export function ProductCard({ product, priority = false }: { product: Product; priority?: boolean }) {
+export function ProductCard({ product, priority = false, rating }: { product: Product; priority?: boolean; rating?: Rating }) {
   const status = cardStatus(product);
   const soldOut = status === "sold-out";
   const hero = product.images[0];
@@ -59,6 +61,14 @@ export function ProductCard({ product, priority = false }: { product: Product; p
           {product.title}
         </h3>
         {spec && <p className="mt-1 t-small text-graphite">{spec}</p>}
+        {rating && rating.count > 0 && (
+          <p className="mt-1 flex items-center gap-1.5 t-small text-graphite [font-variant-numeric:tabular-nums]">
+            <Stars value={rating.average} size={14} />
+            <span>
+              {rating.average.toFixed(1)} ({rating.count})
+            </span>
+          </p>
+        )}
         <Price
           className="mt-auto pt-2"
           from={hasRange}

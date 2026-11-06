@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
 import { CategoryChips } from "@/components/collection/CategoryChips";
+import { ratingsFor } from "@/lib/reviews/store";
 import { ActiveFilters } from "@/components/collection/ActiveFilters";
 import { FilterControl } from "@/components/collection/FilterControl";
 import { SortControl } from "@/components/collection/SortControl";
@@ -74,6 +75,7 @@ async function CollectionContent({
   const count = products.length;
   const filtering = activeFilterCount(filters) > 0;
   const total = collection.products.length;
+  const ratings = await ratingsFor(products.map((p) => p.handle));
 
   return (
     <>
@@ -119,7 +121,7 @@ async function CollectionContent({
       ) : (
         <div className="mt-6 grid grid-cols-2 gap-x-3 gap-y-8 md:grid-cols-3 lg:grid-cols-4 lg:gap-x-6 lg:gap-y-10">
           {products.map((p, i) => (
-            <ProductCard key={p.handle} product={p} priority={i < 2} />
+            <ProductCard key={p.handle} product={p} priority={i < 2} rating={ratings[p.handle]} />
           ))}
         </div>
       )}
