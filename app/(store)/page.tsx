@@ -10,7 +10,7 @@ import { Suspense } from "react";
 import { CategoryIcon } from "@/components/collection/CategoryIcon";
 import { ArrowRight } from "@/components/ui/Icons";
 import { Button } from "@/components/ui/Button";
-import { ImagePlaceholder } from "@/components/ui/ImagePlaceholder";
+import { HeroCarousel, type HeroSlide } from "@/components/home/HeroCarousel";
 import { InfoCard } from "@/components/ui/InfoCard";
 import { customSteps } from "@/lib/custom-orders";
 import { sampleStore } from "@/lib/sample-data";
@@ -21,35 +21,18 @@ export const metadata: Metadata = { title: "Yatsar 3D", robots: { index: false, 
 const section = "mt-16 lg:mt-24";
 
 /**
- * Sections: hero, categories, featured products, delivery area, custom-print steps.
+ * Sections: hero (product banners), categories, featured products, delivery area, custom-print steps.
  * The fact strip was removed until delivery, payment and WhatsApp details are settled.
  * Optional sections (materials, maker note, FAQ preview) wait for their real content.
  */
 export default function HomePage() {
-  const heroAlt = "The Fear Not fridge magnet, a stamp-shaped plum and cream 3D print";
-
   return (
     <main id="main" tabIndex={-1} className="outline-none mx-auto w-full max-w-[1200px] px-4 pt-4 md:px-6 lg:px-8 lg:pt-8">
-      {/* Hero */}
-      <section className="lg:grid lg:grid-cols-12 lg:items-center lg:gap-12">
-        <div className="relative aspect-square overflow-hidden rounded-card bg-mist lg:order-2 lg:col-span-7 lg:aspect-[6/5]">
-          <ImagePlaceholder src="/products/square/fear-not-magnet-front-1200.jpg" alt={heroAlt} label="Photo coming soon" priority onWhite sizes="(min-width: 1024px) 700px, 100vw" />
-        </div>
-        <div className="mt-8 lg:order-1 lg:col-span-5 lg:mt-0 lg:pr-4">
-          <h1 className="t-display text-balance text-ink">Made layer by layer.</h1>
-          <p className="mt-4 max-w-[420px] t-body-l text-graphite">
-            3D-printed products for your desk and home, with the size, material and timing shown on every page.
-          </p>
-          <div className="mt-8 flex flex-col items-start gap-2 sm:flex-row sm:items-center sm:gap-6">
-            <Button href="/collections/all" block className="sm:w-auto">
-              Shop all products
-            </Button>
-            <Button href="/custom-print" variant="text" className="-ml-1 decoration-kiln-deep/40! sm:ml-0">
-              Ask for a custom print
-            </Button>
-          </div>
-        </div>
-      </section>
+      {/* Hero: product banners */}
+      <h1 className="sr-only">Yatsar 3D, 3D-printed products for your desk and home</h1>
+      <Suspense fallback={<HeroSkeleton />}>
+        <Hero />
+      </Suspense>
 
       {/* Shop by category */}
       <Suspense fallback={null}>
@@ -148,6 +131,39 @@ async function Categories() {
       </ul>
     </section>
   );
+}
+
+/** Up to four product banners, from products that have a photo. */
+async function Hero() {
+  const r = await getProducts(8);
+  const slides: HeroSlide[] = r.state === "ok" ? r.data.filter((p) => p.images[0]?.src).slice(0, 4).map((p) => {
+    const live = p.variants.filter((v) => v.availableForSale);
+    const prices = (live.length ? live : p.variants).map((v) => v.price).sort((a, b) => Number(a.amount) - Number(b.amount));
+    const img = p.images[0];
+    return {
+      handle: p.handle,
+      title: p.title,
+      price: prices[0],
+      from: Number(prices[prices.length - 1].amount) > Number(prices[0].amount),
+      image: { src: img.src!, alt: img.alt, onWhite: img.onWhite },
+    };
+  }) : [];
+  if (slides.length === 0) {
+    return (
+      <section className="grid min-h-[320px] place-items-center rounded-card bg-mist px-6 py-12 text-center">
+        <div>
+          <p className="t-display text-ink">Yatsar 3D</p>
+          <p className="mt-3 t-body-l text-graphite">3D-printed products for your desk and home.</p>
+          <Button href="/custom-print" className="mt-6">Ask for a custom print</Button>
+        </div>
+      </section>
+    );
+  }
+  return <HeroCarousel slides={slides} />;
+}
+
+function HeroSkeleton() {
+  return <div aria-busy="true" aria-label="Loading featured products" className="aspect-[5/4] rounded-card bg-mist md:aspect-auto md:min-h-[440px] lg:min-h-[480px]" />;
 }
 
 /** Four products from the store. Loading, empty and error states included. */
