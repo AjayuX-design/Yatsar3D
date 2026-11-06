@@ -33,4 +33,6 @@ export const COOKIES = {
   id: "yatsar_cid",
   oauth: "yatsar_oauth",
   demo: "yatsar_demo",
+  /** Remembers which cart already has the customer's details, so we do not repeat the work. */
+  cartSync: "yatsar_cart_sync",
 } as const;

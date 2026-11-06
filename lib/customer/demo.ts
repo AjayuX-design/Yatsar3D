@@ -36,3 +36,16 @@ export const demoCustomer: CustomerView = {
     },
   ],
 };
+
+import type { SavedAddress } from "./addresses";
+
+export const demoAddresses: SavedAddress[] = [
+  {
+    id: "demo-a1", firstName: "Asha", lastName: "Rao", address1: "12, Road No. 5, Banjara Hills", city: "Hyderabad", zoneCode: "TS", zip: "500034",
+    phoneNumber: "+919876543210", formatted: ["Asha Rao", "12, Road No. 5, Banjara Hills", "Hyderabad TS 500034", "India"], isDefault: true,
+  },
+  {
+    id: "demo-a2", firstName: "Asha", lastName: "Rao", address1: "Flat 4B, Lotus Apartments", address2: "Gachibowli", city: "Hyderabad", zoneCode: "TS", zip: "500032",
+    phoneNumber: "+919876543210", formatted: ["Asha Rao", "Flat 4B, Lotus Apartments", "Gachibowli", "Hyderabad TS 500032", "India"], isDefault: false,
+  },
+];

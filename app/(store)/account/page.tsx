@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { Suspense } from "react";
+import { AccountNav } from "@/components/account/AccountNav";
 import { OrderCard } from "@/components/account/OrderCard";
 import { SignInCard } from "@/components/account/SignInCard";
 import { SignOutButton } from "@/components/account/SignOutButton";
@@ -78,6 +79,8 @@ async function Content({ searchParams }: { searchParams: PageProps<"/account">["
         </div>
         <SignOutButton />
       </header>
+
+      <AccountNav current="/account" />
 
       <section className="mt-8" aria-labelledby="orders">
         <h2 id="orders" className="t-h2 text-ink">

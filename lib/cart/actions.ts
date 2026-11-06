@@ -1,6 +1,7 @@
 "use server";
 
 import { cookies, headers } from "next/headers";
+import { prefillCart } from "@/lib/cart/prefill";
 import { shopifyFetch } from "@/lib/shopify/client";
 import {
   CART_CREATE,
@@ -70,6 +71,7 @@ async function mutate(query: string, variables: Record<string, unknown>, field: 
   }
   if (!out.cart) return { ok: false, message: GENERIC };
   await saveCartId(out.cart.id);
+  await prefillCart(out.cart.id);
   return { ok: true, cart: mapCart(out.cart) };
 }
 
@@ -82,6 +84,7 @@ export async function getCart(): Promise<CartResult> {
     return { ok: false, message: GENERIC };
   }
   // Shopify carts expire. A missing cart just means an empty one.
+  if (r.data.cart) await prefillCart(r.data.cart.id);
   return { ok: true, cart: r.data.cart ? mapCart(r.data.cart) : null };
 }
 

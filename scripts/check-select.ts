@@ -9,6 +9,7 @@ import { formatDimensions } from "@/lib/format/dimensions";
 import { sampleProducts } from "@/lib/sample-products";
 import { searchProducts } from "@/lib/product/search";
 import { buildEmail, escapeHtml, imageKind, newRequestId, readEmailConfig, readFields, validateFields, whatsappDigits } from "@/lib/custom-orders/request";
+import { isAddressId, mapAddresses, normalisePhone, STATES, toInput, validateAddress } from "@/lib/customer/addresses";
 import { mapCustomer } from "@/lib/customer/api";
 import { orderStage } from "@/lib/customer/orders";
 import { endpointsFor, newPkce, safeReturn, idTokenNonce } from "@/lib/customer/oauth";
@@ -291,3 +292,30 @@ console.log("review checks passed");
   assert.equal(c.email, "a@x.com");
 }
 console.log("account checks passed");
+
+// Saved addresses
+{
+  assert.equal(normalisePhone("98765 43210"), "+919876543210");
+  assert.equal(normalisePhone("+91 98765-43210"), "+919876543210");
+  assert.equal(normalisePhone("098765 43210"), "+919876543210");
+  assert.equal(normalisePhone("12345"), null);
+  assert.equal(normalisePhone("5876543210"), null, "Indian mobiles start with 6 to 9");
+  const good = validateAddress({ firstName: " Asha ", lastName: "Rao", phone: "9876543210", address1: "12 Road No 5", address2: "", city: "Hyderabad", state: "TS", zip: "500034" });
+  assert.ok(good.ok && good.value.firstName === "Asha" && good.phoneE164 === "+919876543210");
+  if (good.ok) {
+    const input = toInput(good.value, good.phoneE164);
+    assert.equal(input.countryCode, "IN");
+    assert.equal(input.zoneCode, "TS");
+    assert.equal(input.address2, null, "empty line 2 is sent as null");
+  }
+  const bad = validateAddress({ firstName: "", lastName: "R", phone: "1", address1: "x", city: "", state: "ZZ", zip: "05" });
+  assert.ok(!bad.ok && ["firstName", "phone", "address1", "city", "state", "zip"].every((k) => (bad.errors as Record<string, string>)[k]), "every bad field is reported");
+  assert.ok(STATES.some((x) => x.code === "TS" && x.name === "Telangana"));
+  assert.ok(isAddressId("gid://shopify/CustomerAddress/123?model_name=CustomerAddress") && !isAddressId("123") && !isAddressId("gid://shopify/Order/1"));
+  const book = mapAddresses({
+    defaultAddress: { id: "b" },
+    addresses: { nodes: [{ id: "a", formatted: ["A"] }, { id: "b", formatted: ["B"] }] },
+  });
+  assert.deepEqual(book.map((x) => [x.id, x.isDefault]), [["b", true], ["a", false]], "the default address comes first");
+}
+console.log("address checks passed");

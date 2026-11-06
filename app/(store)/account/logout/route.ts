@@ -1,5 +1,6 @@
 import { NextResponse, type NextRequest } from "next/server";
-import { readAccountConfig } from "@/lib/customer/config";
+import { cookies } from "next/headers";
+import { COOKIES, readAccountConfig } from "@/lib/customer/config";
 import { discover } from "@/lib/customer/oauth";
 import { originOf } from "@/lib/customer/origin";
 import { clearTokens, readTokens } from "@/lib/customer/session";
@@ -9,6 +10,10 @@ export async function POST(request: NextRequest) {
   const origin = originOf(request);
   const { id } = await readTokens();
   await clearTokens();
+  // The cart carries this customer's email and address, so the next person on this browser starts with a fresh one.
+  const jar = await cookies();
+  jar.delete("yatsar_cart");
+  jar.delete(COOKIES.cartSync);
   const cfg = readAccountConfig(process.env);
   if (cfg.ok && id) {
     try {

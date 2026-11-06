@@ -117,8 +117,10 @@ export function mapCustomer(raw: NonNullable<Raw["customer"]>): CustomerView {
   return { displayName: raw.displayName, firstName: raw.firstName ?? undefined, email: raw.emailAddress?.emailAddress ?? undefined, orders };
 }
 
-/** The signed-in customer and their latest orders. Throws SessionExpired when the token is no longer good. */
-export async function fetchCustomer(accessToken: string): Promise<CustomerView> {
+type Gql<T> = { data?: T; errors?: { message: string }[] };
+
+/** One call to the Customer Account API. Throws SessionExpired when the token is no longer good. */
+export async function customerGql<T>(accessToken: string, query: string, variables: Record<string, unknown> = {}): Promise<T> {
   const cfg = readAccountConfig(process.env);
   if (!cfg.ok) throw new Error("Customer accounts are not set up");
   const url = await endpoint(cfg.config.domain, cfg.config.apiVersion, cfg.config.shopId);
@@ -126,13 +128,20 @@ export async function fetchCustomer(accessToken: string): Promise<CustomerView> 
     method: "POST",
     // Shopify wants the raw token here, without "Bearer".
     headers: { "Content-Type": "application/json", Authorization: accessToken },
-    body: JSON.stringify({ query: QUERY, variables: { first: 50 } }),
+    body: JSON.stringify({ query, variables }),
     cache: "no-store",
   });
   if (res.status === 401 || res.status === 403) throw new SessionExpired();
-  if (!res.ok) throw new Error(`Orders could not be loaded (${res.status})`);
-  const json = (await res.json()) as { data?: Raw; errors?: { message: string }[] };
+  if (!res.ok) throw new Error(`Account request failed (${res.status})`);
+  const json = (await res.json()) as Gql<T>;
   if (json.errors?.length) throw new Error(json.errors[0].message);
-  if (!json.data?.customer) throw new SessionExpired();
-  return mapCustomer(json.data.customer);
+  if (!json.data) throw new SessionExpired();
+  return json.data;
+}
+
+/** The signed-in customer and their latest orders. */
+export async function fetchCustomer(accessToken: string): Promise<CustomerView> {
+  const data = await customerGql<Raw>(accessToken, QUERY, { first: 50 });
+  if (!data.customer) throw new SessionExpired();
+  return mapCustomer(data.customer);
 }

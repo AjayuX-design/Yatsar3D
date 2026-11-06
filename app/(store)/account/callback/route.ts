@@ -34,6 +34,7 @@ export async function GET(request: NextRequest) {
     // If Shopify sent an id token, its nonce must be the one we made.
     if (tokens.idToken && idTokenNonce(tokens.idToken) !== saved.nonce) return fail("signin");
     await setTokens(tokens);
+    jar.delete(COOKIES.cartSync); // so the cart is filled in with this customer's details
     return NextResponse.redirect(new URL(safeReturn(saved.returnTo), origin));
   } catch {
     return fail("signin");
