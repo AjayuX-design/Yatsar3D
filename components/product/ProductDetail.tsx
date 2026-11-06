@@ -107,7 +107,7 @@ export function ProductDetail({ product, store, rating }: { product: Product; st
   );
 
   const price = variant ? (
-    <Price size="l" price={variant.price} compareAt={variant.compareAt} />
+    <Price size="l" saving="line" price={variant.price} compareAt={variant.compareAt} />
   ) : null;
 
   const d = product.dimensions;

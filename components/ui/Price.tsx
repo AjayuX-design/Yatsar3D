@@ -1,4 +1,5 @@
 import { cn } from "@/lib/cn";
+import { amountSaved, percentOff } from "@/lib/format/discount";
 import { formatMoney, type Money } from "@/lib/format/money";
 
 /**
@@ -11,6 +12,7 @@ export function Price({
   size = "s",
   from = false,
   muted = false,
+  saving,
   className,
 }: {
   price: Money;
@@ -20,9 +22,13 @@ export function Price({
   from?: boolean;
   /** Greyed price, for sold-out items. */
   muted?: boolean;
+  /** chip: a small "19% off" beside the price. line: a "You save" line under it. Only shown for a real discount. */
+  saving?: "chip" | "line";
   className?: string;
 }) {
   const showCompare = !!compareAt && Number(compareAt.amount) > Number(price.amount);
+  const percent = percentOff(price, compareAt);
+  const saved = amountSaved(price, compareAt);
   return (
     <p
       className={cn(
@@ -42,6 +48,14 @@ export function Price({
           <span className="sr-only">Original price: </span>
           {formatMoney(compareAt!)}
         </s>
+      )}
+      {showCompare && saving === "chip" && percent !== null && (
+        <span className="rounded-pill bg-amber-tint px-2 py-0.5 t-caption font-semibold text-amber-text [font-variant-numeric:tabular-nums]">{percent}% off</span>
+      )}
+      {showCompare && saving === "line" && percent !== null && saved && (
+        <span className="basis-full t-small font-medium text-amber-text [font-variant-numeric:tabular-nums]">
+          You save {formatMoney(saved)} ({percent}% off)
+        </span>
       )}
     </p>
   );

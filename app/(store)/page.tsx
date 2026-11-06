@@ -145,12 +145,14 @@ async function Hero() {
   const r = await getProducts(8);
   const slides: HeroSlide[] = r.state === "ok" ? r.data.filter((p) => p.images[0]?.src).slice(0, 4).map((p) => {
     const live = p.variants.filter((v) => v.availableForSale);
-    const prices = (live.length ? live : p.variants).map((v) => v.price).sort((a, b) => Number(a.amount) - Number(b.amount));
+    const variants = [...(live.length ? live : p.variants)].sort((a, b) => Number(a.price.amount) - Number(b.price.amount));
+    const prices = variants.map((v) => v.price);
     const img = p.images[0];
     return {
       handle: p.handle,
       title: p.title,
       price: prices[0],
+      compareAt: variants[0].compareAt,
       from: Number(prices[prices.length - 1].amount) > Number(prices[0].amount),
       image: { src: img.src!, alt: img.alt, onWhite: img.onWhite },
     };

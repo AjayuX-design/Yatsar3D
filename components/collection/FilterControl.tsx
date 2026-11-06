@@ -83,6 +83,15 @@ export function FilterControl({
                   <PackageCheck className="size-[18px]" aria-hidden="true" />
                   In stock only
                 </button>
+                <button
+                  type="button"
+                  aria-pressed={filters.sale === "on"}
+                  className={chip(filters.sale === "on")}
+                  onClick={() => apply({ ...filters, sale: filters.sale === "on" ? undefined : "on" })}
+                >
+                  <Tag className="size-[18px]" aria-hidden="true" />
+                  On sale
+                </button>
               </div>
             </fieldset>
 

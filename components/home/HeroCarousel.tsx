@@ -12,6 +12,8 @@ export type HeroSlide = {
   handle: string;
   title: string;
   price: Money;
+  /** Shopify's higher "was" price, when the product is marked down. */
+  compareAt?: Money | null;
   /** The price is a range, so it reads "From ...". */
   from: boolean;
   image?: { src: string; alt: string; onWhite?: boolean };
@@ -113,7 +115,7 @@ export function HeroCarousel({ slides }: { slides: HeroSlide[] }) {
             </div>
             <div className="flex flex-col justify-center px-6 pb-14 pt-6 md:order-1 md:px-10 md:py-12 lg:px-14">
               <h2 className="line-clamp-3 text-balance t-display text-ink">{s.title}</h2>
-              <Price className="mt-4" size="l" from={s.from} price={s.price} />
+              <Price className="mt-4" size="l" saving="chip" from={s.from} price={s.price} compareAt={s.from ? null : s.compareAt} />
               <Button href={`/products/${s.handle}`} block className="mt-6 sm:w-auto sm:self-start">
                 Shop now
               </Button>

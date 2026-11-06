@@ -9,6 +9,7 @@ import { formatDimensions } from "@/lib/format/dimensions";
 import { sampleProducts } from "@/lib/sample-products";
 import { searchProducts } from "@/lib/product/search";
 import { buildEmail, escapeHtml, imageKind, newRequestId, readEmailConfig, readFields, validateFields, whatsappDigits } from "@/lib/custom-orders/request";
+import { amountSaved, isOnSale, percentOff } from "@/lib/format/discount";
 import { isAddressId, mapAddresses, normalisePhone, STATES, toInput, validateAddress } from "@/lib/customer/addresses";
 import { mapCustomer } from "@/lib/customer/api";
 import { orderStage } from "@/lib/customer/orders";
@@ -189,7 +190,7 @@ assert.ok(handles({ type: "made_to_order" }).every((h) => h === "planter-pot"), 
 assert.ok(handles({ price: "under-500" }).includes("fear-not-fridge-magnet"), "price under 500");
 assert.ok(!handles({ price: "under-500" }).includes("desk-organiser"), "desk organiser costs more than 500");
 assert.ok(handles({ price: "over-1000" }).includes("desk-organiser"));
-assert.deepEqual(parseFilters({ type: "bogus", price: ["500-1000", "x"], stock: "in" }), { type: undefined, stock: "in", price: "500-1000" }, "unknown values ignored");
+assert.deepEqual(parseFilters({ type: "bogus", price: ["500-1000", "x"], stock: "in" }), { type: undefined, stock: "in", sale: undefined, price: "500-1000" }, "unknown values ignored");
 assert.equal(filterQuery({ type: "ready_stock", price: "over-1000" }, "price-asc"), "?sort=price-asc&type=ready_stock&price=over-1000");
 assert.equal(filterQuery({}, "featured"), "");
 
@@ -319,3 +320,25 @@ console.log("account checks passed");
   assert.deepEqual(book.map((x) => [x.id, x.isDefault]), [["b", true], ["a", false]], "the default address comes first");
 }
 console.log("address checks passed");
+
+// Discounts: only genuine, never overstated
+{
+  const inr = (a: string) => ({ amount: a, currencyCode: "INR" });
+  assert.equal(percentOff(inr("1299"), inr("1599")), 18, "rounded down: 18.76% is shown as 18%");
+  assert.equal(percentOff(inr("500"), inr("1000")), 50);
+  assert.equal(percentOff(inr("1299"), null), null, "no compare-at, no discount");
+  assert.equal(percentOff(inr("1299"), inr("1299")), null, "equal prices are not a discount");
+  assert.equal(percentOff(inr("1299"), inr("1000")), null, "a lower compare-at is not a discount");
+  assert.equal(percentOff(inr("999"), inr("1000")), null, "under 1% is not shown");
+  assert.equal(amountSaved(inr("1299"), inr("1599"))?.amount, "300");
+  assert.equal(amountSaved(inr("1299"), null), null);
+  const v = (price: string, compareAt: string | null, availableForSale = true) => ({ price: inr(price), compareAt: compareAt ? inr(compareAt) : null, availableForSale });
+  assert.equal(isOnSale({ variants: [v("100", "150")] } as never), true);
+  assert.equal(isOnSale({ variants: [v("100", "150", false)] } as never), false, "sold-out markdowns do not count");
+  assert.equal(isOnSale({ variants: [v("100", null)] } as never), false);
+  const f = parseFilters({ sale: "on" });
+  assert.equal(f.sale, "on");
+  assert.equal(filterQuery(f), "?sale=on");
+  assert.deepEqual(activeFilterChips(f).map((c) => c.label), ["On sale"]);
+}
+console.log("discount checks passed");

@@ -73,6 +73,7 @@ export function ProductCard({ product, priority = false, rating }: { product: Pr
           className="mt-auto pt-2"
           from={hasRange}
           muted={soldOut}
+          saving="chip"
           price={lowest.price}
           compareAt={hasRange ? null : lowest.compareAt}
         />

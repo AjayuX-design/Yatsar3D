@@ -1,3 +1,4 @@
+import { isOnSale } from "../format/discount";
 import type { Product } from "../types";
 
 /*
@@ -8,6 +9,7 @@ import type { Product } from "../types";
 export type FilterState = {
   type?: "ready_stock" | "made_to_order";
   stock?: "in";
+  sale?: "on";
   price?: "under-500" | "500-1000" | "over-1000";
 };
 
@@ -30,14 +32,16 @@ export function parseFilters(params: Params): FilterState {
   const type = one(params.type);
   const stock = one(params.stock);
   const price = one(params.price);
+  const sale = one(params.sale);
   return {
+    sale: sale === "on" ? ("on" as const) : undefined,
     type: typeOptions.find((o) => o.key === type)?.key,
     stock: stock === "in" ? "in" : undefined,
     price: priceOptions.find((o) => o.key === price)?.key,
   };
 }
 
-export const activeFilterCount = (f: FilterState) => [f.type, f.stock, f.price].filter(Boolean).length;
+export const activeFilterCount = (f: FilterState) => [f.type, f.stock, f.sale, f.price].filter(Boolean).length;
 
 const lowestPrice = (p: Product) => Math.min(...p.variants.map((v) => Number(v.price.amount)));
 const inStock = (p: Product) => p.variants.some((v) => v.availableForSale);
@@ -46,6 +50,7 @@ export function filterProducts(products: Product[], f: FilterState): Product[] {
   return products.filter((p) => {
     if (f.type && p.fulfilment !== f.type) return false;
     if (f.stock === "in" && !inStock(p)) return false;
+    if (f.sale === "on" && !isOnSale(p)) return false;
     if (f.price) {
       const low = lowestPrice(p);
       if (f.price === "under-500" && !(low < 500)) return false;
@@ -62,6 +67,7 @@ export function filterQuery(f: FilterState, sort?: string) {
   if (sort && sort !== "featured") q.set("sort", sort);
   if (f.type) q.set("type", f.type);
   if (f.stock) q.set("stock", f.stock);
+  if (f.sale) q.set("sale", f.sale);
   if (f.price) q.set("price", f.price);
   const s = q.toString();
   return s ? `?${s}` : "";
@@ -71,6 +77,7 @@ export function filterQuery(f: FilterState, sort?: string) {
 export function activeFilterChips(f: FilterState): { key: string; label: string; without: FilterState }[] {
   const chips: { key: string; label: string; without: FilterState }[] = [];
   if (f.stock) chips.push({ key: "stock", label: "In stock only", without: { ...f, stock: undefined } });
+  if (f.sale) chips.push({ key: "sale", label: "On sale", without: { ...f, sale: undefined } });
   if (f.type) {
     const label = typeOptions.find((o) => o.key === f.type)!.label;
     chips.push({ key: "type", label, without: { ...f, type: undefined } });
