@@ -112,47 +112,35 @@ export function ProductDetail({ product, store }: { product: Product; store: Sto
   const delivery = product.deliveryDays ?? store.defaultDeliveryDays;
   const production = variant?.productionDays ?? product.productionDays;
   const weight = variant?.weightG ?? product.weightG;
-  const bullets = (items: string[]) => (
-    <ul className="space-y-2">
-      {items.map((i) => (
-        <li key={i}>{i}</li>
-      ))}
-    </ul>
-  );
+  // Description: a short intro, then the key facts as bullets (size, weight, finish, what is in the box).
+  const facts: [string, string][] = [
+    ["Size", size ?? ""],
+    ["Weight", weight ? `${weight} g` : ""],
+    ["Material", product.material ?? ""],
+    ["Colour", product.colour ?? ""],
+    ["In the box", product.included.join(", ")],
+    ["Not included", product.notIncluded.join(", ")],
+  ].filter(([, v]) => v) as [string, string][];
 
   const accordionItems: AccordionItem[] = [
     {
       id: "about",
       title: "Description",
       content: (
-        <div className="space-y-3">
-          {product.paragraphs.map((p) => (
-            <p key={p}>{p}</p>
-          ))}
-        </div>
-      ),
-    },
-    {
-      id: "details",
-      title: "Size and what is included",
-      content: (
         <div className="space-y-4">
-          {(size || weight) && (
-            <p className="text-ink">
-              {[size && `Size: ${size}`, weight && `Weight: ${weight} g`].filter(Boolean).join(". ")}
-            </p>
-          )}
-          {product.included.length > 0 && (
-            <div>
-              <p className="mb-2 t-label text-ink">In the box</p>
-              {bullets(product.included)}
-            </div>
-          )}
-          {product.notIncluded.length > 0 && (
-            <div>
-              <p className="mb-2 t-label text-ink">Not included</p>
-              {bullets(product.notIncluded)}
-            </div>
+          <div className="space-y-3">
+            {product.paragraphs.map((p) => (
+              <p key={p}>{p}</p>
+            ))}
+          </div>
+          {facts.length > 0 && (
+            <ul className="list-disc space-y-2 pl-5 marker:text-graphite">
+              {facts.map(([k, v]) => (
+                <li key={k}>
+                  <span className="font-medium text-ink">{k}:</span> {v}
+                </li>
+              ))}
+            </ul>
           )}
         </div>
       ),

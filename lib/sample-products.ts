@@ -41,7 +41,6 @@ export const sampleProducts: Product[] = [
     productionDays: { min: 1, max: 2 },
     // Width 64 mm, height 70 mm, total thickness 5 mm (back to top of the raised text).
     dimensions: { lengthMm: 64, widthMm: 70, heightMm: 5 },
-    finish: "Matte",
     colour: "Plum and cream",
     included: ["1 Fear Not fridge magnet"],
     notIncluded: [],
