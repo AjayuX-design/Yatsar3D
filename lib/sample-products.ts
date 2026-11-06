@@ -61,6 +61,26 @@ export const sampleProducts: Product[] = [
       },
       {
         id: "2",
+        kind: "closeup",
+        alt: "The Fear Not fridge magnet seen at an angle, showing the raised lettering and thickness",
+        src: "/products/fear-not-magnet-angle-v2.jpg",
+        onWhite: true,
+      },
+      {
+        id: "3",
+        kind: "closeup",
+        alt: "Close-up of the scalloped edge and printed surface of the Fear Not fridge magnet",
+        src: "/products/fear-not-magnet-closeup-v3.jpg",
+        onWhite: true,
+      },
+      {
+        id: "4",
+        kind: "in-use",
+        alt: "A hand placing the Fear Not fridge magnet on a fridge door to hold a note",
+        src: "/products/fear-not-magnet-kitchen-v4.jpg",
+      },
+      {
+        id: "5",
         kind: "scale",
         alt: "The Fear Not fridge magnet on a fridge door beside the handle, showing its size",
         src: "/products/fear-not-magnet-fridge.jpg",
