@@ -1,4 +1,4 @@
-import { businessEnquiryMessage, drawerEnquiryMessage, personalisedEnquiryMessage } from "@/lib/whatsapp";
+import { businessEnquiryMessage, drawerEnquiryMessage, generalEnquiryMessage, personalisedEnquiryMessage } from "@/lib/whatsapp";
 
 /*
   Custom orders content. WhatsApp-first: the shopper messages us, we reply with a
@@ -40,6 +40,14 @@ export const customOptions = [
     message: businessEnquiryMessage,
     cta: "Ask about business orders",
   },
+  {
+    id: "other",
+    title: "Something else",
+    text: "Have a different idea? Describe it, and we will tell you if we can make it and what it would cost.",
+    icon: "other",
+    message: generalEnquiryMessage,
+    cta: "Tell us your idea",
+  },
 ] as const;
 
 export const customFaq = [
@@ -52,6 +60,11 @@ export const customFaq = [
     id: "time",
     title: "How long does it take?",
     content: "We confirm the timing in your quote, once we know the size and quantity.",
+  },
+  {
+    id: "other",
+    title: "Can you make something that is not listed?",
+    content: "Choose \"Something else\" and describe your idea, with a photo or sketch if you have one. We look at it and tell you if we can make it, and the price, before you pay anything.",
   },
   {
     id: "area",
@@ -67,7 +80,7 @@ export const customFaq = [
 
 /** Three short steps for the page sidebar. Icons, not numbers, so they do not clash with the form's own steps. */
 export const nextSteps = [
-  { icon: "send", title: "You send your request", text: "It takes about two minutes." },
+  { icon: "send", title: "Tell us what you need", text: "A short form. It takes about two minutes." },
   { icon: "quote", title: "We send a quote", text: "A price and timing, by phone or WhatsApp." },
   { icon: "approve", title: "You approve, then pay", text: "We start printing only after you say yes." },
 ] as const;

@@ -195,10 +195,12 @@ assert.equal(filterQuery({ type: "ready_stock", price: "over-1000" }, "price-asc
 assert.equal(filterQuery({}, "featured"), "");
 
 // Custom order requests
-const ok = readFields((n) => ({ type: "drawers", name: "Asha", phone: "+91 98765 43210", city: "Hyderabad", details: "A drawer organiser for kitchen cutlery." } as Record<string, string>)[n]);
+const ok = readFields((n) => ({ type: "drawers", name: "Asha", phone: "+91 98765 43210", city: "Hyderabad", details: "A drawer organiser for kitchen cutlery.", size: "18 x 9 x 4 cm" } as Record<string, string>)[n]);
 assert.deepEqual(validateFields(ok), {}, "a complete request is valid");
 const bad = validateFields(readFields(() => "x"));
 assert.ok(bad.type && bad.name && bad.phone && bad.city && bad.details, "empty request lists every required field");
+assert.ok(validateFields({ ...ok, size: "" }).size, "a drawer request needs its size");
+assert.equal(validateFields({ ...ok, type: "personalised", size: "" }).size, undefined, "other types do not need a size");
 assert.equal(readFields((n) => (n === "type" ? "hack" : "")).type, "", "unknown type is dropped");
 assert.equal(readFields((n) => (n === "name" ? "a".repeat(500) : "")).name.length, 80, "long input is cut");
 assert.ok(validateFields({ ...ok, email: "nope" }).email, "bad email flagged");

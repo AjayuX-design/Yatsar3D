@@ -9,6 +9,7 @@ export const REQUEST_TYPES = [
   { key: "drawers", label: "Custom-fit drawers" },
   { key: "personalised", label: "Personalisation" },
   { key: "business", label: "Business order" },
+  { key: "other", label: "Something else" },
 ] as const;
 
 export type RequestType = (typeof REQUEST_TYPES)[number]["key"];
@@ -57,6 +58,7 @@ export function validateFields(f: RequestFields): FieldErrors {
   if (f.email && !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(f.email)) e.email = "Check the email address.";
   if (f.city.length < 2) e.city = "Enter your city.";
   if (f.details.length < 10) e.details = "Tell us a little more, at least a sentence.";
+  if (f.type === "drawers" && f.size.length < 3) e.size = "Add the inside size of the drawer.";
   return e;
 }
 

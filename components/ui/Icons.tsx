@@ -20,6 +20,7 @@ export {
   House,
   Info,
   Layers,
+  Lightbulb,
   LampDesk,
   LayoutGrid,
   Loader2,

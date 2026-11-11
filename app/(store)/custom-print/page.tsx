@@ -4,7 +4,7 @@ import { EnquiryCta } from "@/components/enquiry/EnquiryCta";
 import { WhatsAppButton } from "@/components/enquiry/WhatsAppButton";
 import { Accordion } from "@/components/ui/Accordion";
 import { Breadcrumb } from "@/components/ui/Breadcrumb";
-import { Archive, Briefcase, PackageCheck, PenLine, ReceiptText, Send, ShieldCheck } from "@/components/ui/Icons";
+import { Archive, Briefcase, Lightbulb, PackageCheck, PenLine, ReceiptText, Send, ShieldCheck } from "@/components/ui/Icons";
 import { isCustomOrderFormReady } from "@/app/(store)/custom-print/actions";
 import { customFaq, customOptions, nextSteps } from "@/lib/custom-orders";
 import { sampleStore } from "@/lib/sample-data";
@@ -15,7 +15,7 @@ export const metadata: Metadata = {
   description: "Custom-fit drawers, personalised prints and business orders. We send a quote before you pay.",
 };
 
-const icons = { drawer: Archive, personalise: PenLine, business: Briefcase } as const;
+const icons = { drawer: Archive, personalise: PenLine, business: Briefcase, other: Lightbulb } as const;
 const stepIcons = { send: Send, quote: ReceiptText, approve: PackageCheck } as const;
 
 /*
@@ -31,12 +31,31 @@ export default async function CustomPrintPage() {
 
       <header className="mt-2 max-w-[640px]">
         <h1 className="t-h1 text-ink">Custom orders</h1>
-        <p className="mt-3 t-body-l text-graphite">
-          Tell us what you need and we will send you a quote. You pay only after you approve it.
-        </p>
+        <p className="mt-3 t-body-l text-graphite">Tell us what you need. We send you a price. You pay only if you like it.</p>
+        <p className="mt-2 t-body text-graphite">Drawers made to fit, names and logos, business orders, or an idea of your own. If it is not on the list, choose &quot;Something else&quot;.</p>
       </header>
 
-      <div className="mt-8 grid gap-10 lg:mt-10 lg:grid-cols-12 lg:items-stretch lg:gap-12">
+      <ol aria-label="How it works" className="mt-6 grid gap-3 sm:grid-cols-3">
+        {nextSteps.map((s, i) => {
+          const Icon = stepIcons[s.icon];
+          return (
+            <li key={s.title} className="flex items-start gap-4 rounded-card bg-mist p-4">
+              <span aria-hidden="true" className="grid size-10 shrink-0 place-items-center rounded-pill bg-surface text-ink">
+                <Icon className="size-5" />
+              </span>
+              <div>
+                <p className="t-label text-ink">
+                  <span className="text-graphite [font-variant-numeric:tabular-nums]">{i + 1}. </span>
+                  {s.title}
+                </p>
+                <p className="mt-1 t-small text-graphite">{s.text}</p>
+              </div>
+            </li>
+          );
+        })}
+      </ol>
+
+      <div className="mt-8 grid gap-6 lg:grid-cols-12 lg:items-stretch lg:gap-12">
         <div className="lg:col-span-7">
           {formReady ? (
             <div className="flex h-full flex-col rounded-card border border-line bg-surface p-5 shadow-[0_1px_2px_rgba(23,23,23,0.04)] md:p-8">
@@ -61,29 +80,7 @@ export default async function CustomPrintPage() {
           )}
         </div>
 
-        <aside className="space-y-6 lg:sticky lg:top-24 lg:col-span-5 lg:self-start" aria-label="What happens next">
-          <section aria-labelledby="next">
-            <h2 id="next" className="t-h3 text-ink">
-              What happens next
-            </h2>
-            <ol className="mt-4 space-y-5">
-              {nextSteps.map((s) => {
-                const Icon = stepIcons[s.icon];
-                return (
-                  <li key={s.title} className="flex gap-4">
-                    <span aria-hidden="true" className="grid size-10 shrink-0 place-items-center rounded-pill bg-mist text-ink">
-                      <Icon className="size-5" />
-                    </span>
-                    <div>
-                      <p className="t-label text-ink">{s.title}</p>
-                      <p className="mt-1 t-small text-graphite">{s.text}</p>
-                    </div>
-                  </li>
-                );
-              })}
-            </ol>
-          </section>
-
+        <aside className="space-y-6 lg:sticky lg:top-24 lg:col-span-5 lg:self-start" aria-label="Reassurance and help">
           <p className="flex gap-3 rounded-card bg-mist p-4 t-small text-ink">
             <ShieldCheck className="mt-0.5 size-5 shrink-0 text-moss" aria-hidden="true" />
             Nothing is printed or charged until you approve the quote.

@@ -4,7 +4,7 @@ import { useActionState, useEffect, useId, useRef, useState } from "react";
 import { submitCustomOrder, type CustomOrderState } from "@/app/(store)/custom-print/actions";
 import { WhatsAppButton } from "@/components/enquiry/WhatsAppButton";
 import { Button } from "@/components/ui/Button";
-import { Archive, ArrowLeft, ArrowRight, Briefcase, Camera, Check, Copy, Pencil, PenLine, Send, ShieldCheck, X } from "@/components/ui/Icons";
+import { Archive, ArrowLeft, ArrowRight, Briefcase, Camera, Check, Copy, Pencil, PenLine, Send, ShieldCheck, X, Lightbulb } from "@/components/ui/Icons";
 import { cn } from "@/lib/cn";
 import {
   MAX_PHOTOS,
@@ -15,7 +15,7 @@ import {
   type RequestType,
 } from "@/lib/custom-orders/request";
 
-const typeIcons: Record<RequestType, typeof Archive> = { drawers: Archive, personalised: PenLine, business: Briefcase };
+const typeIcons: Record<RequestType, typeof Archive> = { drawers: Archive, personalised: PenLine, business: Briefcase, other: Lightbulb };
 
 type Photo = { file: File; url: string };
 
@@ -59,38 +59,59 @@ const input =
   "h-12 w-full rounded-ctl border bg-surface px-3 text-[16px] text-ink placeholder:text-hint aria-[invalid=true]:border-error border-field";
 
 const steps = [
-  { n: 1, label: "Choose", title: "What do you need?", help: "Pick the one that fits best." },
+  { n: 1, label: "Choose", title: "What do you need?", help: "Pick the closest one. Not on the list? Choose \"Something else\" and tell us your idea." },
   { n: 2, label: "Describe", title: "Tell us about it", help: "A few quick details so we can quote." },
   { n: 3, label: "Contact", title: "Where can we reach you?", help: "We reply with your quote. No payment now." },
 ] as const;
 
 /** Words and colours for each choice, so each one is recognisable at a glance. */
-const typeCopy: Record<RequestType, { short: string; detailsLabel: string; placeholder: string; tint: string }> = {
+const typeCopy: Record<RequestType, { short: string; example: string; detailsLabel: string; placeholder: string; tint: string }> = {
   drawers: {
     short: "Made to your drawer's exact size",
+    example: "a cutlery tray, a makeup drawer, a desk drawer",
     detailsLabel: "What will it hold?",
     placeholder: "For example: cutlery, three sections, matte black",
     tint: "bg-slate-tint text-slate",
   },
   personalised: {
     short: "Names, dates, logos or messages",
+    example: "a birthday magnet, a name plate, a wedding favour",
     detailsLabel: "What should we print, and on what?",
     placeholder: "For example: the name Asha on a fridge magnet, plum colour",
     tint: "bg-amber-tint text-amber-text",
   },
+  other: {
+    short: "Any other idea you have",
+    example: "a gift, a spare part, a model from a photo",
+    detailsLabel: "What would you like us to make?",
+    placeholder: "Describe your idea. Add the size and colour if you know them. A photo or sketch helps.",
+    tint: "bg-mist text-ink",
+  },
   business: {
     short: "Branded items and bulk orders",
+    example: "desk items with your logo, staff gifts, shop displays",
     detailsLabel: "What do you need?",
     placeholder: "For example: 50 desk organisers with our logo",
     tint: "bg-moss-tint text-moss",
   },
 };
 
+/** The red star that marks a required field. Read out as "required" by screen readers. */
+function Star() {
+  return (
+    <>
+      <span aria-hidden="true" className="text-error"> *</span>
+      <span className="sr-only"> (required)</span>
+    </>
+  );
+}
+
 function Field({
   label,
   hint,
   error,
   optional,
+  required,
   children,
   id,
 }: {
@@ -98,6 +119,7 @@ function Field({
   hint?: string;
   error?: string;
   optional?: boolean;
+  required?: boolean;
   children: React.ReactNode;
   id: string;
 }) {
@@ -105,6 +127,7 @@ function Field({
     <div>
       <label htmlFor={id} className="mb-2 block t-label text-ink">
         {label}
+        {required && <Star />}
         {optional && <span className="font-normal text-graphite"> (optional)</span>}
       </label>
       {children}
@@ -122,6 +145,28 @@ function Field({
   );
 }
 
+
+/** A simple drawer, with the three measurements marked in the same colours as the boxes beside it. */
+function DrawerDiagram() {
+  return (
+    <svg viewBox="0 0 240 150" role="img" aria-label="A drawer seen from above and the front. Length runs left to right, width runs front to back, depth runs top to bottom." className="mx-auto w-full max-w-[220px]">
+      <g fill="none" strokeLinejoin="round" strokeWidth="2" className="text-graphite" stroke="currentColor">
+        <path d="M30 60h140v70H30z" />
+        <path d="M30 60l40-30h140l-40 30" />
+        <path d="M210 30v70l-40 30" />
+      </g>
+      {/* Length: along the front */}
+      <path d="M30 142h140M30 138v8M170 138v8" strokeWidth="3" strokeLinecap="round" className="text-kiln-deep" stroke="currentColor" fill="none" />
+      <text x="100" y="124" textAnchor="middle" fontSize="12" fontWeight="600" className="fill-kiln-deep">Length</text>
+      {/* Depth: the height of the front */}
+      <path d="M18 60v70M14 60h8M14 130h8" strokeWidth="3" strokeLinecap="round" className="text-slate" stroke="currentColor" fill="none" />
+      <text x="50" y="99" textAnchor="middle" fontSize="12" fontWeight="600" className="fill-slate">Depth</text>
+      {/* Width: front to back */}
+      <path d="M176 56l40-30" strokeWidth="3" strokeLinecap="round" className="text-moss" stroke="currentColor" fill="none" />
+      <text x="140" y="46" textAnchor="middle" fontSize="12" fontWeight="600" className="fill-moss">Width</text>
+    </svg>
+  );
+}
 
 /** Three segments that show where you are. Finished steps get a tick. */
 function Progress({ step }: { step: number }) {
@@ -171,6 +216,9 @@ function CustomOrderFormInner({ whatsappNumber, onReset }: { whatsappNumber?: st
   const [type, setType] = useState<RequestType | "">("");
   const [step, setStep] = useState<1 | 2 | 3>(1);
   const [dims, setDims] = useState({ l: "", w: "", d: "" });
+  const [unit, setUnit] = useState<"cm" | "mm" | "in">("cm");
+  const sizeOk = [dims.l, dims.w, dims.d].every((v) => Number(v) > 0);
+  const sizeText = `${dims.l} × ${dims.w} × ${dims.d} ${unit === "in" ? "inch" : unit}`;
   const [company, setCompany] = useState("");
   const fileInput = useRef<HTMLInputElement>(null);
   const formRef = useRef<HTMLFormElement>(null);
@@ -191,7 +239,7 @@ function CustomOrderFormInner({ whatsappNumber, onReset }: { whatsappNumber?: st
     const errors = validateFields(readFields((n) => data.get(n)));
     const list: string[] = [];
     if (errors.type) list.push("type");
-    if (type === "drawers" && !(dims.l && dims.w && dims.d)) list.push("size");
+    if (type === "drawers" && !sizeOk) list.push("size");
     if (errors.details) list.push("details");
     for (const k of ["name", "phone", "city", "email"] as const) if (errors[k]) list.push(k);
     setMissing(list);
@@ -209,7 +257,7 @@ function CustomOrderFormInner({ whatsappNumber, onReset }: { whatsappNumber?: st
     setSeenState(state);
     if (state.status === "error" && state.fieldErrors) {
       const e = state.fieldErrors;
-      setStep(e.type ? 1 : e.details ? 2 : 3);
+      setStep(e.type ? 1 : e.details || e.size ? 2 : 3);
     }
   }
 
@@ -340,7 +388,7 @@ function CustomOrderFormInner({ whatsappNumber, onReset }: { whatsappNumber?: st
       action={(fd) => {
         setSent({
           typeLabel: typeLabel ?? "",
-          size: type === "drawers" && dims.l && dims.w && dims.d ? `${dims.l} × ${dims.w} × ${dims.d} mm` : undefined,
+          size: type === "drawers" && sizeOk ? sizeText : undefined,
           quantity: String(fd.get("quantity") ?? "").trim() || undefined,
           photos: photos.length,
           city: String(fd.get("city") ?? "").trim(),
@@ -349,7 +397,7 @@ function CustomOrderFormInner({ whatsappNumber, onReset }: { whatsappNumber?: st
         fd.delete("photos");
         photos.forEach((p) => fd.append("photos", p.file));
         // The three drawer boxes become one line of text, and a company name joins the details.
-        if (type === "drawers" && dims.l && dims.w && dims.d) fd.set("size", `${dims.l} x ${dims.w} x ${dims.d} mm (length x width x depth)`);
+        if (type === "drawers" && sizeOk) fd.set("size", `${sizeText.replaceAll("×", "x")} (length x width x depth)`);
         if (type === "business" && company.trim()) fd.set("details", `Company: ${company.trim()}\n\n${String(fd.get("details") ?? "")}`);
         action(fd);
       }}
@@ -364,16 +412,22 @@ function CustomOrderFormInner({ whatsappNumber, onReset }: { whatsappNumber?: st
 
       <Progress step={step} />
 
-      <h2 id={`${uid}-step-${step}`} tabIndex={-1} className="mt-8 t-h2 text-ink outline-none">
+      <p className="mt-8 t-label text-graphite [font-variant-numeric:tabular-nums]">Step {step} of 3</p>
+      <h2 id={`${uid}-step-${step}`} tabIndex={-1} className="mt-1 t-h2 text-ink outline-none">
         {meta.title}
       </h2>
       <p className="mt-2 t-body text-graphite">{meta.help}</p>
+      {step > 1 && (
+        <p className="mt-1 t-small text-graphite">
+          <span aria-hidden="true" className="text-error">*</span> means you need to fill it in.
+        </p>
+      )}
 
       {/* Every step stays in the page, hidden, so nothing typed is lost when you go back. */}
       <div hidden={step !== 1} className="mt-6">
         <fieldset>
-          <legend className="sr-only">What do you need?</legend>
-          <div className="grid gap-3 sm:grid-cols-3" role="radiogroup">
+          <legend className="sr-only">What do you need? (required)</legend>
+          <div className="grid gap-3 sm:grid-cols-2" role="radiogroup">
             {REQUEST_TYPES.map((t) => {
               const Icon = typeIcons[t.key];
               const selected = type === t.key;
@@ -392,6 +446,10 @@ function CustomOrderFormInner({ whatsappNumber, onReset }: { whatsappNumber?: st
                   <span>
                     <span className="block t-label text-ink">{t.label}</span>
                     <span className="mt-1 block t-small text-graphite">{typeCopy[t.key].short}</span>
+                    <span className="mt-2 block t-small text-ink">
+                      <span className="text-graphite">For example: </span>
+                      {typeCopy[t.key].example}
+                    </span>
                   </span>
                   {selected && (
                     <span aria-hidden="true" className="absolute right-3 top-3 grid size-6 place-items-center rounded-pill bg-ink text-surface">
@@ -416,32 +474,54 @@ function CustomOrderFormInner({ whatsappNumber, onReset }: { whatsappNumber?: st
             </p>
 
             {type === "drawers" && (
-              <fieldset>
-                <legend className="mb-2 t-label text-ink">Inside size of the drawer, in mm</legend>
-                <div className="grid grid-cols-3 gap-3">
-                  {([
-                    ["l", "Length"],
-                    ["w", "Width"],
-                    ["d", "Depth"],
-                  ] as const).map(([k, label]) => (
-                    <div key={k}>
-                      <label htmlFor={`${uid}-dim-${k}`} className="mb-2 block t-small text-graphite">
+              <fieldset className="rounded-card bg-mist p-4 sm:p-5">
+                <legend className="sr-only">Inside size of the drawer</legend>
+                <div className="flex flex-wrap items-center justify-between gap-3">
+                  <p className="t-label text-ink">Inside size of your drawer<Star /></p>
+                  <div role="group" aria-label="Unit" className="flex rounded-pill bg-surface p-1">
+                    {([
+                      ["cm", "cm"],
+                      ["mm", "mm"],
+                      ["in", "inch"],
+                    ] as const).map(([k, label]) => (
+                      <button
+                        key={k}
+                        type="button"
+                        aria-pressed={unit === k}
+                        onClick={() => setUnit(k)}
+                        className={cn("min-h-9 min-w-12 rounded-pill px-3 t-label", unit === k ? "bg-ink text-surface" : "text-ink hover:bg-mist")}
+                      >
                         {label}
-                      </label>
-                      <input
-                        id={`${uid}-dim-${k}`}
-                        inputMode="numeric"
-                        pattern="[0-9]*"
-                        maxLength={4}
-                        value={dims[k]}
-                        onChange={(e) => setDims((cur) => ({ ...cur, [k]: e.target.value.replace(/\D/g, "") }))}
-                        placeholder="mm"
-                        className={input}
-                      />
-                    </div>
-                  ))}
+                      </button>
+                    ))}
+                  </div>
                 </div>
-                <p className="mt-2 t-small text-graphite">Measure the empty space inside, from wall to wall.</p>
+                <div className="mt-4 grid items-center gap-4 sm:grid-cols-[1fr_200px]">
+                  <div className="grid grid-cols-3 gap-3">
+                    {([
+                      ["l", "Length", "text-kiln-deep"],
+                      ["w", "Width", "text-moss"],
+                      ["d", "Depth", "text-slate"],
+                    ] as const).map(([k, label, colour]) => (
+                      <div key={k}>
+                        <label htmlFor={`${uid}-dim-${k}`} className={cn("mb-2 block t-label", colour)}>
+                          {label}
+                        </label>
+                        <input
+                          id={`${uid}-dim-${k}`}
+                          inputMode="decimal"
+                          maxLength={5}
+                          value={dims[k]}
+                          onChange={(e) => setDims((cur) => ({ ...cur, [k]: e.target.value.replace(/[^\d.]/g, "").replace(/(\..*)\./g, "$1") }))}
+                          placeholder={unit === "in" ? "inch" : unit}
+                          className={input}
+                        />
+                      </div>
+                    ))}
+                  </div>
+                  <DrawerDiagram />
+                </div>
+                <p className="mt-3 t-small text-graphite">Measure the empty space inside, from wall to wall, with a ruler or tape. Pick the unit you measured in.</p>
               </fieldset>
             )}
 
@@ -451,14 +531,14 @@ function CustomOrderFormInner({ whatsappNumber, onReset }: { whatsappNumber?: st
               </Field>
             )}
 
-            <Field id={`${uid}-details`} label={copy.detailsLabel} error={err?.details}>
+            <Field id={`${uid}-details`} label={copy.detailsLabel} required error={err?.details}>
               <textarea
                 id={`${uid}-details`}
                 name="details"
                 rows={4}
                 defaultValue={values?.details}
                 placeholder={copy.placeholder}
-                aria-invalid={!!err?.details}
+                aria-required="true" aria-invalid={!!err?.details}
                 aria-describedby={err?.details ? `${uid}-details-error` : undefined}
                 className={cn(input, "h-auto min-h-28 py-3")}
               />
@@ -517,7 +597,7 @@ function CustomOrderFormInner({ whatsappNumber, onReset }: { whatsappNumber?: st
             <span className="t-label">Your request</span>
             <span className="text-graphite">
               {typeLabel}
-              {type === "drawers" && dims.l && dims.w && dims.d ? `, ${dims.l} × ${dims.w} × ${dims.d} mm` : ""}
+              {type === "drawers" && sizeOk ? `, ${sizeText}` : ""}
               {photos.length ? `, ${photos.length} ${photos.length === 1 ? "photo" : "photos"}` : ""}
             </span>
             <button
@@ -531,14 +611,14 @@ function CustomOrderFormInner({ whatsappNumber, onReset }: { whatsappNumber?: st
           </p>
         )}
         <div className="grid gap-5 sm:grid-cols-2">
-          <Field id={`${uid}-name`} label="Your name" error={err?.name}>
-            <input id={`${uid}-name`} name="name" autoComplete="name" defaultValue={values?.name} aria-invalid={!!err?.name} aria-describedby={err?.name ? `${uid}-name-error` : undefined} className={input} />
+          <Field id={`${uid}-name`} label="Your name" required error={err?.name}>
+            <input id={`${uid}-name`} name="name" autoComplete="name" defaultValue={values?.name} aria-required="true" aria-invalid={!!err?.name} aria-describedby={err?.name ? `${uid}-name-error` : undefined} className={input} />
           </Field>
-          <Field id={`${uid}-phone`} label="Phone or WhatsApp" error={err?.phone}>
-            <input id={`${uid}-phone`} name="phone" type="tel" inputMode="tel" autoComplete="tel" defaultValue={values?.phone} aria-invalid={!!err?.phone} aria-describedby={err?.phone ? `${uid}-phone-error` : undefined} className={input} />
+          <Field id={`${uid}-phone`} label="Phone or WhatsApp" required error={err?.phone}>
+            <input id={`${uid}-phone`} name="phone" type="tel" inputMode="tel" autoComplete="tel" defaultValue={values?.phone} aria-required="true" aria-invalid={!!err?.phone} aria-describedby={err?.phone ? `${uid}-phone-error` : undefined} className={input} />
           </Field>
-          <Field id={`${uid}-city`} label="City" error={err?.city}>
-            <input id={`${uid}-city`} name="city" autoComplete="address-level2" defaultValue={values?.city} aria-invalid={!!err?.city} aria-describedby={err?.city ? `${uid}-city-error` : undefined} className={input} />
+          <Field id={`${uid}-city`} label="City" required error={err?.city}>
+            <input id={`${uid}-city`} name="city" autoComplete="address-level2" defaultValue={values?.city} aria-required="true" aria-invalid={!!err?.city} aria-describedby={err?.city ? `${uid}-city-error` : undefined} className={input} />
           </Field>
           <Field id={`${uid}-email`} label="Email" optional error={err?.email}>
             <input id={`${uid}-email`} name="email" type="email" inputMode="email" autoComplete="email" defaultValue={values?.email} aria-invalid={!!err?.email} aria-describedby={err?.email ? `${uid}-email-error` : undefined} className={input} />
