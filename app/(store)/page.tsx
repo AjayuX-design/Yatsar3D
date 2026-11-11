@@ -6,7 +6,6 @@ import { ProductCard } from "@/components/product/ProductCard";
 import { StatePanel } from "@/components/ui/StatePanel";
 import { CUSTOM_ORDERS_HANDLE, categoryHref, categoryImage } from "@/lib/categories";
 import { getCollection, getNavCollections, getProducts } from "@/lib/data";
-import { ratingsFor } from "@/lib/reviews/store";
 import { Suspense } from "react";
 import { CategoryIcon } from "@/components/collection/CategoryIcon";
 import { ArrowRight } from "@/components/ui/Icons";
@@ -192,11 +191,10 @@ async function Featured() {
       </StatePanel>
     );
   }
-  const ratings = await ratingsFor(r.data.map((p) => p.handle));
   return (
     <div className="mt-6 grid grid-cols-2 gap-x-3 gap-y-8 md:grid-cols-4 lg:gap-x-6 lg:gap-y-10">
       {r.data.map((p, i) => (
-        <ProductCard key={p.handle} product={p} priority={i < 2} rating={ratings[p.handle]} />
+        <ProductCard key={p.handle} product={p} priority={i < 2} compact />
       ))}
     </div>
   );
