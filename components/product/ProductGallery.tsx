@@ -4,7 +4,9 @@ import { useEffect, useRef, useState } from "react";
 import { cn } from "@/lib/cn";
 import { ImagePlaceholder } from "@/components/ui/ImagePlaceholder";
 import { ArrowLeft, ArrowRight, Search, X } from "@/components/ui/Icons";
+import { ImageBadges } from "@/components/ui/ImageBadges";
 import { Sheet } from "@/components/ui/Sheet";
+import type { Status } from "@/components/ui/Chip";
 import type { ProductImage } from "@/lib/types";
 
 const labels: Record<ProductImage["kind"], string> = {
@@ -19,7 +21,7 @@ const labels: Record<ProductImage["kind"], string> = {
  * Swipe track (scroll snap) with dots and a counter. 4:5.
  * On desktop, vertical thumbnails sit to the left.
  */
-export function ProductGallery({ images, title }: { images: ProductImage[]; title: string }) {
+export function ProductGallery({ images, title, percent, status }: { images: ProductImage[]; title: string; percent?: number | null; status?: Status }) {
   const track = useRef<HTMLDivElement>(null);
   const [index, setIndex] = useState(0);
   const [zoomAt, setZoomAt] = useState<number | null>(null);
@@ -33,6 +35,7 @@ export function ProductGallery({ images, title }: { images: ProductImage[]; titl
     return (
       <div className="relative aspect-square overflow-hidden rounded-card bg-mist">
         <ImagePlaceholder alt={title} label="Photos coming soon" />
+        <ImageBadges percent={percent} status={status} />
       </div>
     );
   }
@@ -63,6 +66,7 @@ export function ProductGallery({ images, title }: { images: ProductImage[]; titl
 
       <div className="min-w-0 flex-1">
         <div className="relative">
+          <ImageBadges percent={percent} status={status} />
           <div
             ref={track}
             role="region"

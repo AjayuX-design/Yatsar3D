@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Price } from "@/components/ui/Price";
-import { StatusChip, type Status } from "@/components/ui/Chip";
+import type { Status } from "@/components/ui/Chip";
+import { ImageBadges } from "@/components/ui/ImageBadges";
 import { ImagePlaceholder } from "@/components/ui/ImagePlaceholder";
 import { percentOff } from "@/lib/format/discount";
 import { longestSideCm } from "@/lib/format/dimensions";
@@ -68,20 +69,8 @@ export function ProductCard({
             onWhite={hero?.onWhite}
           />
         </div>
-        {compact ? (
-          soldOut ? (
-            <StatusChip status={status} tone="overlay" className="absolute left-3 top-3" />
-          ) : (
-            off !== null && (
-              <span className="absolute left-3 top-3 inline-flex h-6 items-center rounded-pill bg-ink px-3 t-caption font-semibold text-surface [font-variant-numeric:tabular-nums]">
-                <span className="sr-only">Sale: </span>
-                {off}% off
-              </span>
-            )
-          )
-        ) : (
-          <StatusChip status={status} tone="overlay" className="absolute left-3 top-3" />
-        )}
+        {/* Home (compact) shows only a discount or "Sold out". Elsewhere "Made to order" shows too. */}
+        <ImageBadges percent={soldOut ? null : off} status={compact && !soldOut ? undefined : status} />
       </div>
       <div className="flex flex-1 flex-col pt-3">
         <h3 className="line-clamp-2 text-[15px] font-medium leading-5 text-ink group-hover:underline group-hover:underline-offset-[3px]">
@@ -100,7 +89,6 @@ export function ProductCard({
           className="mt-auto pt-2"
           from={hasRange}
           muted={soldOut}
-          saving={compact ? undefined : "chip"}
           price={lowest.price}
           compareAt={hasRange ? null : lowest.compareAt}
         />

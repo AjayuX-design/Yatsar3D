@@ -2,7 +2,9 @@
 
 import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { Button } from "@/components/ui/Button";
+import { ImageBadges } from "@/components/ui/ImageBadges";
 import { ImagePlaceholder } from "@/components/ui/ImagePlaceholder";
+import { percentOff } from "@/lib/format/discount";
 import { ArrowLeft, ArrowRight, Pause, Play } from "@/components/ui/Icons";
 import { Price } from "@/components/ui/Price";
 import { cn } from "@/lib/cn";
@@ -112,10 +114,11 @@ export function HeroCarousel({ slides }: { slides: HeroSlide[] }) {
                 sizes="(min-width: 1024px) 600px, 100vw"
                 whole
               />
+              <ImageBadges percent={s.from ? null : percentOff(s.price, s.compareAt)} />
             </div>
             <div className="flex flex-col justify-center px-6 pb-14 pt-6 md:order-1 md:px-10 md:py-12 lg:px-14">
               <h2 className="line-clamp-3 text-balance t-display text-ink">{s.title}</h2>
-              <Price className="mt-4" size="l" saving="chip" from={s.from} price={s.price} compareAt={s.from ? null : s.compareAt} />
+              <Price className="mt-4" size="l" from={s.from} price={s.price} compareAt={s.from ? null : s.compareAt} />
               <Button href={`/products/${s.handle}`} block className="mt-6 sm:w-auto sm:self-start">
                 Shop now
               </Button>

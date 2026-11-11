@@ -4,7 +4,8 @@ import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { Accordion, type AccordionItem } from "@/components/ui/Accordion";
 import { Button } from "@/components/ui/Button";
-import { StatusChip, type Status } from "@/components/ui/Chip";
+import type { Status } from "@/components/ui/Chip";
+import { percentOff } from "@/lib/format/discount";
 import { Price } from "@/components/ui/Price";
 import { QuantityStepper } from "@/components/ui/QuantityStepper";
 import { Check } from "@/components/ui/Icons";
@@ -199,7 +200,7 @@ export function ProductDetail({ product, store, rating }: { product: Product; st
       <div className="md:grid md:grid-cols-2 md:items-start md:gap-8 lg:gap-12 xl:gap-16">
         <div>
           <div className="md:sticky md:top-20 lg:top-24">
-            <ProductGallery images={product.images} title={product.title} />
+            <ProductGallery images={product.images} title={product.title} percent={canBuy && variant ? percentOff(variant.price, variant.compareAt) : null} status={status} />
           </div>
         </div>
 
@@ -221,7 +222,6 @@ export function ProductDetail({ product, store, rating }: { product: Product; st
             )}
             <div className="mt-5 flex flex-wrap items-center justify-between gap-x-4 gap-y-3">
               {price}
-              <StatusChip status={status} />
             </div>
           </header>
 

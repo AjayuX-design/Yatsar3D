@@ -61,10 +61,7 @@ export function CartLine({
           </p>
         </div>
 
-        <StatusChip
-          className="mt-2 h-6 px-3"
-          status={line.fulfilment === "made_to_order" ? "made-to-order" : "ready"}
-        />
+        {line.fulfilment === "made_to_order" && <StatusChip className="mt-2 h-6 px-3" status="made-to-order" />}
 
         <div className="mt-3 flex items-center justify-between">
           <QuantityStepper
