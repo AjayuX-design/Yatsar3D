@@ -3,7 +3,7 @@ import { Suspense } from "react";
 import { ProductCard } from "@/components/product/ProductCard";
 import { Breadcrumb } from "@/components/ui/Breadcrumb";
 import { Button } from "@/components/ui/Button";
-import { Search } from "@/components/ui/Icons";
+import { SearchBox } from "@/components/layout/SearchBox";
 import { StatePanel } from "@/components/ui/StatePanel";
 import { getProducts } from "@/lib/data";
 import { ratingsFor } from "@/lib/reviews/store";
@@ -36,20 +36,14 @@ async function SearchContent({ searchParams }: { searchParams: PageProps<"/searc
         <label htmlFor="search-q" className="sr-only">
           Search products
         </label>
-        <div className="relative min-w-0 flex-1">
-          <Search aria-hidden="true" className="pointer-events-none absolute left-3 top-1/2 size-5 -translate-y-1/2 text-graphite" />
-          <input
-            id="search-q"
-            name="q"
-            type="search"
-            defaultValue={query}
-            autoFocus={!query}
-            autoComplete="off"
-            enterKeyHint="search"
-            placeholder="Search products"
-            className="h-12 w-full rounded-ctl border border-field bg-surface pl-10 pr-3 text-[16px] text-ink placeholder:text-hint"
-          />
-        </div>
+        <SearchBox
+          id="search-q"
+          defaultValue={query}
+          autoFocus={!query}
+          placeholder="Search products"
+          iconClass="pointer-events-none absolute left-3 top-1/2 size-5 -translate-y-1/2 text-graphite"
+          inputClass="h-12 w-full rounded-ctl border border-field bg-surface pl-10 pr-3 text-[16px] text-ink placeholder:text-hint"
+        />
         <Button type="submit">Search</Button>
       </form>
 

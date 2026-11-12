@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
+import { SearchBox } from "@/components/layout/SearchBox";
 import { Menu, Search, ShoppingBag, User } from "@/components/ui/Icons";
 import { MobileMenu } from "@/components/layout/MobileMenu";
 import { Wordmark } from "@/components/layout/Wordmark";
@@ -68,15 +69,10 @@ export function Header({
             <label htmlFor="header-search" className="sr-only">
               Search products
             </label>
-            <Search aria-hidden="true" className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-graphite" />
-            <input
+            <SearchBox
               id="header-search"
-              name="q"
-              type="search"
-              autoComplete="off"
-              enterKeyHint="search"
-              placeholder="Search"
-              className="h-10 w-[200px] rounded-pill border border-field bg-mist/60 pl-9 pr-3 text-[14px] text-ink transition-[width] duration-200 placeholder:text-hint focus:w-[260px] focus:bg-surface"
+              iconClass="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-graphite"
+              inputClass="h-10 w-[200px] rounded-pill border border-field bg-mist/60 pl-9 pr-3 text-[14px] text-ink transition-[width] duration-200 placeholder:text-hint focus:w-[260px] focus:bg-surface"
             />
           </form>
           {accountEnabled && (

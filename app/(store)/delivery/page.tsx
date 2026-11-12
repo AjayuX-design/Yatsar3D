@@ -48,7 +48,7 @@ export default function DeliveryPage() {
         </h2>
         <ul className="mt-6 grid gap-3 md:grid-cols-2 lg:gap-6">
           <li className="rounded-card bg-mist p-5 lg:p-6">
-            <span aria-hidden="true" className="grid size-11 place-items-center rounded-pill bg-surface text-ink">
+            <span aria-hidden="true" className="grid size-11 place-items-center rounded-pill bg-kiln/10 text-kiln-deep">
               <Clock className="size-5" />
             </span>
             <h3 className="mt-4 t-h3 text-ink">1. Getting it ready</h3>
@@ -58,7 +58,7 @@ export default function DeliveryPage() {
             </p>
           </li>
           <li className="rounded-card bg-mist p-5 lg:p-6">
-            <span aria-hidden="true" className="grid size-11 place-items-center rounded-pill bg-surface text-ink">
+            <span aria-hidden="true" className="grid size-11 place-items-center rounded-pill bg-kiln/10 text-kiln-deep">
               <Truck className="size-5" />
             </span>
             <h3 className="mt-4 t-h3 text-ink">2. Delivery</h3>

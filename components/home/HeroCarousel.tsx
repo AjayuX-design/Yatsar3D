@@ -93,7 +93,7 @@ export function HeroCarousel({ slides }: { slides: HeroSlide[] }) {
         }}
         // Live only while it is not moving by itself, so screen readers are not interrupted.
         aria-live={playing ? "off" : "polite"}
-        className="relative flex snap-x snap-mandatory overflow-x-auto rounded-card[scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+        className="relative flex snap-x snap-mandatory overflow-x-auto rounded-card [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
       >
         {slides.map((s, i) => (
           <div
