@@ -23,7 +23,7 @@ export function CategoryChips({ collections, current }: { collections: Collectio
                 aria-current={active ? "page" : undefined}
                 className={cn(
                   "inline-flex h-11 items-center gap-2 rounded-pill border pl-3 pr-4 t-label transition-colors duration-150",
-                  active ? "border-ink bg-ink text-surface" : "border-line text-ink hover:border-graphite/50",
+                  active ? "border-kiln bg-kiln text-surface" : "border-line text-ink hover:border-graphite/50",
                 )}
               >
                 <CategoryIcon handle={c.handle} title={c.title} className="size-[18px] shrink-0" />

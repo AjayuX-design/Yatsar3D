@@ -44,7 +44,7 @@ const nav = [
 ];
 
 const variants: Array<{ v: ButtonVariant; name: string; pressed: string }> = [
-  { v: "primary", name: "Primary", pressed: "bg-ink-pressed!" },
+  { v: "primary", name: "Primary", pressed: "bg-kiln-deep!" },
   { v: "secondary", name: "Secondary", pressed: "bg-line!" },
   { v: "whatsapp", name: "WhatsApp", pressed: "bg-moss-tint!" },
   { v: "text", name: "Text link", pressed: "no-underline!" },

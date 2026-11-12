@@ -1,10 +1,10 @@
 import { StatusChip, type Status } from "@/components/ui/Chip";
 
-/** The black "% off" pill. One style everywhere; "lg" is for the home banner text. */
+/** The orange "% off" pill. One style everywhere; "lg" is for the home banner text. */
 export function SaleBadge({ percent, size = "sm" }: { percent: number; size?: "sm" | "lg" }) {
   return (
     <span
-      className={`inline-flex items-center rounded-pill bg-ink font-semibold text-surface [font-variant-numeric:tabular-nums] ${
+      className={`inline-flex items-center rounded-pill bg-kiln-deep font-semibold text-surface [font-variant-numeric:tabular-nums] ${
         size === "lg" ? "h-8 px-4 text-[14px] leading-5" : "h-6 px-3 t-caption"
       }`}
     >
@@ -16,7 +16,7 @@ export function SaleBadge({ percent, size = "sm" }: { percent: number; size?: "s
 
 /**
  * The badges that sit on a product photo, top-left, the same everywhere
- * (cards, product page, home banners): a black "% off" pill for a genuine
+ * (cards, product page, home banners): an orange "% off" pill for a genuine
  * discount, and the white status pill for "Made to order" or "Sold out".
  * "Ready to ship" is the normal case, so it is never shown.
  */

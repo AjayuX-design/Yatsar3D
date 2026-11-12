@@ -30,7 +30,7 @@ const base =
 
 const variants: Record<ButtonVariant, string> = {
   primary:
-    "font-semibold bg-ink text-surface rounded-ctl hover:bg-ink-hover active:scale-[0.98] active:bg-ink-pressed",
+    "font-semibold bg-kiln text-surface rounded-ctl hover:bg-kiln-deep active:scale-[0.98] active:bg-kiln-deep",
   secondary:
     "font-semibold bg-surface text-ink border border-ink rounded-ctl hover:bg-mist active:scale-[0.98] active:bg-line",
   whatsapp:

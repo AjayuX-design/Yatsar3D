@@ -37,7 +37,7 @@ export function FilterControl({
   const chip = (selected: boolean) =>
     cn(
       "inline-flex min-h-11 items-center gap-2 rounded-pill border pl-3 pr-4 t-label transition-colors duration-150",
-      selected ? "border-ink bg-ink text-surface" : "border-line text-ink hover:border-graphite/50",
+      selected ? "border-kiln bg-kiln text-surface" : "border-line text-ink hover:border-graphite/50",
     );
 
   return (
@@ -148,7 +148,7 @@ export function FilterControl({
             <button
               type="button"
               onClick={() => setOpen(false)}
-              className="ml-auto inline-flex h-12 flex-1 items-center justify-center rounded-ctl bg-ink px-5 t-label text-surface hover:bg-ink-hover sm:max-w-[240px]"
+              className="ml-auto inline-flex h-12 flex-1 items-center justify-center rounded-ctl bg-kiln px-5 t-label text-surface hover:bg-kiln-deep sm:max-w-[240px]"
             >
               Show {resultCount} {resultCount === 1 ? "product" : "products"}
             </button>

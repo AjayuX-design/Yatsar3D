@@ -73,7 +73,7 @@ export function Footer({
           <div className="lg:col-span-3">
             <Wordmark />
             <p className="mt-3 max-w-[320px] t-small text-graphite">
-              Physical 3D-printed products, made in India. Size, material and timing on every page.
+              From idea to reality, 3D printed in India.
             </p>
             <div className="mt-6 lg:max-w-[320px]">
               <WhatsAppButton number={whatsappNumber} message={generalEnquiryMessage} />

@@ -55,7 +55,7 @@ export function Header({
                 key={l.href}
                 href={l.href}
                 aria-current={active ? "page" : undefined}
-                className={`inline-flex min-h-11 items-center t-label text-ink underline-offset-[6px] decoration-2 hover:underline ${active ? "underline" : ""}`}
+                className={`inline-flex min-h-11 items-center t-label text-ink underline-offset-[6px] decoration-kiln decoration-2 hover:underline ${active ? "underline" : ""}`}
               >
                 {l.label}
               </Link>
@@ -97,7 +97,7 @@ export function Header({
             {totals.count > 0 && (
               <span
                 aria-hidden="true"
-                className="absolute right-0.5 top-0.5 grid h-[18px] min-w-[18px] place-items-center rounded-pill bg-ink px-1 text-[11px] font-semibold leading-none text-surface [font-variant-numeric:tabular-nums]"
+                className="absolute right-0.5 top-0.5 grid h-[18px] min-w-[18px] place-items-center rounded-pill bg-kiln px-1 text-[11px] font-semibold leading-none text-surface [font-variant-numeric:tabular-nums]"
               >
                 {totals.count > 9 ? "9+" : totals.count}
               </span>

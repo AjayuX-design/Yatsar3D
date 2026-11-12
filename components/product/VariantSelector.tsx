@@ -5,7 +5,7 @@ import { formatMoney } from "@/lib/format/money";
 import { valueState, type Selection } from "@/lib/product/select";
 import type { Product } from "@/lib/types";
 
-/** One pill. Selected = 2px ink border. Unavailable = struck through, still focusable. */
+/** One pill. Selected = 2px orange border. Unavailable = struck through, still focusable. */
 export function VariantPill({
   label,
   selected,
@@ -36,7 +36,7 @@ export function VariantPill({
       className={cn(
         "relative inline-flex min-h-11 min-w-[4.5rem] items-center justify-center gap-2 rounded-ctl border px-4 t-label transition-colors duration-150",
         selected
-          ? "border-ink bg-mist font-semibold text-ink"
+          ? "border-kiln bg-mist font-semibold text-ink"
           : "border-line bg-surface text-ink hover:border-graphite/50",
         !available && "text-graphite",
       )}

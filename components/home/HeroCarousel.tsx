@@ -153,7 +153,7 @@ export function HeroCarousel({ slides }: { slides: HeroSlide[] }) {
                 aria-current={i === index}
                 className="grid h-11 w-6 place-items-center"
               >
-                <span className={cn("h-1.5 rounded-pill transition-all duration-300", i === index ? "w-6 bg-ink" : "w-1.5 bg-graphite/40")} />
+                <span className={cn("h-1.5 rounded-pill transition-all duration-300", i === index ? "w-6 bg-kiln" : "w-1.5 bg-graphite/40")} />
               </button>
             ))}
           </div>
