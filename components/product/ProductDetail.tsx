@@ -205,7 +205,7 @@ export function ProductDetail({ product, store, rating }: { product: Product; st
 
         <div className="mt-6 space-y-6 md:mt-0 lg:space-y-8">
           <header>
-            <h1 className="t-h1 text-ink">{product.title}</h1>
+            <h1 className="t-h1 text-ink [overflow-wrap:anywhere]">{product.title}</h1>
             {rating && rating.count > 0 && (
               <a href="#reviews" className="-mb-1 mt-2 inline-flex min-h-11 items-center gap-2 t-small text-ink">
                 <Stars value={rating.average} />

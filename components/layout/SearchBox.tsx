@@ -127,7 +127,7 @@ export function SearchBox({
                 {s.image && <Image src={s.image} alt="" fill sizes="40px" className="object-cover mix-blend-multiply" />}
               </span>
               <span className="min-w-0 flex-1 truncate t-small font-semibold text-ink">{s.title}</span>
-              <span className="t-small text-graphite [font-variant-numeric:tabular-nums]">{s.price}</span>
+              <span className="shrink-0 whitespace-nowrap t-small text-graphite [font-variant-numeric:tabular-nums]">{s.price}</span>
             </a>
           </li>
         ))}

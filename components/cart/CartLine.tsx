@@ -40,8 +40,8 @@ export function CartLine({
       </Link>
 
       <div className="min-w-0 flex-1">
-        <div className="flex justify-between gap-3">
-          <div className="min-w-0">
+        <div className="flex flex-wrap justify-between gap-x-3 gap-y-1">
+          <div className="min-w-[9rem] flex-1">
             <Link
               href={`/products/${line.handle}`}
               onClick={onNavigate}
@@ -49,9 +49,9 @@ export function CartLine({
             >
               {line.title}
             </Link>
-            {line.variantTitle && <p className="mt-1 t-small text-graphite">{line.variantTitle}</p>}
+            {line.variantTitle && <p className="mt-1 line-clamp-2 t-small text-graphite [overflow-wrap:anywhere]" title={line.variantTitle}>{line.variantTitle}</p>}
           </div>
-          <p className="shrink-0 text-right t-price-s text-ink">
+          <p className="ml-auto shrink-0 whitespace-nowrap text-right t-price-s text-ink">
             {totals.discounted && (
               <s className="block t-caption font-normal text-graphite [font-variant-numeric:tabular-nums]">
                 {formatMoney(totals.full)}
