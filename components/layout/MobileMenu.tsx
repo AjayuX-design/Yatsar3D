@@ -7,7 +7,7 @@ import { Sheet } from "@/components/ui/Sheet";
 import { X } from "@/components/ui/Icons";
 import { Wordmark } from "@/components/layout/Wordmark";
 import { WhatsAppButton } from "@/components/enquiry/WhatsAppButton";
-import { mainNav } from "@/components/layout/nav";
+import { helpNav, mainNav } from "@/components/layout/nav";
 import { generalEnquiryMessage } from "@/lib/whatsapp";
 import type { Collection } from "@/lib/types";
 
@@ -68,6 +68,12 @@ export function MobileMenu({
               My account
             </Link>
           )}
+          <p className="mt-6 t-label text-graphite">Help</p>
+          {helpNav.map((l) => (
+            <Link key={l.href} href={l.href} className={`${row} font-normal text-graphite`} onClick={onClose} {...current(l.href)}>
+              {l.label}
+            </Link>
+          ))}
         </nav>
 
         <div className="shrink-0 space-y-3 border-t border-line p-4 pb-[calc(16px+env(safe-area-inset-bottom))]">

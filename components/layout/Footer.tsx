@@ -44,10 +44,10 @@ export function Footer({
       id: "help",
       title: "Help",
       links: [
-        { label: "FAQ", href: "/faq" },
-        { label: "Delivery", href: "/delivery" },
-        ...(accountEnabled ? [{ label: "My account", href: "/account" }] : []),
         { label: "Track order", href: "/track-order" },
+        { label: "Delivery", href: "/delivery" },
+        { label: "FAQ", href: "/faq" },
+        ...(accountEnabled ? [{ label: "My account", href: "/account" }] : []),
         { label: "Custom orders", href: "/custom-print" },
       ],
     },
