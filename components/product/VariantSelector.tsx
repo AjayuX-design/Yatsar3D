@@ -5,7 +5,7 @@ import { formatMoney } from "@/lib/format/money";
 import { valueState, type Selection } from "@/lib/product/select";
 import type { Product } from "@/lib/types";
 
-/** One pill. Selected = 2px orange border. Unavailable = struck through, still focusable. */
+/** One pill. Selected = 2px orange border. Unavailable = struck through and disabled, but still reachable by keyboard so screen readers announce "sold out". */
 export function VariantPill({
   label,
   selected,
@@ -30,21 +30,24 @@ export function VariantPill({
       type="button"
       role="radio"
       aria-checked={selected}
+      aria-disabled={!available || undefined}
       aria-label={`${name}: ${label}${available ? "" : ", sold out"}`}
       title={available ? undefined : "Sold out"}
-      onClick={onSelect}
+      onClick={available ? onSelect : undefined}
       className={cn(
         "relative inline-flex min-h-11 w-full min-w-[4.5rem] items-center justify-center gap-2 rounded-ctl border px-4 t-label transition-colors duration-150",
         selected
           ? "border-kiln bg-mist font-semibold text-ink"
-          : "border-line bg-surface text-ink hover:border-graphite/50",
-        !available && "text-graphite",
+          : available
+            ? "border-line bg-surface text-ink hover:border-graphite/50"
+            : "border-line bg-mist/60",
+        !available && "cursor-not-allowed text-graphite/70",
       )}
     >
       {swatch && (
         <span
           aria-hidden="true"
-          className="size-5 shrink-0 rounded-pill border border-ink/20"
+          className={cn("size-5 shrink-0 rounded-pill border border-ink/20", !available && "opacity-40")}
           style={{ background: swatch }}
         />
       )}
