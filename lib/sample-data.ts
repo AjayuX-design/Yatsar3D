@@ -9,13 +9,13 @@ import type { Money } from "@/lib/format/money";
 export const sampleStore = {
   // Placeholder. The real number is still an open decision.
   whatsappNumber: "919999999999",
-  deliveryAreaText: "We currently deliver in Hyderabad.",
+  deliveryAreaText: "Message us your pincode and we will confirm delivery before you order.",
   // Confirmed by the shop. Must match the free shipping rate set in Shopify (minimum order price).
   freeDeliveryText: "Free delivery on orders above ₹1,500.",
   // The same minimum, as a number, for the cart progress bar.
   freeDeliveryMin: 1500,
   // Placeholder wording. Shown only when there is a useful message.
-  announcementText: "Free delivery above ₹1,500 in Hyderabad. Custom quotes on WhatsApp.",
+  announcementText: "Free delivery above ₹1,500. Custom quotes on WhatsApp.",
   responseHours: "We reply between 10 am and 10 pm.",
   mixedCartNote:
     "Your cart has ready to ship and made to order items. Made to order items take longer, so check the timing on each product.",

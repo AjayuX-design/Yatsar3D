@@ -38,7 +38,7 @@ export default function DeliveryPage() {
 
       <div className="mt-8 max-w-[720px]">
         <InfoCard variant="slate" title="Where we deliver">
-          {sampleStore.deliveryAreaText} Outside Hyderabad? Message us and we will tell you what is possible.
+          {sampleStore.deliveryAreaText}
         </InfoCard>
       </div>
 
@@ -63,7 +63,7 @@ export default function DeliveryPage() {
             </span>
             <h3 className="mt-4 t-h3 text-ink">2. Delivery</h3>
             <p className="mt-2 t-body text-graphite">
-              After dispatch, delivery within Hyderabad usually takes <span className="[font-variant-numeric:tabular-nums]">{days}</span>.
+              After dispatch, delivery usually takes <span className="[font-variant-numeric:tabular-nums]">{days}</span>.
             </p>
           </li>
         </ul>

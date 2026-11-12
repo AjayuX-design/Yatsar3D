@@ -69,7 +69,7 @@ export const customFaq = [
   {
     id: "area",
     title: "Where do you deliver?",
-    content: "We currently deliver in Hyderabad. If you are somewhere else, message us and we will tell you what is possible.",
+    content: "Message us your pincode and we will confirm delivery to your area.",
   },
   {
     id: "approve",

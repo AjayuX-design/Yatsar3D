@@ -19,7 +19,7 @@ import { generalEnquiryMessage } from "@/lib/whatsapp";
 
 export const metadata: Metadata = { title: "Yatsar 3D", robots: { index: false, follow: false } };
 
-const section = "mt-16 lg:mt-24";
+const section = "reveal mt-16 lg:mt-24";
 
 /**
  * Sections: hero (product banners), categories, featured products, delivery area, custom-print steps.

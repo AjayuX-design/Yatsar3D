@@ -67,7 +67,7 @@ export function Footer({
   );
 
   return (
-    <footer className="mt-24 border-t border-line bg-surface">
+    <footer className="mt-24 border-t border-line bg-mist/70">
       <div className="mx-auto max-w-[1200px] px-4 py-12 md:px-6 lg:px-8 lg:py-16">
         <div className="lg:grid lg:grid-cols-12 lg:gap-12">
           <div className="lg:col-span-3">
@@ -92,14 +92,14 @@ export function Footer({
           <div className="hidden lg:col-span-5 lg:col-start-5 lg:grid lg:grid-cols-3 lg:gap-8">
             {groups.map((g) => (
               <div key={g.id}>
-                <h2 className="mb-2 t-label text-graphite">{g.title}</h2>
+                <h2 className="mb-2 t-label text-ink">{g.title}</h2>
                 {list(g.links)}
               </div>
             ))}
           </div>
 
           <div className="mt-10 space-y-1 lg:col-span-3 lg:col-start-10 lg:mt-0">
-            <h2 className="mb-2 t-label text-graphite">Delivery and contact</h2>
+            <h2 className="mb-2 t-label text-ink">Delivery and contact</h2>
             <p className="t-small text-ink">{deliveryAreaText}</p>
             <p className="t-small text-graphite">{responseHours}</p>
           </div>

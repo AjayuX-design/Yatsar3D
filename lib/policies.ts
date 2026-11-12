@@ -29,7 +29,7 @@ export const policies: Policy[] = [
       {
         heading: "Where we deliver",
         body: [
-          "We currently deliver in Hyderabad. If you are somewhere else, message us and we will tell you what is possible before you order.",
+          "Message us your pincode and we will confirm delivery to your area before you order.",
         ],
       },
       {
@@ -116,7 +116,7 @@ export const policies: Policy[] = [
     sections: [
       {
         heading: "Who we are",
-        body: [`Yatsar 3D sells 3D-printed products from Hyderabad, India. You can contact us at ${CONTACT_EMAIL}.`],
+        body: [`Yatsar 3D sells 3D-printed products from India. You can contact us at ${CONTACT_EMAIL}.`],
       },
       {
         heading: "What we collect",
