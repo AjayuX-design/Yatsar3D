@@ -1,6 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Bricolage_Grotesque, Inter } from "next/font/google";
-import { siteUrl } from "@/lib/site";
+import { indexingOn, siteUrl } from "@/lib/site";
 import "./globals.css";
 
 // Headings only.
@@ -32,6 +32,8 @@ const description = "3D-printed products for your desk and home, and custom prin
 // The share card for WhatsApp, Instagram and search results comes from app/opengraph-image.png. Product pages use their own photo.
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl()),
+  alternates: { canonical: "./" }, // each page names itself, without filters or tracking tags
+  robots: indexingOn() ? undefined : { index: false, follow: false },
   title: "Yatsar 3D",
   description,
   openGraph: {

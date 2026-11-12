@@ -26,7 +26,12 @@ export async function generateMetadata(props: PageProps<"/collections/[handle]">
   const { handle } = await props.params;
   const r = await getCollection(handle);
   const title = r.state === "ok" && r.data ? `${r.data.title} | Yatsar 3D` : "Collection | Yatsar 3D";
-  return { title, robots: getSource() === "sample" ? { index: false, follow: false } : undefined };
+  const name = r.state === "ok" && r.data ? r.data.title : null;
+  return {
+    title,
+    description: name ? `${name} from Yatsar 3D. 3D-printed products for your desk and home, with size and timing on every product.` : undefined,
+    robots: getSource() === "sample" ? { index: false, follow: false } : undefined,
+  };
 }
 
 export default function CollectionPage(props: PageProps<"/collections/[handle]">) {

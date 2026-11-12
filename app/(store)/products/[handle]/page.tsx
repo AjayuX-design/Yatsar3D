@@ -81,12 +81,35 @@ async function ProductContent({ params }: { params: PageProps<"/products/[handle
   const related = all.state === "ok" ? all.data.filter((p) => p.handle !== product.handle).slice(0, 4) : [];
   const ratings = await ratingsFor([product.handle, ...related.map((p) => p.handle)]);
 
+  const prices = product.variants.map((v) => Number(v.price.amount));
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    name: product.title,
+    description: product.paragraphs[0],
+    image: product.images.flatMap((i) => (i.src ? [new URL(i.src, siteUrl()).href] : [])),
+    url: `${siteUrl()}/products/${product.handle}`,
+    offers: {
+      "@type": "AggregateOffer",
+      priceCurrency: product.variants[0]?.price.currencyCode ?? "INR",
+      lowPrice: Math.min(...prices),
+      highPrice: Math.max(...prices),
+      offerCount: product.variants.length,
+      availability: product.variants.some((v) => v.availableForSale) ? "https://schema.org/InStock" : "https://schema.org/OutOfStock",
+    },
+  };
+
   return (
     <>
+      {/* Product facts for search results. "<" is escaped so no text can close the script tag. */}
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c") }} />
       <Breadcrumb
         items={[
           { label: "Home", href: "/" },
-          { label: product.collection.title, href: `/collections/${product.collection.handle}` },
+          // Shopify's built-in "Home page" collection is not a real category, so point to the full shop instead.
+          product.collection.handle === "frontpage"
+            ? { label: "All products", href: "/collections/all" }
+            : { label: product.collection.title, href: `/collections/${product.collection.handle}` },
           { label: product.title },
         ]}
       />

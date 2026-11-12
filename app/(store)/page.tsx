@@ -17,7 +17,7 @@ import { customSteps } from "@/lib/custom-orders";
 import { sampleStore } from "@/lib/sample-data";
 import { generalEnquiryMessage } from "@/lib/whatsapp";
 
-export const metadata: Metadata = { title: "Yatsar 3D", robots: { index: false, follow: false } };
+export const metadata: Metadata = { title: "Yatsar 3D" };
 
 const section = "reveal mt-16 lg:mt-24";
 
@@ -36,7 +36,7 @@ export default function HomePage() {
       </Suspense>
 
       {/* Shop by category */}
-      <Suspense fallback={null}>
+      <Suspense fallback={<CategoriesSkeleton />}>
         <Categories />
       </Suspense>
 
@@ -205,6 +205,20 @@ async function Featured() {
         <ProductCard key={p.handle} product={p} priority={i < 2} compact />
       ))}
     </div>
+  );
+}
+
+/** Same size as the real tiles, so the page below does not jump when they arrive. */
+function CategoriesSkeleton() {
+  return (
+    <section className={section} aria-busy="true" aria-label="Loading categories">
+      <div className="h-8 w-48 rounded-ctl bg-mist" />
+      <div className="mt-6 grid grid-cols-2 gap-3 md:grid-cols-3 lg:grid-cols-5 lg:gap-4">
+        {[0, 1, 2, 3, 4].map((i) => (
+          <div key={i} className={`h-[160px] rounded-card bg-mist md:h-[200px] ${i === 4 ? "col-span-2 md:col-span-1" : ""}`} />
+        ))}
+      </div>
+    </section>
   );
 }
 
