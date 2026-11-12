@@ -27,9 +27,9 @@ export const viewport: Viewport = {
   themeColor: "#ffffff",
 };
 
-const description = "Physical 3D-printed products, made in India. Size, material and timing on every page.";
+const description = "3D-printed products for your desk and home, and custom prints made for you. From idea to reality.";
 
-// The share card for WhatsApp, Instagram and search results. Product pages use their own photo.
+// The share card for WhatsApp, Instagram and search results comes from app/opengraph-image.png. Product pages use their own photo.
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl()),
   title: "Yatsar 3D",
@@ -40,7 +40,6 @@ export const metadata: Metadata = {
     locale: "en_IN",
     title: "Yatsar 3D",
     description,
-    images: [{ url: "/products/square/fear-not-magnet-front-1200.jpg", width: 1200, height: 1200, alt: "Yatsar 3D" }],
   },
   twitter: { card: "summary_large_image", title: "Yatsar 3D", description },
 };
