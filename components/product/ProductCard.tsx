@@ -51,9 +51,13 @@ export function ProductCard({
   return (
     <Link
       href={`/products/${product.handle}`}
-      className="group flex h-full flex-col rounded-card outline-offset-4 transition-transform duration-150 ease-out active:scale-[0.99]"
+      className={cn(
+        "group flex h-full flex-col rounded-card outline-offset-4 transition-[transform,box-shadow] duration-200 ease-out active:scale-[0.99]",
+        // Home cards sit in a soft box that lifts on hover.
+        compact && "border border-line bg-surface p-2 shadow-[0_1px_2px_rgba(23,23,23,0.05)] [@media(hover:hover)]:hover:-translate-y-1 [@media(hover:hover)]:hover:shadow-[0_12px_28px_-12px_rgba(23,23,23,0.28)]",
+      )}
     >
-      <div className="relative aspect-square overflow-hidden rounded-card bg-mist">
+      <div className={cn("relative aspect-square overflow-hidden bg-mist", compact ? "rounded-ctl" : "rounded-card")}>
         <div
           className={cn(
             "absolute inset-0 transition-[opacity,transform] duration-300 ease-out [@media(hover:hover)]:group-hover:scale-[1.03]",
@@ -72,8 +76,8 @@ export function ProductCard({
         {/* Home (compact) shows only a discount or "Sold out". Elsewhere "Made to order" shows too. */}
         <ImageBadges percent={soldOut ? null : off} status={compact && !soldOut ? undefined : status} />
       </div>
-      <div className="flex flex-1 flex-col pt-3">
-        <h3 className="line-clamp-2 text-[15px] font-medium leading-5 text-ink group-hover:underline group-hover:underline-offset-[3px]">
+      <div className={cn("flex flex-1 flex-col", compact ? "px-1 pb-1 pt-3" : "pt-3")}>
+        <h3 className={cn("line-clamp-2 text-ink", compact ? "text-[16px] font-semibold leading-5" : "text-[15px] font-medium leading-5 group-hover:underline group-hover:underline-offset-[3px]")}>
           {product.title}
         </h3>
         {!compact && spec && <p className="mt-1 t-small text-graphite">{spec}</p>}
@@ -92,6 +96,18 @@ export function ProductCard({
           price={lowest.price}
           compareAt={hasRange ? null : lowest.compareAt}
         />
+        {/* Looks like a button, but the whole card is the link, so it is a span. */}
+        {compact && (
+          <span
+            aria-hidden="true"
+            className={cn(
+              "mt-3 inline-flex h-10 w-full items-center justify-center rounded-ctl text-[15px] font-semibold transition-colors duration-150",
+              soldOut ? "border border-line bg-mist text-graphite" : "bg-kiln text-surface group-hover:bg-kiln-deep",
+            )}
+          >
+            View product
+          </span>
+        )}
       </div>
     </Link>
   );
