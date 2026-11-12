@@ -110,6 +110,7 @@ async function ProductContent({ params }: { params: PageProps<"/products/[handle
 
       {related.length > 0 && (
         <section aria-labelledby="related" className="mt-16 border-t border-line pt-12">
+          <span aria-hidden="true" className="mb-3 block h-1 w-10 rounded-pill bg-kiln" />
           <h2 id="related" className="t-h2 text-ink">
             You may also like
           </h2>

@@ -120,7 +120,6 @@ export function ProductDetail({ product, store, rating }: { product: Product; st
   const facts: [string, string][] = [
     ["Size", size ?? ""],
     ["Weight", weight ? `${weight} g` : ""],
-    ["Material", product.material ?? ""],
     ["Colour", product.colour ?? ""],
     ["In the box", product.included.join(", ")],
     ["Not included", product.notIncluded.join(", ")],
@@ -207,11 +206,6 @@ export function ProductDetail({ product, store, rating }: { product: Product; st
         <div className="mt-6 space-y-6 md:mt-0 lg:space-y-8">
           <header>
             <h1 className="t-h1 text-ink">{product.title}</h1>
-            {(product.material || product.finish) && (
-              <p className="mt-2 t-small text-graphite">
-                {[product.material, product.finish].filter(Boolean).join(", ")}
-              </p>
-            )}
             {rating && rating.count > 0 && (
               <a href="#reviews" className="-mb-1 mt-2 inline-flex min-h-11 items-center gap-2 t-small text-ink">
                 <Stars value={rating.average} />
@@ -225,31 +219,28 @@ export function ProductDetail({ product, store, rating }: { product: Product; st
             </div>
           </header>
 
-          {/* Price and options belong together: 24px, not the 32px between blocks. */}
-          <VariantSelector
-            className="-mt-2"
-            product={product}
-            selection={selection}
-            onChange={setSelection}
-          />
+          {/* One soft panel groups everything used to buy: options, quantity, button. */}
+          <div className="-mt-2 space-y-5 rounded-card bg-mist/70 p-4 lg:p-5">
+            <VariantSelector product={product} selection={selection} onChange={setSelection} />
 
-          <div ref={buyButton} className="flex flex-col gap-4 sm:flex-row sm:items-center">
-            {canBuy && (
-              <QuantityStepper
-                className="self-start sm:self-auto"
-                value={qtyShown}
-                onChange={setQty}
-                max={maxQty}
-              />
+            <div ref={buyButton} className="flex flex-col gap-4 sm:flex-row sm:items-center">
+              {canBuy && (
+                <QuantityStepper
+                  className="self-start sm:self-auto"
+                  value={qtyShown}
+                  onChange={setQty}
+                  max={maxQty}
+                />
+              )}
+              <div className="flex-1">{addButton(true)}</div>
+            </div>
+            {variant && !canBuy && (
+              <p className="t-small text-graphite">
+                This option is not available right now.
+                {product.customAvailable && " You can ask us about a custom one below."}
+              </p>
             )}
-            <div className="flex-1">{addButton(true)}</div>
           </div>
-          {variant && !canBuy && (
-            <p className="t-small text-graphite">
-              This option is not available right now.
-              {product.customAvailable && " You can ask us about a custom one below."}
-            </p>
-          )}
 
           <FulfilmentBox
             fulfilment={product.fulfilment}

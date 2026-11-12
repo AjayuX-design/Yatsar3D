@@ -17,6 +17,7 @@ export async function ReviewsSection({ handle, title }: { handle: string; title:
 
   return (
     <section id="reviews" aria-labelledby="reviews-title" className="mt-16 scroll-mt-24 border-t border-line pt-12">
+      <span aria-hidden="true" className="mb-3 block h-1 w-10 rounded-pill bg-kiln" />
       <h2 id="reviews-title" className="t-h2 text-ink">
         Customer reviews
       </h2>

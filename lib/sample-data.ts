@@ -37,7 +37,7 @@ export const samplePrices = {
 
 export const sampleProduct = {
   title: "Sample product",
-  variant: "PETG, 18 cm",
+  variant: "Tougher, 18 cm",
   url: "https://example.com/products/sample-product",
 };
 

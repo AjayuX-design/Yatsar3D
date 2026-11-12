@@ -34,7 +34,7 @@ export function VariantPill({
       title={available ? undefined : "Sold out"}
       onClick={onSelect}
       className={cn(
-        "relative inline-flex min-h-11 min-w-[4.5rem] items-center justify-center gap-2 rounded-ctl border px-4 t-label transition-colors duration-150",
+        "relative inline-flex min-h-11 w-full min-w-[4.5rem] items-center justify-center gap-2 rounded-ctl border px-4 t-label transition-colors duration-150",
         selected
           ? "border-kiln bg-mist font-semibold text-ink"
           : "border-line bg-surface text-ink hover:border-graphite/50",
@@ -71,15 +71,17 @@ export function VariantSelector({
   selection: Selection;
   onChange: (next: Selection) => void;
 }) {
-  if (!product.options.length) return null;
+  // An option with one value is not a choice, so it is not shown (for example "Material: PLA").
+  const choices = product.options.filter((o) => o.values.length > 1);
+  if (!choices.length) return null;
   return (
     <div className={cn("space-y-6", className)}>
-      {product.options.map((opt) => (
+      {choices.map((opt) => (
         <div key={opt.name} role="radiogroup" aria-label={opt.name}>
           <p className="mb-3 t-label text-graphite">
             {opt.name} <span className="ml-1 font-semibold text-ink">{selection[opt.name]}</span>
           </p>
-          <div className="flex flex-wrap gap-2">
+          <div className="grid grid-cols-[repeat(auto-fill,minmax(8rem,1fr))] gap-2">
             {opt.values.map((value) => {
               const s = valueState(product, selection, opt.name, value);
               return (

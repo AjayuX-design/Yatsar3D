@@ -409,7 +409,7 @@ export default function PreviewPage() {
           <ul className="grid gap-2 md:grid-cols-2">
             {[
               ["fear-not-fridge-magnet", "Single product, ₹199, two photos, ready to ship"],
-              ["desk-organiser", "Ready to ship, PETG sold out, compare-at price"],
+              ["desk-organiser", "Ready to ship, two types with compare-at prices"],
               ["planter-pot", "Made to order, two options, price steps, one sold-out combination"],
               ["phone-stand", "Sold out, no options"],
               ["wall-mounted-headphone-and-cable-hanger-with-adjustable-arm", "Long title, ready to ship"],

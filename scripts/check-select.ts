@@ -26,15 +26,16 @@ import { addLine, cartTotals, checkCode, hasMixedFulfilment, lineFromProduct, li
 
 const bySlug = (h: string) => sampleProducts.find((p) => p.handle === h)!;
 
-// Ready stock, one option. PETG is sold out and costs more.
+// Ready stock, one option. The tougher type costs more and has its own compare-at price.
 const desk = bySlug("desk-organiser");
-assert.deepEqual(defaultSelection(desk), { Material: "PLA" });
-assert.equal(findVariant(desk, { Material: "PETG" })!.availableForSale, false);
-assert.deepEqual(valueState(desk, { Material: "PLA" }, "Material", "PETG"), {
-  available: false,
+assert.deepEqual(defaultSelection(desk), { Type: "Standard" });
+assert.equal(findVariant(desk, { Type: "Tougher" })!.availableForSale, true);
+assert.equal(findVariant(desk, { Type: "Tougher" })!.compareAt?.amount, "1749");
+assert.deepEqual(valueState(desk, { Type: "Standard" }, "Type", "Tougher"), {
+  available: true,
   delta: 150,
 });
-assert.equal(valueState(desk, { Material: "PLA" }, "Material", "PLA").delta, null);
+assert.equal(valueState(desk, { Type: "Standard" }, "Type", "Standard").delta, null);
 
 // Made to order, two options. A choice in one option changes availability in the other.
 const planter = bySlug("planter-pot");
@@ -65,7 +66,7 @@ assert.equal(sortProducts(sampleProducts, "newest")[0].handle, "fear-not-fridge-
 assert.equal(sortProducts(sampleProducts, "featured")[0].handle, sampleProducts[0].handle);
 
 // Cart
-const deskLine = lineFromProduct(desk, findVariant(desk, { Material: "PLA" })!, 2);
+const deskLine = lineFromProduct(desk, findVariant(desk, { Type: "Standard" })!, 2);
 let lines = addLine([], deskLine);
 lines = addLine(lines, { ...deskLine, quantity: 10 });
 assert.equal(lines.length, 1, "same variant merges");

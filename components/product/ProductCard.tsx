@@ -46,7 +46,7 @@ export function ProductCard({
 
   const off = hasRange ? null : percentOff(lowest.price, lowest.compareAt);
   const size = longestSideCm(product.dimensions);
-  const spec = [product.material, size ? `${size} cm` : null].filter(Boolean).join(", ");
+  const spec = size ? `${size} cm` : "";
 
   return (
     <Link

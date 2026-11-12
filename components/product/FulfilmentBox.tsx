@@ -17,7 +17,7 @@ function Row({
     <div className="flex items-center gap-4 px-4 py-3">
       <span
         aria-hidden="true"
-        className="grid size-9 shrink-0 place-items-center rounded-pill bg-mist text-ink"
+        className="grid size-9 shrink-0 place-items-center rounded-pill bg-kiln/10 text-kiln-deep"
       >
         {icon}
       </span>

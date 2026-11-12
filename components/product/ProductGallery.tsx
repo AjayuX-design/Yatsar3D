@@ -77,7 +77,7 @@ export function ProductGallery({ images, title, percent, status }: { images: Pro
               const el = e.currentTarget;
               setIndex(Math.round(el.scrollLeft / el.clientWidth));
             }}
-            className="flex snap-x snap-mandatory overflow-x-auto rounded-card [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+            className="flex snap-x snap-mandatory overflow-x-auto rounded-card shadow-[0_10px_30px_-14px_rgba(23,23,23,0.3)] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
           >
             {images.map((img, i) => (
               <div

@@ -15,7 +15,7 @@ export const demoCustomer: CustomerView = {
       paymentStatus: "PAID", fulfillmentStatus: "UNFULFILLED",
       total: inr("1448"), subtotal: inr("1448"), shipping: inr("0"), tax: inr("0"), address, statusPageUrl: "https://example.com",
       lines: [
-        { id: "l1", name: "Desk organiser", variantTitle: "PLA", quantity: 1, image: { url: "/mock/desk-organiser-hero.svg", alt: "Desk organiser" }, total: inr("1299") },
+        { id: "l1", name: "Desk organiser", variantTitle: "Standard", quantity: 1, image: { url: "/mock/desk-organiser-hero.svg", alt: "Desk organiser" }, total: inr("1299") },
         { id: "l2", name: "Bookmark set", quantity: 1, image: { url: "/mock/bookmark-set-hero.svg", alt: "Bookmark set" }, total: inr("149") },
       ],
       shipments: [],
@@ -24,7 +24,7 @@ export const demoCustomer: CustomerView = {
       id: "demo-1002", number: 1002, name: "#1002", processedAt: "2026-10-30T18:40:00+05:30",
       paymentStatus: "PAID", fulfillmentStatus: "FULFILLED",
       total: inr("559"), subtotal: inr("499"), shipping: inr("60"), tax: inr("0"), address, statusPageUrl: "https://example.com",
-      lines: [{ id: "l3", name: "Phone stand", variantTitle: "PLA", quantity: 1, image: { url: "/mock/phone-stand-hero.svg", alt: "Phone stand" }, total: inr("499") }],
+      lines: [{ id: "l3", name: "Phone stand", variantTitle: "Standard", quantity: 1, image: { url: "/mock/phone-stand-hero.svg", alt: "Phone stand" }, total: inr("499") }],
       shipments: [{ latest: "IN_TRANSIT", carrier: "Delhivery", trackingNumber: "DL123456789", trackingUrl: "https://example.com/track", estimatedDeliveryAt: "2026-11-07T18:00:00+05:30" }],
     },
     {
