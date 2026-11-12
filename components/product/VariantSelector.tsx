@@ -5,13 +5,17 @@ import { formatMoney } from "@/lib/format/money";
 import { valueState, type Selection } from "@/lib/product/select";
 import type { Product } from "@/lib/types";
 
-/** One pill. Selected = 2px orange border. Unavailable = struck through and disabled, but still reachable by keyboard so screen readers announce "sold out". */
+/**
+ * One pill. Selected = 2px orange border. Unavailable = struck through. For colour options
+ * it is also disabled (lock), but still reachable by keyboard so screen readers announce "sold out".
+ */
 export function VariantPill({
   label,
   selected,
   available = true,
   delta,
   swatch,
+  lock = false,
   onSelect,
   name,
 }: {
@@ -22,6 +26,8 @@ export function VariantPill({
   delta?: number | null;
   /** Colour dot, for colour options. */
   swatch?: string;
+  /** Sold-out values cannot be picked. Used for colours. */
+  lock?: boolean;
   onSelect: () => void;
   name: string;
 }) {
@@ -30,24 +36,26 @@ export function VariantPill({
       type="button"
       role="radio"
       aria-checked={selected}
-      aria-disabled={!available || undefined}
+      aria-disabled={(lock && !available) || undefined}
       aria-label={`${name}: ${label}${available ? "" : ", sold out"}`}
       title={available ? undefined : "Sold out"}
-      onClick={available ? onSelect : undefined}
+      onClick={lock && !available ? undefined : onSelect}
       className={cn(
         "relative inline-flex min-h-11 w-full min-w-[4.5rem] items-center justify-center gap-2 rounded-ctl border px-4 t-label transition-colors duration-150",
         selected
           ? "border-kiln bg-mist font-semibold text-ink"
           : available
             ? "border-line bg-surface text-ink hover:border-graphite/50"
-            : "border-line bg-mist/60",
-        !available && "cursor-not-allowed text-graphite/70",
+            : lock
+              ? "border-line bg-mist/60"
+              : "border-line bg-surface hover:border-graphite/50",
+        !available && (lock ? "cursor-not-allowed text-graphite/70" : "text-graphite"),
       )}
     >
       {swatch && (
         <span
           aria-hidden="true"
-          className={cn("size-5 shrink-0 rounded-pill border border-ink/20", !available && "opacity-40")}
+          className={cn("size-5 shrink-0 rounded-pill border border-ink/20", !available && lock && "opacity-40")}
           style={{ background: swatch }}
         />
       )}
@@ -102,6 +110,7 @@ export function VariantSelector({
                   available={s.available}
                   delta={selection[opt.name] === value ? null : s.delta}
                   swatch={opt.swatches?.[value]}
+                  lock={/colou?r/i.test(opt.name)}
                   onSelect={() => onChange({ ...selection, [opt.name]: value })}
                 />
               );

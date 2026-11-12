@@ -20,7 +20,7 @@ export function PillStates() {
       </Demo>
       {["Beige", "Pink", "Orange", "Red", "White", "Yellow", "Matte Black", "Teal"].map((c, i) => (
         <Demo key={c} label={`Colour: ${c}`}>
-          <VariantPill name="Color" label={c} selected={i === 2} available={c !== "Yellow"} swatch={swatchFor(c)} onSelect={noop} />
+          <VariantPill name="Color" label={c} selected={i === 2} available={c !== "Yellow"} lock swatch={swatchFor(c)} onSelect={noop} />
         </Demo>
       ))}
       <Demo label="With price difference">
