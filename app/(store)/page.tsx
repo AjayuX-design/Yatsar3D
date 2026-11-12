@@ -104,17 +104,14 @@ async function Categories() {
       <h2 id="categories" className="t-h2 text-ink">
         Shop by category
       </h2>
-      <ul className="mt-6 grid grid-cols-2 gap-3 lg:grid-cols-6 lg:gap-4">
+      <ul className="mt-6 grid grid-cols-2 gap-3 md:grid-cols-3 lg:grid-cols-5 lg:gap-4">
         {collections.map((c, i) => {
           const n = collections.length;
-          // An odd last tile spans the full row on phones. On desktop, five tiles sit as three over two.
-          const span = [
-            n % 2 === 1 && i === n - 1 ? "col-span-2" : "",
-            n === 5 ? (i < 3 ? "lg:col-span-2" : "lg:col-span-3") : "lg:col-span-2",
-          ].join(" ");
+          // On phones an odd last tile spans the full row. On tablets (3 columns) two sit under three.
+          const span = n % 2 === 1 && i === n - 1 ? "col-span-2 md:col-span-1" : "";
           return (
             <li key={c.handle} className={span}>
-              <Link href={categoryHref(c.handle)} className="group relative block h-[220px] overflow-hidden rounded-card bg-mist outline-offset-4 md:h-[260px] lg:h-[280px]">
+              <Link href={categoryHref(c.handle)} className="group relative block h-[160px] overflow-hidden rounded-card bg-mist outline-offset-4 md:h-[200px] lg:h-[200px]">
                 <span className="absolute inset-0 transition-transform duration-500 ease-out [@media(hover:hover)]:group-hover:scale-[1.05]">
                   <ImagePlaceholder src={c.image?.src} alt="" label="" sizes="(min-width: 1024px) 560px, 100vw" onWhite={c.image?.onWhite} />
                 </span>
@@ -127,7 +124,7 @@ async function Categories() {
                 <span aria-hidden="true" className="absolute inset-x-0 bottom-0 h-3/5 bg-linear-to-t from-ink/85 via-ink/35 to-transparent" />
                 <span className="absolute inset-x-3 bottom-3 flex items-end justify-between gap-2 sm:inset-x-4 sm:bottom-4 sm:gap-3">
                   <span>
-                    <span className="block font-heading text-[17px] font-semibold leading-5 text-surface sm:text-[20px] sm:leading-6 lg:text-[22px] lg:leading-7">{c.title}</span>
+                    <span className="block font-heading text-[17px] font-semibold leading-5 text-surface sm:text-[18px] sm:leading-6">{c.title}</span>
                     <span className="mt-0.5 block t-small text-surface/90 [font-variant-numeric:tabular-nums]">
                       {c.handle === CUSTOM_ORDERS_HANDLE
                         ? "Get a quote"
