@@ -1,6 +1,7 @@
 "use client";
 
 import { VariantPill } from "@/components/product/VariantSelector";
+import { swatchFor } from "@/lib/product/swatch";
 import { Demo } from "./parts";
 
 const noop = () => {};
@@ -17,6 +18,11 @@ export function PillStates() {
       <Demo label="Unavailable">
         <VariantPill name="Size" label="Large" selected={false} available={false} onSelect={noop} />
       </Demo>
+      {["Beige", "Pink", "Orange", "Red", "White", "Yellow", "Matte Black", "Teal"].map((c, i) => (
+        <Demo key={c} label={`Colour: ${c}`}>
+          <VariantPill name="Color" label={c} selected={i === 2} swatch={swatchFor(c)} onSelect={noop} />
+        </Demo>
+      ))}
       <Demo label="With price difference">
         <VariantPill name="Size" label="Medium" selected={false} delta={300} onSelect={noop} />
       </Demo>

@@ -44,7 +44,7 @@ export function VariantPill({
       {swatch && (
         <span
           aria-hidden="true"
-          className="size-4 shrink-0 rounded-pill border border-ink/15"
+          className="size-5 shrink-0 rounded-pill border border-ink/20"
           style={{ background: swatch }}
         />
       )}
@@ -79,7 +79,13 @@ export function VariantSelector({
       {choices.map((opt) => (
         <div key={opt.name} role="radiogroup" aria-label={opt.name}>
           <p className="mb-3 t-label text-graphite">
-            {opt.name} <span className="ml-1 font-semibold text-ink">{selection[opt.name]}</span>
+            {opt.name}{" "}
+            <span className="ml-1 inline-flex items-center gap-2 font-semibold text-ink">
+              {opt.swatches?.[selection[opt.name]] && (
+                <span aria-hidden="true" className="size-4 rounded-pill border border-ink/20" style={{ background: opt.swatches[selection[opt.name]] }} />
+              )}
+              {selection[opt.name]}
+            </span>
           </p>
           <div className="grid grid-cols-[repeat(auto-fill,minmax(8rem,1fr))] gap-2">
             {opt.values.map((value) => {

@@ -1,4 +1,5 @@
 import type { Days, Product, ProductImage, ProductVariant } from "../types";
+import { swatchesFor } from "../product/swatch";
 
 /*
   Turns Storefront API data into the Product shape the interface uses.
@@ -158,7 +159,7 @@ export function mapProduct(p: ShopifyProduct): Product {
     careNote: meta.get("care_note"),
     scaleCaption: meta.get("scale_caption"),
     customAvailable: meta.get("custom_available") === "true",
-    options: noOptions ? [] : p.options.map((o) => ({ name: o.name, values: o.values })),
+    options: noOptions ? [] : p.options.map((o) => ({ name: o.name, values: o.values, swatches: swatchesFor(o.name, o.values) })),
     variants,
     images,
     collection,

@@ -345,3 +345,13 @@ console.log("address checks passed");
   assert.deepEqual(activeFilterChips(f).map((c) => c.label), ["On sale"]);
 }
 console.log("discount checks passed");
+
+// Colour dots come from the colour name
+import { swatchFor, swatchesFor } from "../lib/product/swatch";
+assert.equal(swatchFor("Orange"), "#f08a24");
+assert.equal(swatchFor("Matte Black"), "#1c1c1c");
+assert.equal(swatchFor("Dark Green"), "#3f9b4f");
+assert.equal(swatchFor("Unicorn"), undefined);
+assert.equal(swatchesFor("Size", ["Red"]), undefined);
+assert.deepEqual(Object.keys(swatchesFor("Color", ["Beige", "Pink", "Unicorn"]) ?? {}), ["Beige", "Pink"]);
+console.log("swatch checks passed");
