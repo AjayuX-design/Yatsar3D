@@ -12,6 +12,8 @@ export const sampleStore = {
   deliveryAreaText: "We currently deliver in Hyderabad.",
   // Confirmed by the shop. Must match the free shipping rate set in Shopify (minimum order price).
   freeDeliveryText: "Free delivery on orders above ₹1,500.",
+  // The same minimum, as a number, for the cart progress bar.
+  freeDeliveryMin: 1500,
   // Placeholder wording. Shown only when there is a useful message.
   announcementText: "Free delivery above ₹1,500 in Hyderabad. Custom quotes on WhatsApp.",
   responseHours: "We reply between 10 am and 10 pm.",

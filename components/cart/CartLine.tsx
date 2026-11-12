@@ -32,11 +32,11 @@ export function CartLine({
       <Link
         href={`/products/${line.handle}`}
         onClick={onNavigate}
-        className="relative block aspect-square w-[72px] shrink-0 self-start overflow-hidden rounded-ctl bg-mist"
+        className="relative block aspect-square w-[88px] shrink-0 self-start overflow-hidden rounded-card bg-mist"
         aria-hidden="true"
         tabIndex={-1}
       >
-        <ImagePlaceholder src={line.imageSrc} alt="" label="" sizes="72px" />
+        <ImagePlaceholder src={line.imageSrc} alt="" label="" sizes="88px" />
       </Link>
 
       <div className="min-w-0 flex-1">
@@ -45,7 +45,7 @@ export function CartLine({
             <Link
               href={`/products/${line.handle}`}
               onClick={onNavigate}
-              className="line-clamp-2 text-[15px] font-medium leading-5 text-ink hover:underline hover:underline-offset-[3px]"
+              className="line-clamp-2 text-[16px] font-semibold leading-5 text-ink hover:underline hover:underline-offset-[3px]"
             >
               {line.title}
             </Link>

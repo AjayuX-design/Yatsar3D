@@ -3,7 +3,7 @@
 import { Button } from "@/components/ui/Button";
 import { InfoCard } from "@/components/ui/InfoCard";
 import { Sheet } from "@/components/ui/Sheet";
-import { X } from "@/components/ui/Icons";
+import { PackageCheck, ShoppingBag, X } from "@/components/ui/Icons";
 import { CartLine } from "@/components/cart/CartLine";
 import { DiscountField } from "@/components/cart/DiscountField";
 import { EnquiryCta } from "@/components/enquiry/EnquiryCta";
@@ -11,10 +11,45 @@ import { ProductCard } from "@/components/product/ProductCard";
 import { hasMixedFulfilment } from "@/lib/cart/cart";
 import { useCart } from "@/lib/cart/CartProvider";
 import { formatMoney } from "@/lib/format/money";
+import { sampleStore } from "@/lib/sample-data";
 import { generalEnquiryMessage } from "@/lib/whatsapp";
 import type { Product } from "@/lib/types";
 
 const row = "flex items-baseline justify-between gap-4";
+
+/** How close the cart is to free delivery. A bar that fills as the total grows. */
+function FreeDeliveryBar({ total }: { total: number }) {
+  const min = sampleStore.freeDeliveryMin;
+  const left = Math.max(0, Math.ceil(min - total));
+  const done = left === 0;
+  return (
+    <div className="mt-4 rounded-card bg-mist p-3">
+      <p className="flex items-center gap-2 t-small text-ink">
+        <PackageCheck aria-hidden="true" className={done ? "size-5 shrink-0 text-moss" : "size-5 shrink-0 text-kiln-deep"} />
+        {done ? (
+          <span className="font-medium">You have unlocked free delivery</span>
+        ) : (
+          <span>
+            Add <span className="font-semibold [font-variant-numeric:tabular-nums]">{formatMoney({ amount: String(left), currencyCode: "INR" })}</span> more for free delivery
+          </span>
+        )}
+      </p>
+      <div
+        role="progressbar"
+        aria-label="Progress to free delivery"
+        aria-valuemin={0}
+        aria-valuemax={min}
+        aria-valuenow={Math.min(total, min)}
+        className="mt-2 h-1 overflow-hidden rounded-pill bg-line"
+      >
+        <div
+          className={`h-full rounded-pill transition-[width] duration-500 ease-out ${done ? "bg-moss" : "bg-kiln"}`}
+          style={{ width: `${Math.min(100, (total / min) * 100)}%` }}
+        />
+      </div>
+    </div>
+  );
+}
 
 /**
  * Mobile: tall bottom sheet. Desktop: 420px drawer on the right.
@@ -57,6 +92,9 @@ export function CartDrawer({
         <div className="flex-1 overflow-y-auto px-4">
           {empty ? (
             <div className="py-10">
+              <span aria-hidden="true" className="mb-4 grid size-14 place-items-center rounded-pill bg-kiln/10 text-kiln-deep">
+                <ShoppingBag className="size-7" />
+              </span>
               <p className="t-h3 text-ink">Your cart is empty</p>
               <p className="mt-2 t-small text-graphite">Pick something from the shop, or ask us for a custom print.</p>
               <Button href="/collections/all" onClick={closeCart} block className="mt-6">
@@ -78,6 +116,7 @@ export function CartDrawer({
             </div>
           ) : (
             <>
+              <FreeDeliveryBar total={Number(totals.total.amount)} />
               <ul>
                 {lines.map((line) => (
                   <CartLine
@@ -121,7 +160,7 @@ export function CartDrawer({
         )}
 
         {!empty && (
-          <div className="shrink-0 space-y-3 border-t border-line bg-surface px-4 pb-[calc(12px+env(safe-area-inset-bottom))] pt-4">
+          <div className="shrink-0 space-y-3 border-t border-line bg-mist/70 px-4 pb-[calc(12px+env(safe-area-inset-bottom))] pt-4">
             <dl className="space-y-2 t-small">
               <div className={row}>
                 <dt className="text-graphite">Subtotal</dt>
@@ -133,9 +172,9 @@ export function CartDrawer({
                   <dd className="t-value text-moss">-{formatMoney(totals.discount)}</dd>
                 </div>
               )}
-              <div className={`${row} border-t border-line pt-2`}>
+              <div className={`${row} items-center border-t border-line pt-3`}>
                 <dt className="t-label text-ink">Estimated total</dt>
-                <dd className="t-price-s text-ink">{formatMoney(totals.total)}</dd>
+                <dd className="t-price-l text-ink">{formatMoney(totals.total)}</dd>
               </div>
             </dl>
             <p className="t-caption text-graphite">
