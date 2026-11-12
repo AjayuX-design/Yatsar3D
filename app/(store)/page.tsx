@@ -160,7 +160,8 @@ async function Hero() {
       price: prices[0],
       compareAt: variants[0].compareAt,
       from: Number(prices[prices.length - 1].amount) > Number(prices[0].amount),
-      image: { src: img.src!, alt: img.alt, onWhite: img.onWhite },
+      // Product photos sit on white. Blending them into the banner colour leaves only the product.
+      image: { src: img.src!, alt: img.alt, onWhite: true },
     };
   }) : [];
   if (slides.length === 0) {
