@@ -177,13 +177,13 @@ function Progress({ step }: { step: number }) {
         const current = s.n === step;
         return (
           <li key={s.n} aria-current={current ? "step" : undefined}>
-            <span className={cn("block h-1 rounded-pill transition-colors duration-200", done || current ? "bg-ink" : "bg-line")} />
+            <span className={cn("block h-1 rounded-pill transition-colors duration-200", done || current ? "bg-kiln" : "bg-line")} />
             <span className={cn("mt-2 flex items-center gap-2 t-caption", current ? "text-ink" : "text-graphite")}>
               <span
                 aria-hidden="true"
                 className={cn(
                   "grid size-5 place-items-center rounded-pill text-[11px] font-semibold leading-none",
-                  done || current ? "bg-ink text-surface" : "bg-mist text-graphite",
+                  done || current ? "bg-kiln text-surface" : "bg-mist text-graphite",
                 )}
               >
                 {done ? <Check className="size-3" /> : s.n}
@@ -427,7 +427,7 @@ function CustomOrderFormInner({ whatsappNumber, onReset }: { whatsappNumber?: st
       <div hidden={step !== 1} className="mt-6">
         <fieldset>
           <legend className="sr-only">What do you need? (required)</legend>
-          <div className="grid gap-3 sm:grid-cols-2" role="radiogroup">
+          <div className="grid auto-rows-fr gap-3 sm:grid-cols-2" role="radiogroup">
             {REQUEST_TYPES.map((t) => {
               const Icon = typeIcons[t.key];
               const selected = type === t.key;
@@ -436,7 +436,7 @@ function CustomOrderFormInner({ whatsappNumber, onReset }: { whatsappNumber?: st
                   key={t.key}
                   className={cn(
                     "relative flex cursor-pointer items-center gap-4 rounded-card border-2 p-4 transition-colors duration-150 has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-kiln sm:flex-col sm:items-start sm:gap-5 sm:p-5",
-                    selected ? "border-ink bg-mist" : "border-line hover:border-graphite/40",
+                    selected ? "border-kiln bg-mist" : "border-line hover:border-graphite/40",
                   )}
                 >
                   <input type="radio" name="type" value={t.key} checked={selected} onChange={() => setType(t.key)} className="sr-only" />
@@ -452,7 +452,7 @@ function CustomOrderFormInner({ whatsappNumber, onReset }: { whatsappNumber?: st
                     </span>
                   </span>
                   {selected && (
-                    <span aria-hidden="true" className="absolute right-3 top-3 grid size-6 place-items-center rounded-pill bg-ink text-surface">
+                    <span aria-hidden="true" className="absolute right-3 top-3 grid size-6 place-items-center rounded-pill bg-kiln text-surface">
                       <Check className="size-4" />
                     </span>
                   )}
@@ -489,7 +489,7 @@ function CustomOrderFormInner({ whatsappNumber, onReset }: { whatsappNumber?: st
                         type="button"
                         aria-pressed={unit === k}
                         onClick={() => setUnit(k)}
-                        className={cn("min-h-9 min-w-12 rounded-pill px-3 t-label", unit === k ? "bg-ink text-surface" : "text-ink hover:bg-mist")}
+                        className={cn("min-h-9 min-w-12 rounded-pill px-3 t-label", unit === k ? "bg-kiln text-surface" : "text-ink hover:bg-mist")}
                       >
                         {label}
                       </button>
@@ -657,7 +657,9 @@ function CustomOrderFormInner({ whatsappNumber, onReset }: { whatsappNumber?: st
       </div>
       <p aria-live="polite" className="mt-3 text-right t-small text-graphite">
         {!canContinue
-          ? `To continue, add ${here.map((k) => missingLabels[k] ?? k).join(", ")}.`
+          ? here.includes("type")
+            ? "Choose one option above to continue."
+            : `To continue, add ${here.map((k) => missingLabels[k] ?? k).join(", ")}.`
           : step === 3
             ? "We use these details only to reply to your request. No payment is taken here."
             : ""}

@@ -40,12 +40,12 @@ export default async function CustomPrintPage() {
           const Icon = stepIcons[s.icon];
           return (
             <li key={s.title} className="flex items-start gap-4 rounded-card bg-mist p-4">
-              <span aria-hidden="true" className="grid size-10 shrink-0 place-items-center rounded-pill bg-surface text-ink">
+              <span aria-hidden="true" className="grid size-10 shrink-0 place-items-center rounded-pill bg-kiln/10 text-kiln-deep">
                 <Icon className="size-5" />
               </span>
               <div>
                 <p className="t-label text-ink">
-                  <span className="text-graphite [font-variant-numeric:tabular-nums]">{i + 1}. </span>
+                  <span className="text-kiln-deep [font-variant-numeric:tabular-nums]">{i + 1}. </span>
                   {s.title}
                 </p>
                 <p className="mt-1 t-small text-graphite">{s.text}</p>
@@ -67,7 +67,7 @@ export default async function CustomPrintPage() {
                 const Icon = icons[o.icon];
                 return (
                   <li key={o.id} className="flex flex-col rounded-card bg-mist p-5">
-                    <span aria-hidden="true" className="grid size-10 place-items-center rounded-pill bg-surface text-ink">
+                    <span aria-hidden="true" className="grid size-10 place-items-center rounded-pill bg-kiln/10 text-kiln-deep">
                       <Icon className="size-5" />
                     </span>
                     <h2 className="mt-4 t-h3 text-ink">{o.title}</h2>
