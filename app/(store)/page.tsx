@@ -104,36 +104,46 @@ async function Categories() {
       <h2 id="categories" className="t-h2 text-ink">
         Shop by category
       </h2>
-      <ul className="mt-6 grid grid-cols-2 gap-x-3 gap-y-6 md:grid-cols-3 lg:grid-cols-5 lg:gap-x-6">
-        {collections.map((c) => (
-          <li key={c.handle}>
-            <Link href={categoryHref(c.handle)} className="group flex h-full flex-col rounded-card outline-offset-4">
-              <span className="relative block aspect-square overflow-hidden rounded-card bg-mist">
-                <span className="absolute inset-0 transition-transform duration-300 ease-out [@media(hover:hover)]:group-hover:scale-[1.03]">
-                  <ImagePlaceholder src={c.image?.src} alt="" label="" sizes="(min-width: 1024px) 220px, 50vw" onWhite={c.image?.onWhite} />
+      <ul className="mt-6 grid grid-cols-2 gap-3 lg:grid-cols-6 lg:gap-4">
+        {collections.map((c, i) => {
+          const n = collections.length;
+          // An odd last tile spans the full row on phones. On desktop, five tiles sit as three over two.
+          const span = [
+            n % 2 === 1 && i === n - 1 ? "col-span-2" : "",
+            n === 5 ? (i < 3 ? "lg:col-span-2" : "lg:col-span-3") : "lg:col-span-2",
+          ].join(" ");
+          return (
+            <li key={c.handle} className={span}>
+              <Link href={categoryHref(c.handle)} className="group relative block h-[220px] overflow-hidden rounded-card bg-mist outline-offset-4 md:h-[260px] lg:h-[280px]">
+                <span className="absolute inset-0 transition-transform duration-500 ease-out [@media(hover:hover)]:group-hover:scale-[1.05]">
+                  <ImagePlaceholder src={c.image?.src} alt="" label="" sizes="(min-width: 1024px) 560px, 100vw" onWhite={c.image?.onWhite} />
                 </span>
                 {!c.image?.src && (
                   <span aria-hidden="true" className="absolute inset-0 grid place-items-center text-graphite">
                     <CategoryIcon handle={c.handle} title={c.title} className="size-10" />
                   </span>
                 )}
-              </span>
-              <span className="mt-3 flex items-start justify-between gap-2">
-                <span>
-                  <span className="block t-h3 text-ink group-hover:underline group-hover:underline-offset-[3px]">{c.title}</span>
-                  <span className="mt-1 block t-small text-graphite [font-variant-numeric:tabular-nums]">
-                    {c.handle === CUSTOM_ORDERS_HANDLE
-                      ? "Get a quote"
-                      : c.count === 0
-                        ? "Coming soon"
-                        : `${c.count} ${c.count === 1 ? "product" : "products"}`}
+                {/* Dark fade at the bottom so the white name always reads, whatever the photo. */}
+                <span aria-hidden="true" className="absolute inset-x-0 bottom-0 h-3/5 bg-linear-to-t from-ink/85 via-ink/35 to-transparent" />
+                <span className="absolute inset-x-3 bottom-3 flex items-end justify-between gap-2 sm:inset-x-4 sm:bottom-4 sm:gap-3">
+                  <span>
+                    <span className="block font-heading text-[17px] font-semibold leading-5 text-surface sm:text-[20px] sm:leading-6 lg:text-[22px] lg:leading-7">{c.title}</span>
+                    <span className="mt-0.5 block t-small text-surface/90 [font-variant-numeric:tabular-nums]">
+                      {c.handle === CUSTOM_ORDERS_HANDLE
+                        ? "Get a quote"
+                        : c.count === 0
+                          ? "Coming soon"
+                          : `${c.count} ${c.count === 1 ? "product" : "products"}`}
+                    </span>
+                  </span>
+                  <span aria-hidden="true" className="grid size-8 shrink-0 place-items-center rounded-pill bg-surface text-ink sm:size-9 transition-transform duration-150 group-hover:translate-x-0.5">
+                    <ArrowRight className="size-5" />
                   </span>
                 </span>
-                <ArrowRight aria-hidden="true" className="mt-0.5 size-5 shrink-0 text-ink transition-transform duration-150 group-hover:translate-x-0.5" />
-              </span>
-            </Link>
-          </li>
-        ))}
+              </Link>
+            </li>
+          );
+        })}
       </ul>
     </section>
   );
