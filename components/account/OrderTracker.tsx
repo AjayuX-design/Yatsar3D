@@ -14,12 +14,12 @@ export function OrderTracker({ stage }: { stage: Stage }) {
         return (
           <li key={label} aria-current={current ? "step" : undefined} className="relative flex flex-col items-center text-center">
             {i > 0 && (
-              <span aria-hidden="true" className={cn("absolute right-1/2 top-4 h-0.5 w-full -translate-y-1/2", !cancelled && i <= at ? "bg-ink" : "bg-line")} />
+              <span aria-hidden="true" className={cn("absolute right-1/2 top-4 h-0.5 w-full -translate-y-1/2", !cancelled && i <= at ? "bg-kiln" : "bg-line")} />
             )}
             <span
               className={cn(
                 "relative z-10 grid size-8 place-items-center rounded-pill border-2",
-                done ? "border-ink bg-ink text-surface" : "border-line bg-surface text-graphite",
+                done ? "border-kiln bg-kiln text-surface" : "border-line bg-surface text-graphite",
               )}
             >
               {done ? <Check className="size-4" aria-hidden="true" /> : <span className="t-caption">{i + 1}</span>}

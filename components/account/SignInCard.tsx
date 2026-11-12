@@ -15,7 +15,7 @@ export function SignInCard({ next = "/account" }: { next?: string }) {
       <ul className="mt-5 space-y-3">
         {perks.map(({ Icon, text }) => (
           <li key={text} className="flex items-center gap-3 t-body text-ink">
-            <span aria-hidden="true" className="grid size-9 shrink-0 place-items-center rounded-pill bg-surface">
+            <span aria-hidden="true" className="grid size-9 shrink-0 place-items-center rounded-pill bg-kiln/10 text-kiln-deep">
               <Icon className="size-[18px]" />
             </span>
             {text}

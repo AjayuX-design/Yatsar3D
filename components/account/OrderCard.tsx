@@ -15,11 +15,11 @@ export function OrderCard({ order }: { order: OrderView }) {
   return (
     <Link
       href={`/account/orders/${order.number}`}
-      className="group block rounded-card border border-line p-4 transition-colors duration-150 hover:border-graphite/50 lg:p-5"
+      className="group block rounded-card border border-line bg-surface p-4 shadow-[0_1px_2px_rgba(23,23,23,0.05)] transition-[transform,box-shadow] duration-200 ease-out [@media(hover:hover)]:hover:-translate-y-0.5 [@media(hover:hover)]:hover:shadow-[0_12px_28px_-14px_rgba(23,23,23,0.28)] lg:p-5"
     >
       <div className="flex flex-wrap items-center justify-between gap-2">
         <div>
-          <p className="t-h3 text-ink">{order.name}</p>
+          <p className="font-heading text-[20px] font-semibold leading-6 text-ink">{order.name}</p>
           <p className="t-small text-graphite">Placed {shortDate(order.processedAt)}</p>
         </div>
         <OrderStageChip stage={stage} />
@@ -36,7 +36,7 @@ export function OrderCard({ order }: { order: OrderView }) {
         <span className="text-graphite [font-variant-numeric:tabular-nums]">
           {items} {items === 1 ? "item" : "items"} · <span className="font-medium text-ink">{formatMoney(order.total)}</span>
         </span>
-        <span className="inline-flex items-center gap-1 t-label text-ink group-hover:underline group-hover:underline-offset-[3px]">
+        <span className="inline-flex items-center gap-1 t-label text-kiln-deep group-hover:underline group-hover:underline-offset-[3px]">
           View order <ArrowRight className="size-4" aria-hidden="true" />
         </span>
       </div>

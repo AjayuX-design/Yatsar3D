@@ -72,10 +72,15 @@ async function Content({ searchParams }: { searchParams: PageProps<"/account">["
   const { customer } = a;
   return (
     <>
-      <header className="mt-2 flex flex-wrap items-end justify-between gap-4">
-        <div>
-          <h1 className="t-h1 text-ink">{customer.firstName ? `Hi, ${customer.firstName}` : "My account"}</h1>
-          {customer.email && <p className="mt-1 t-small text-graphite">{customer.email}</p>}
+      <header className="mt-2 flex flex-wrap items-center justify-between gap-4 rounded-card bg-mist p-4 lg:p-6">
+        <div className="flex min-w-0 items-center gap-4">
+          <span aria-hidden="true" className="grid size-14 shrink-0 place-items-center rounded-pill bg-kiln font-heading text-[24px] font-semibold uppercase leading-none text-surface">
+            {(customer.firstName ?? customer.email ?? "A").charAt(0)}
+          </span>
+          <div className="min-w-0">
+            <h1 className="t-h1 text-ink">{customer.firstName ? `Hi, ${customer.firstName}` : "My account"}</h1>
+            {customer.email && <p className="mt-1 truncate t-small text-graphite">{customer.email}</p>}
+          </div>
         </div>
         <SignOutButton />
       </header>

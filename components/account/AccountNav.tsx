@@ -17,7 +17,7 @@ export function AccountNav({ current }: { current: string }) {
           aria-current={t.href === current ? "page" : undefined}
           className={cn(
             "inline-flex min-h-11 items-center rounded-pill border px-4 t-label",
-            t.href === current ? "border-ink bg-ink text-surface" : "border-line text-ink hover:border-graphite/50",
+            t.href === current ? "border-kiln bg-kiln text-surface" : "border-line text-ink hover:border-graphite/50",
           )}
         >
           {t.label}
