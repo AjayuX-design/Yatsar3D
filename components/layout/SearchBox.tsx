@@ -104,39 +104,39 @@ export function SearchBox({
         placeholder={placeholder}
         className={inputClass}
       />
-      <ul
-        id={listId}
-        role="listbox"
-        aria-label="Matching products"
+      <p role="status" className="sr-only">
+        {show ? `${items.length} ${items.length === 1 ? "suggestion" : "suggestions"} available. Use the up and down arrows.` : ""}
+      </p>
+      <div
         hidden={!show}
         className="absolute left-0 top-full z-40 mt-2 w-[min(340px,calc(100vw-32px))] overflow-hidden rounded-card border border-line bg-surface shadow-[0_12px_32px_-12px_rgba(23,23,23,0.3)]"
       >
-        {items.map((s, i) => (
-          <li key={s.handle} id={`${listId}-${i}`} role="option" aria-selected={i === active}>
-            <a
-              href={`/products/${s.handle}`}
-              tabIndex={-1}
-              onClick={(e) => {
-                e.preventDefault();
-                setOpen(false);
-                router.push(`/products/${s.handle}`);
-              }}
-              className={`flex min-h-14 items-center gap-3 px-3 py-2 ${i === active ? "bg-mist" : "hover:bg-mist"}`}
-            >
-              <span className="relative size-10 shrink-0 overflow-hidden rounded-ctl bg-mist">
-                {s.image && <Image src={s.image} alt="" fill sizes="40px" className="object-cover mix-blend-multiply" />}
-              </span>
-              <span className="min-w-0 flex-1 truncate t-small font-semibold text-ink">{s.title}</span>
-              <span className="shrink-0 whitespace-nowrap t-small text-graphite [font-variant-numeric:tabular-nums]">{s.price}</span>
-            </a>
-          </li>
-        ))}
-        <li role="presentation" className="border-t border-line">
-          <button type="submit" className="flex min-h-11 w-full items-center px-3 t-small font-medium text-kiln-deep hover:bg-mist">
-            See all results
-          </button>
-        </li>
-      </ul>
+        <ul id={listId} role="listbox" aria-label="Matching products">
+          {items.map((s, i) => (
+            <li key={s.handle} id={`${listId}-${i}`} role="option" aria-selected={i === active}>
+              <a
+                href={`/products/${s.handle}`}
+                tabIndex={-1}
+                onClick={(e) => {
+                  e.preventDefault();
+                  setOpen(false);
+                  router.push(`/products/${s.handle}`);
+                }}
+                className={`flex min-h-14 items-center gap-3 px-3 py-2 ${i === active ? "bg-mist" : "hover:bg-mist"}`}
+              >
+                <span className="relative size-10 shrink-0 overflow-hidden rounded-ctl bg-mist">
+                  {s.image && <Image src={s.image} alt="" fill sizes="40px" className="object-cover mix-blend-multiply" />}
+                </span>
+                <span className="min-w-0 flex-1 truncate t-small font-semibold text-ink">{s.title}</span>
+                <span className="shrink-0 whitespace-nowrap t-small text-graphite [font-variant-numeric:tabular-nums]">{s.price}</span>
+              </a>
+            </li>
+          ))}
+        </ul>
+        <button type="submit" className="flex min-h-11 w-full items-center border-t border-line px-3 t-small font-medium text-kiln-deep hover:bg-mist">
+          See all results
+        </button>
+      </div>
     </div>
   );
 }

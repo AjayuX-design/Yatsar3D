@@ -31,7 +31,7 @@ type Store = {
   productUrl: string;
 };
 
-type CartState = "idle" | "adding" | "added";
+type CartState = "idle" | "adding" | "added" | "failed";
 
 /**
  * Everything on the product page that depends on the chosen variant.
@@ -43,7 +43,7 @@ export function ProductDetail({ product, store, rating }: { product: Product; st
   const [qty, setQty] = useState(1);
   const [cart, setCart] = useState<CartState>("idle");
   const [stickyVisible, setStickyVisible] = useState(false);
-  const { add: addLine, openCart, open: cartOpen } = useCart();
+  const { add: addLine, openCart, open: cartOpen, error: cartError } = useCart();
   const buyButton = useRef<HTMLDivElement>(null);
 
   const variant = findVariant(product, selection);
@@ -78,9 +78,10 @@ export function ProductDetail({ product, store, rating }: { product: Product; st
   // Adds the line, then opens the cart. The cart is a sample client cart for now;
   // it will call cartLinesAdd on Shopify.
   const addToCart = async () => {
-    if (!variant || cart !== "idle") return;
+    if (!variant || cart === "adding" || cart === "added") return;
     setCart("adding");
-    await addLine(product, variant, qtyShown);
+    const ok = await addLine(product, variant, qtyShown);
+    if (!ok) return setCart("failed"); // stays until the shopper tries again
     setCart("added");
     openCart();
     setTimeout(() => setCart("idle"), 1500);
@@ -234,6 +235,11 @@ export function ProductDetail({ product, store, rating }: { product: Product; st
               )}
               <div className="flex-1">{addButton(true)}</div>
             </div>
+            {cart === "failed" && (
+              <p role="alert" className="t-small text-error">
+                {cartError ?? "We could not add this to your cart. Please try again."}
+              </p>
+            )}
             {variant && !canBuy && (
               <p className="t-small text-graphite">
                 This option is not available right now.
@@ -274,7 +280,7 @@ export function ProductDetail({ product, store, rating }: { product: Product; st
         // Hidden while the cart is open, and when there is nothing to buy.
         visible={stickyVisible && canBuy && !cartOpen}
         price={variant && <Price price={variant.price} compareAt={variant.compareAt} />}
-        summary={variantLabel}
+        summary={cart === "failed" ? "Could not add. Please try again." : variantLabel}
       >
         {addButton(false, "h-11 px-5")}
       </StickyBuyBar>

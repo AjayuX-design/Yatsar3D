@@ -427,7 +427,7 @@ function CustomOrderFormInner({ whatsappNumber, onReset }: { whatsappNumber?: st
       <div hidden={step !== 1} className="mt-6">
         <fieldset>
           <legend className="sr-only">What do you need? (required)</legend>
-          <div className="grid auto-rows-fr gap-3 sm:grid-cols-2" role="radiogroup">
+          <div className="grid auto-rows-fr gap-3 sm:grid-cols-2">
             {REQUEST_TYPES.map((t) => {
               const Icon = typeIcons[t.key];
               const selected = type === t.key;

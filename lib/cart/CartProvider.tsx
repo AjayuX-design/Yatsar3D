@@ -45,7 +45,7 @@ type CartContextValue = {
   removed: CartLine | null;
   openCart: () => void;
   closeCart: () => void;
-  add: (product: Product, variant: ProductVariant, quantity: number) => Promise<void>;
+  add: (product: Product, variant: ProductVariant, quantity: number) => Promise<boolean>;
   setQuantity: (lineId: string, quantity: number) => void;
   remove: (lineId: string) => void;
   undoRemove: () => void;
@@ -147,9 +147,7 @@ function ShopifyCartProvider({ children }: { children: ReactNode }) {
       checkoutUrl: cart?.checkoutUrl,
       openCart: () => setOpen(true),
       closeCart: () => setOpen(false),
-      add: async (_product, variant, quantity) => {
-        await run(() => addToCart(variant.id, quantity));
-      },
+      add: async (_product, variant, quantity) => (await run(() => addToCart(variant.id, quantity))).ok,
       setQuantity: (id, quantity) => void run(() => (quantity > 0 ? setLineQuantityAction(id, quantity) : removeLine(id))),
       remove: (id) => {
         const line = lines.find((l) => l.id === id);
@@ -231,6 +229,7 @@ function SampleCartProvider({ children }: { children: ReactNode }) {
       closeCart: () => setOpen(false),
       add: async (product, variant, quantity) => {
         await run(() => setLines((l) => addLine(l, lineFromProduct(product, variant, quantity))));
+        return true;
       },
       setQuantity: (id, quantity) => void run(() => setLines((l) => setLineQuantity(l, id, quantity))),
       remove: (id) => {
