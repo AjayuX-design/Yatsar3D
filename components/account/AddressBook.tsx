@@ -136,7 +136,7 @@ export function AddressBook({ addresses }: { addresses: SavedAddress[] }) {
           ) : (
             <li key={a.id} className="flex flex-col rounded-card border border-line p-4 lg:p-5">
               <div className="flex items-center justify-between gap-2">
-                <span aria-hidden="true" className="grid size-9 place-items-center rounded-pill bg-mist text-ink">
+                <span aria-hidden="true" className="grid size-9 place-items-center rounded-pill bg-kiln/10 text-kiln-deep">
                   <MapPin className="size-[18px]" />
                 </span>
                 {a.isDefault && <span className="rounded-pill bg-moss-tint px-3 py-1 t-caption text-moss">Default</span>}

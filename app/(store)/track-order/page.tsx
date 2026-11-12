@@ -21,7 +21,7 @@ export const metadata: Metadata = {
 */
 
 const card = "rounded-card bg-mist p-5 lg:p-6";
-const badge = "grid size-11 place-items-center rounded-pill bg-surface text-ink";
+const badge = "grid size-11 place-items-center rounded-pill bg-kiln/10 text-kiln-deep";
 
 export default function TrackOrderPage() {
   return (
