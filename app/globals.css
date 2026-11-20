@@ -280,6 +280,19 @@ dialog.sheet-menu[open] { animation-name: sheet-left; }
   dialog.sheet-cart[open] { animation-name: sheet-right; }
 }
 dialog.sheet[open]::backdrop { animation: 250ms ease-out both backdrop-in; }
+/*
+  Opening the cart softly blurs the page behind it, so the eye stays on the cart.
+  Tablet and desktop only: on a phone the cart covers most of the screen, and blurring
+  a screen of photos costs battery on older phones. The blur does part of the dimming,
+  so the dim is lighter there (30% instead of 40%).
+*/
+@media (min-width: 48rem) {
+  dialog.sheet-cart::backdrop {
+    background-color: color-mix(in srgb, var(--color-ink) 30%, transparent);
+    -webkit-backdrop-filter: blur(6px);
+    backdrop-filter: blur(6px);
+  }
+}
 
 /*
   Reduced motion: no sliding or spinning-for-show. Sheets fade in instead of
