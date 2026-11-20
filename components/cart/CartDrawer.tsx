@@ -74,7 +74,7 @@ function Suggestions({ products, inCart, onNavigate }: { products: Product[]; in
           const quick = quickVariant(p);
           const many = p.variants.filter((v) => v.availableForSale).length > 1;
           return (
-            <li key={p.handle} className="flex items-center gap-3 rounded-card border border-line p-2">
+            <li key={p.handle} className="flex items-center gap-3 card p-2">
               <span className="relative block size-14 shrink-0 overflow-hidden rounded-ctl bg-mist">
                 <ImagePlaceholder src={p.images[0]?.src} alt="" label="" sizes="56px" onWhite={p.images[0]?.onWhite} whole />
               </span>

@@ -47,7 +47,7 @@ export function WriteReview({ handle, title }: { handle: string; title: string }
 
   const shown = hover || rating;
   return (
-    <form action={action} className="space-y-5 rounded-card border border-line p-4 lg:p-5" noValidate>
+    <form action={action} className="space-y-5 card p-4 lg:p-5" noValidate>
       <p className="t-h3 text-ink">Review {title}</p>
       <input type="hidden" name="handle" value={handle} />
       {/* Hidden trap field for bots. */}

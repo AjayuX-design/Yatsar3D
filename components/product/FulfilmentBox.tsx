@@ -55,7 +55,7 @@ export function FulfilmentBox({
   return (
     <section aria-label="Production and delivery">
       <div
-        className={`grid divide-x divide-line overflow-hidden rounded-card border border-line bg-surface ${cells.length > 1 ? "grid-cols-2" : "grid-cols-1"}`}
+        className={`grid divide-x divide-line overflow-hidden panel ${cells.length > 1 ? "grid-cols-2" : "grid-cols-1"}`}
       >
         {cells}
       </div>

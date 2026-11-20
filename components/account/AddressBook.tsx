@@ -40,7 +40,7 @@ function AddressForm({ address, first, onDone }: { address?: SavedAddress; first
   }, [state, router, onDone]);
 
   return (
-    <form action={action} className="space-y-4 rounded-card border border-line p-4 lg:p-5" noValidate>
+    <form action={action} className="space-y-4 card p-4 lg:p-5" noValidate>
       <p className="t-h3 text-ink">{address ? "Edit address" : "New address"}</p>
       {address && <input type="hidden" name="id" value={address.id} />}
       <div className="grid gap-4 sm:grid-cols-2">
@@ -134,7 +134,7 @@ export function AddressBook({ addresses }: { addresses: SavedAddress[] }) {
               <AddressForm address={a} first={false} onDone={close} />
             </li>
           ) : (
-            <li key={a.id} className="flex flex-col rounded-card border border-line p-4 lg:p-5">
+            <li key={a.id} className="flex flex-col card p-4 lg:p-5">
               <div className="flex items-center justify-between gap-2">
                 <span aria-hidden="true" className="grid size-9 place-items-center rounded-pill bg-kiln/10 text-kiln-deep">
                   <MapPin className="size-[18px]" />

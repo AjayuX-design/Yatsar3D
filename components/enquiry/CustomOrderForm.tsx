@@ -71,28 +71,28 @@ const typeCopy: Record<RequestType, { short: string; example: string; detailsLab
     example: "a cutlery tray, a makeup drawer, a desk drawer",
     detailsLabel: "What will it hold?",
     placeholder: "For example: cutlery, three sections, matte black",
-    tint: "bg-slate-tint text-slate",
+    tint: "bg-kiln/10 text-kiln-deep",
   },
   personalised: {
     short: "Names, dates, logos or messages",
     example: "a birthday magnet, a name plate, a wedding favour",
     detailsLabel: "What should we print, and on what?",
     placeholder: "For example: the name Asha on a fridge magnet, plum colour",
-    tint: "bg-amber-tint text-amber-text",
+    tint: "bg-kiln/10 text-kiln-deep",
   },
   other: {
     short: "Any other idea you have",
     example: "a gift, a spare part, a model from a photo",
     detailsLabel: "What would you like us to make?",
     placeholder: "Describe your idea. Add the size and colour if you know them. A photo or sketch helps.",
-    tint: "bg-mist text-ink",
+    tint: "bg-kiln/10 text-kiln-deep",
   },
   business: {
     short: "Branded items and bulk orders",
     example: "desk items with your logo, staff gifts, shop displays",
     detailsLabel: "What do you need?",
     placeholder: "For example: 50 desk organisers with our logo",
-    tint: "bg-moss-tint text-moss",
+    tint: "bg-kiln/10 text-kiln-deep",
   },
 };
 
@@ -436,7 +436,7 @@ function CustomOrderFormInner({ whatsappNumber, onReset }: { whatsappNumber?: st
                   key={t.key}
                   className={cn(
                     "relative flex cursor-pointer items-center gap-4 rounded-card border-2 p-4 transition-colors duration-150 has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-kiln sm:flex-col sm:items-start sm:gap-5 sm:p-5",
-                    selected ? "border-kiln bg-mist" : "border-line hover:border-graphite/40",
+                    selected ? "border-kiln bg-mist" : "border-line hover:border-graphite/50",
                   )}
                 >
                   <input type="radio" name="type" value={t.key} checked={selected} onChange={() => setType(t.key)} className="sr-only" />

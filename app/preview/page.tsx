@@ -370,8 +370,8 @@ export default function PreviewPage() {
             <Demo label="Neutral">
               <InfoCard title="What is included">Printed item only. Display stand not included.</InfoCard>
             </Demo>
-            <Demo label="Delivery area (slate)">
-              <InfoCard variant="slate" title="Delivery area">
+            <Demo label="Delivery area (accent)">
+              <InfoCard variant="accent" title="Delivery area">
                 {sampleStore.deliveryAreaText}
               </InfoCard>
             </Demo>

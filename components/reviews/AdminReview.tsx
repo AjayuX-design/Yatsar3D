@@ -13,7 +13,7 @@ const when = (iso: string) => new Date(iso).toLocaleString("en-IN", { day: "nume
 export function AdminReview({ r }: { r: Review }) {
   const hidden = r.status === "hidden";
   return (
-    <li className={`rounded-card border p-4 lg:p-5 ${hidden ? "border-line bg-mist" : "border-line"}`}>
+    <li className={`p-4 lg:p-5 ${hidden ? "panel" : "card"}`}>
       <div className="flex flex-wrap items-center justify-between gap-2">
         <Stars value={r.rating} />
         <span className={`rounded-pill px-3 py-1 t-caption ${hidden ? "bg-amber-tint text-amber-text" : "bg-moss-tint text-moss"}`}>{hidden ? "Hidden" : "Live"}</span>

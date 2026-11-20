@@ -102,7 +102,7 @@ export function ProductGallery({
               const el = e.currentTarget;
               setIndex(Math.round(el.scrollLeft / el.clientWidth));
             }}
-            className="flex snap-x snap-mandatory overflow-x-auto rounded-card shadow-[0_10px_30px_-14px_rgba(23,23,23,0.3)] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+            className="flex snap-x snap-mandatory overflow-x-auto rounded-card shadow-float [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
           >
             {images.map((img, i) => (
               <div
@@ -207,7 +207,7 @@ function ZoomViewer({
     return () => window.removeEventListener("keydown", onKey);
   }, [open, i, images.length, onChange]);
 
-  const nav = "absolute top-1/2 z-10 grid size-12 -translate-y-1/2 place-items-center rounded-pill bg-surface text-ink shadow-sm disabled:hidden";
+  const nav = "absolute top-1/2 z-10 grid size-12 -translate-y-1/2 place-items-center rounded-pill bg-surface text-ink shadow-rest disabled:hidden";
 
   return (
     <Sheet open={open} onClose={onClose} label="Zoom product image" variant="full">

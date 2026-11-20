@@ -90,7 +90,7 @@ async function Content({ params, searchParams }: { params: PageProps<"/account/o
 
       <div className="mt-8 grid gap-8 lg:grid-cols-12 lg:gap-12">
         <div className="space-y-8 lg:col-span-7">
-          <section aria-labelledby="progress" className="rounded-card border border-line p-5 lg:p-6">
+          <section aria-labelledby="progress" className="card p-5 lg:p-6">
             <h2 id="progress" className="sr-only">
               Order progress
             </h2>
@@ -149,7 +149,7 @@ async function Content({ params, searchParams }: { params: PageProps<"/account/o
         </div>
 
         <aside className="space-y-6 lg:col-span-5">
-          <section aria-labelledby="summary" className="rounded-card border border-line p-5 lg:p-6">
+          <section aria-labelledby="summary" className="card p-5 lg:p-6">
             <h2 id="summary" className="t-h3 text-ink">
               Summary
             </h2>
@@ -180,7 +180,7 @@ async function Content({ params, searchParams }: { params: PageProps<"/account/o
           </section>
 
           {order.address.length > 0 && (
-            <section aria-labelledby="address" className="rounded-card border border-line p-5 lg:p-6">
+            <section aria-labelledby="address" className="card p-5 lg:p-6">
               <h2 id="address" className="t-h3 text-ink">
                 Delivery address
               </h2>

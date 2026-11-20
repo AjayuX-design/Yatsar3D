@@ -69,7 +69,7 @@ export default function TrackOrderPage() {
       </ul>
 
       {accountEnabled() && (
-        <div className="mt-8 max-w-[720px] rounded-card border border-line p-5 lg:p-6">
+        <div className="mt-8 max-w-[720px] card p-5 lg:p-6">
           <h2 className="t-h3 text-ink">Have an account?</h2>
           <p className="mt-2 t-body text-graphite">Sign in to see every order, its status and its tracking in one place.</p>
           <Button href="/account" className="mt-4">
@@ -79,7 +79,7 @@ export default function TrackOrderPage() {
       )}
 
       <div className="mt-8 max-w-[720px]">
-        <InfoCard variant="slate" title="Where is my order number?">
+        <InfoCard variant="accent" title="Where is my order number?">
           It is in your confirmation email, and starts with a # sign. Made to order items are printed before they are
           sent, so allow for the production time shown on the product page.
         </InfoCard>

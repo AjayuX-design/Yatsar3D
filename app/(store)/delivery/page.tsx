@@ -37,7 +37,7 @@ export default function DeliveryPage() {
       </header>
 
       <div className="mt-8 max-w-[720px]">
-        <InfoCard variant="slate" title="Where we deliver">
+        <InfoCard variant="accent" title="Where we deliver">
           {sampleStore.deliveryAreaText}
         </InfoCard>
       </div>
@@ -77,13 +77,13 @@ export default function DeliveryPage() {
           Ready to ship and made to order
         </h2>
         <ul className="mt-6 grid gap-3 md:grid-cols-2 lg:gap-6">
-          <li className="rounded-card border border-line p-5 lg:p-6">
+          <li className="card p-5 lg:p-6">
             <StatusChip status="ready" />
             <p className="mt-3 t-body text-graphite">
               We have these in stock. They are packed and dispatched in the time shown on the product page.
             </p>
           </li>
-          <li className="rounded-card border border-line p-5 lg:p-6">
+          <li className="card p-5 lg:p-6">
             <StatusChip status="made-to-order" />
             <p className="mt-3 t-body text-graphite">
               We print these after you order, so they take a little longer. You see the production time before you pay.

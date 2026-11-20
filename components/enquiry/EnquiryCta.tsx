@@ -78,7 +78,7 @@ export function EnquiryCta({
   return (
     <section
       className={cn(
-        "rounded-card border border-line bg-surface p-6 md:p-8",
+        "card p-6 md:p-8",
         className,
       )}
     >

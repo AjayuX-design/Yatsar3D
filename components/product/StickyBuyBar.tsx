@@ -25,7 +25,7 @@ export function StickyBuyBar({
         "fixed inset-x-3 z-30 lg:hidden",
         "bottom-[calc(12px+env(safe-area-inset-bottom))]",
         "rounded-sheet border border-line/70 bg-surface/90 py-2 pl-4 pr-2 backdrop-blur-md",
-        "shadow-[0_8px_30px_rgb(23_23_23/0.10)]",
+        "shadow-float",
         "transition-[transform,opacity] duration-[250ms] ease-out",
         visible ? "translate-y-0 opacity-100" : "translate-y-[calc(100%+24px)] opacity-0",
       )}

@@ -57,7 +57,7 @@ export default async function CustomPrintPage() {
       <div className="mt-8 grid gap-6 lg:grid-cols-12 lg:items-stretch lg:gap-12">
         <div className="lg:col-span-7">
           {formReady ? (
-            <div className="flex h-full flex-col rounded-card border border-line bg-surface p-5 shadow-[0_1px_2px_rgba(23,23,23,0.04)] md:p-8">
+            <div className="flex h-full flex-col card p-5 md:p-8">
               <CustomOrderForm whatsappNumber={sampleStore.whatsappNumber} />
             </div>
           ) : (
@@ -80,7 +80,7 @@ export default async function CustomPrintPage() {
         </div>
 
         <aside className="space-y-6 lg:sticky lg:top-24 lg:col-span-5 lg:self-start" aria-label="Reassurance and help">
-          <div className="rounded-card border border-line p-4">
+          <div className="card p-4">
             <p className="t-label text-ink">Prefer to chat?</p>
             <p className="mt-1 t-small text-graphite">Message us on WhatsApp instead. {sampleStore.responseHours}</p>
             <WhatsAppButton number={sampleStore.whatsappNumber} message={generalEnquiryMessage} label="Chat on WhatsApp" className="mt-4" />

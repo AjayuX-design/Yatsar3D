@@ -109,7 +109,7 @@ export function SearchBox({
       </p>
       <div
         hidden={!show}
-        className="absolute left-0 top-full z-40 mt-2 w-[min(340px,calc(100vw-32px))] overflow-hidden rounded-card border border-line bg-surface shadow-[0_12px_32px_-12px_rgba(23,23,23,0.3)]"
+        className="absolute left-0 top-full z-40 mt-2 w-[min(340px,calc(100vw-32px))] overflow-hidden rounded-card border border-line bg-surface shadow-float"
       >
         <ul id={listId} role="listbox" aria-label="Matching products">
           {items.map((s, i) => (

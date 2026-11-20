@@ -2,17 +2,17 @@ import type { ReactNode } from "react";
 import { cn } from "@/lib/cn";
 import { AlertTriangle, Info, MapPin } from "@/components/ui/Icons";
 
-export type InfoCardVariant = "neutral" | "slate" | "amber";
+export type InfoCardVariant = "neutral" | "accent" | "amber";
 
 const styles: Record<InfoCardVariant, { box: string; icon: string; Default: typeof Info }> = {
   neutral: { box: "bg-mist", icon: "text-graphite", Default: Info },
-  slate: { box: "bg-slate-tint", icon: "text-slate", Default: MapPin },
+  accent: { box: "bg-mist", icon: "text-kiln-deep", Default: MapPin },
   amber: { box: "bg-amber-tint", icon: "text-amber-text", Default: AlertTriangle },
 };
 
 /**
- * Light grey panel with an icon. neutral for general facts, slate for the delivery
- * area, amber for warnings such as the mixed-cart note.
+ * Light grey panel with an icon. neutral for general facts, accent (orange icon) for the delivery
+ * area and where-to-find notes, amber for warnings such as the mixed-cart note.
  * Use at most one tinted card per section.
  */
 export function InfoCard({

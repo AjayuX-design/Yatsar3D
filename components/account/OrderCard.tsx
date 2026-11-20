@@ -15,7 +15,7 @@ export function OrderCard({ order }: { order: OrderView }) {
   return (
     <Link
       href={`/account/orders/${order.number}`}
-      className="group block rounded-card border border-line bg-surface p-4 shadow-[0_1px_2px_rgba(23,23,23,0.05)] transition-[transform,box-shadow] duration-200 ease-out [@media(hover:hover)]:hover:-translate-y-0.5 [@media(hover:hover)]:hover:shadow-[0_12px_28px_-14px_rgba(23,23,23,0.28)] lg:p-5"
+      className="group block card p-4 transition-[transform,box-shadow] duration-200 ease-out [@media(hover:hover)]:hover:-translate-y-0.5 [@media(hover:hover)]:hover:shadow-lift lg:p-5"
     >
       <div className="flex flex-wrap items-center justify-between gap-2">
         <div>

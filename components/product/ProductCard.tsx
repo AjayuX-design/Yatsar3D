@@ -57,9 +57,9 @@ export function ProductCard({
   return (
     <div
       className={cn(
-        "group flex h-full flex-col rounded-card transition-[transform,box-shadow] duration-200 ease-out",
-        // Every card sits in a soft box that lifts on hover.
-        "border border-line bg-surface p-2 shadow-[0_1px_2px_rgba(23,23,23,0.05)] [@media(hover:hover)]:hover:-translate-y-1 [@media(hover:hover)]:hover:shadow-[0_12px_28px_-12px_rgba(23,23,23,0.28)]",
+        "group flex h-full flex-col card p-2 transition-[transform,box-shadow] duration-200 ease-out",
+        // The card lifts 2px on hover, like every other linked card.
+        "[@media(hover:hover)]:hover:-translate-y-0.5 [@media(hover:hover)]:hover:shadow-lift",
       )}
     >
     <Link href={`/products/${product.handle}`} className="flex flex-1 flex-col rounded-ctl outline-offset-4 active:scale-[0.99]">

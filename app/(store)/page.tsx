@@ -91,8 +91,8 @@ async function Categories() {
           const span = n % 2 === 1 && i === n - 1 ? "col-span-2 md:col-span-1" : "";
           return (
             <li key={c.handle} className={span}>
-              <Link href={categoryHref(c.handle)} className="group relative block h-[160px] overflow-hidden rounded-card bg-mist outline-offset-4 md:h-[200px] lg:h-[200px]">
-                <span className="absolute inset-0 transition-transform duration-500 ease-out [@media(hover:hover)]:group-hover:scale-[1.05]">
+              <Link href={categoryHref(c.handle)} className="group relative block h-[160px] overflow-hidden rounded-card bg-mist outline-offset-4 transition-[transform,box-shadow] duration-200 ease-out md:h-[200px] lg:h-[200px] [@media(hover:hover)]:hover:-translate-y-0.5 [@media(hover:hover)]:hover:shadow-lift">
+                <span className="absolute inset-0 transition-transform duration-300 ease-out [@media(hover:hover)]:group-hover:scale-[1.03]">
                   <ImagePlaceholder src={c.image?.src} alt="" label="" sizes="(min-width: 1024px) 560px, 100vw" onWhite={c.image?.onWhite} />
                 </span>
                 {!c.image?.src && (

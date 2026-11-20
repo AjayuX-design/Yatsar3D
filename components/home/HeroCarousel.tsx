@@ -73,7 +73,7 @@ export function HeroCarousel({ slides }: { slides: HeroSlide[] }) {
   }, []);
 
   const control =
-    "grid size-11 place-items-center rounded-pill bg-surface text-ink shadow-sm hover:bg-mist disabled:opacity-0";
+    "grid size-11 place-items-center rounded-pill bg-surface text-ink shadow-rest hover:bg-mist disabled:opacity-0";
 
   return (
     <section
