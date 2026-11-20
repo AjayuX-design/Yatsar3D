@@ -4,7 +4,6 @@ import type { Status } from "@/components/ui/Chip";
 import { ImageBadges } from "@/components/ui/ImageBadges";
 import { ImagePlaceholder } from "@/components/ui/ImagePlaceholder";
 import { percentOff } from "@/lib/format/discount";
-import { longestSideCm } from "@/lib/format/dimensions";
 import { cn } from "@/lib/cn";
 import { Stars } from "@/components/reviews/Stars";
 import { QuickAdd } from "@/components/product/QuickAdd";
@@ -20,7 +19,7 @@ function cardStatus(p: Product): Status {
 /**
  * Photo first, text beneath on the page background. No card box, so the
  * product leads. One white status pill on the photo, top-left. Title (2 lines
- * max), one spec line, price pinned to the bottom so prices align across a row.
+ * max), price pinned to the bottom so prices align across a row.
  * The whole card is one link.
  * compact (home page): only the name and price. No size line, no rating, no "Ready to ship".
  * A genuine discount shows as one neat badge on the photo; "Sold out" still shows, because it matters.
@@ -47,8 +46,6 @@ export function ProductCard({
   const hasRange = Number(sorted[sorted.length - 1].price.amount) > Number(lowest.price.amount);
 
   const off = hasRange ? null : percentOff(lowest.price, lowest.compareAt);
-  const size = longestSideCm(product.dimensions);
-  const spec = size ? `${size} cm` : "";
 
   // One option: add in a tap. Several options or sold out: the card opens the product.
   const quick = quickVariant(product);
@@ -86,7 +83,6 @@ export function ProductCard({
         <h3 className="line-clamp-2 text-[16px] font-semibold leading-5 text-ink">
           {product.title}
         </h3>
-        {!compact && spec && <p className="mt-1 t-small text-graphite">{spec}</p>}
         {!compact && rating && rating.count > 0 && (
           <p className="mt-1 flex items-center gap-1.5 t-small text-graphite [font-variant-numeric:tabular-nums]">
             <Stars value={rating.average} size={14} />

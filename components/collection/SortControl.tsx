@@ -3,7 +3,7 @@
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 import { Sheet } from "@/components/ui/Sheet";
-import { ArrowUpDown, Check, X } from "@/components/ui/Icons";
+import { ArrowUpDown, Check, ChevronDown, X } from "@/components/ui/Icons";
 import { sortOptions, type SortKey } from "@/lib/product/sort";
 
 /**
@@ -41,12 +41,15 @@ export function SortControl({ current }: { current: SortKey }) {
         <span className="sr-only">{currentLabel}</span>
       </button>
 
-      <label className="hidden items-center gap-3 lg:flex">
-        <span className="t-label text-graphite">Sort</span>
+      {/* Looks like the Filter button: icon, the word Sort, then the choice. Still a native select underneath. */}
+      <label className="relative hidden h-11 cursor-pointer items-center gap-2 rounded-ctl border border-line pl-4 pr-3 t-label text-ink transition-colors duration-150 hover:border-graphite/50 has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-kiln lg:flex">
+        <ArrowUpDown className="size-[18px]" aria-hidden="true" />
+        Sort
         <select
           value={current}
           onChange={(e) => choose(e.target.value as SortKey)}
-          className="h-11 rounded-ctl border border-field bg-surface px-3 text-[16px] text-ink"
+          aria-label="Sort products"
+          className="cursor-pointer appearance-none bg-transparent pr-6 font-semibold text-ink outline-none"
         >
           {sortOptions.map((o) => (
             <option key={o.key} value={o.key}>
@@ -54,6 +57,7 @@ export function SortControl({ current }: { current: SortKey }) {
             </option>
           ))}
         </select>
+        <ChevronDown className="pointer-events-none absolute right-3 size-4 text-graphite" aria-hidden="true" />
       </label>
 
       <Sheet open={open} onClose={() => setOpen(false)} label="Sort products">

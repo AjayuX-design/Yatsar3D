@@ -14,6 +14,7 @@ export {
   Briefcase,
   Camera,
   Check,
+  ChevronDown,
   Clock,
   Gift,
   Hash,
