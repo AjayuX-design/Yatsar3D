@@ -39,6 +39,7 @@ export type ShopifyVariant = {
   selectedOptions: { name: string; value: string }[];
   price: Money;
   compareAtPrice: Money | null;
+  image?: { url: string } | null;
   weight: number | null;
   weightUnit: "GRAMS" | "KILOGRAMS" | "OUNCES" | "POUNDS";
 };
@@ -121,6 +122,7 @@ export function mapProduct(p: ShopifyProduct): Product {
     price: v.price,
     compareAt: v.compareAtPrice,
     availableForSale: v.availableForSale,
+    imageSrc: v.image?.url,
     quantityAvailable: v.quantityAvailable ?? undefined,
     weightG: toGrams(v.weight, v.weightUnit),
   }));

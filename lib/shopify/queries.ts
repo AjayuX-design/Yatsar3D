@@ -23,6 +23,7 @@ const PRODUCT_FIELDS = `
         selectedOptions { name value }
         price { amount currencyCode }
         compareAtPrice { amount currencyCode }
+        image { url }
         weight
         weightUnit
       }

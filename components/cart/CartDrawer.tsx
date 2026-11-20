@@ -8,6 +8,9 @@ import { CartLine } from "@/components/cart/CartLine";
 import { DiscountField } from "@/components/cart/DiscountField";
 import { EnquiryCta } from "@/components/enquiry/EnquiryCta";
 import { ProductCard } from "@/components/product/ProductCard";
+import { QuickAdd } from "@/components/product/QuickAdd";
+import { quickVariant } from "@/lib/product/quick";
+import { ImagePlaceholder } from "@/components/ui/ImagePlaceholder";
 import { hasMixedFulfilment } from "@/lib/cart/cart";
 import { useCart } from "@/lib/cart/CartProvider";
 import { formatMoney } from "@/lib/format/money";
@@ -47,6 +50,53 @@ function FreeDeliveryBar({ total }: { total: number }) {
           style={{ width: `${Math.min(100, (total / min) * 100)}%` }}
         />
       </div>
+    </div>
+  );
+}
+
+/**
+ * Up to two products that can be added in a tap, shown while the cart is short of free delivery.
+ * Cheapest first, skipping what is already in the cart.
+ */
+function Suggestions({ products, inCart, onNavigate }: { products: Product[]; inCart: string[]; onNavigate: () => void }) {
+  const lowest = (p: Product) => Math.min(...p.variants.filter((v) => v.availableForSale).map((v) => Number(v.price.amount)));
+  const picks = products
+    .filter((p) => !inCart.includes(p.handle) && p.variants.some((v) => v.availableForSale))
+    .sort((a, b) => lowest(a) - lowest(b))
+    .slice(0, 2);
+  if (!picks.length) return null;
+  return (
+    <div className="mt-4">
+      <p className="t-label text-ink">Add to reach free delivery</p>
+      <ul className="mt-2 space-y-2">
+        {picks.map((p) => {
+          const quick = quickVariant(p);
+          const many = p.variants.filter((v) => v.availableForSale).length > 1;
+          return (
+            <li key={p.handle} className="flex items-center gap-3 rounded-card border border-line p-2">
+              <span className="relative block size-14 shrink-0 overflow-hidden rounded-ctl bg-mist">
+                <ImagePlaceholder src={p.images[0]?.src} alt="" label="" sizes="56px" onWhite={p.images[0]?.onWhite} whole />
+              </span>
+              <span className="min-w-0 flex-1">
+                <span className="line-clamp-1 block text-[15px] font-semibold leading-5 text-ink">{p.title}</span>
+                <span className="t-small text-graphite [font-variant-numeric:tabular-nums]">
+                  {many ? "From " : ""}
+                  {formatMoney({ amount: String(lowest(p)), currencyCode: "INR" })}
+                </span>
+              </span>
+              <span className="w-28 shrink-0">
+                {quick ? (
+                  <QuickAdd product={p} variant={quick} openOnAdd={false} label="Add" />
+                ) : (
+                  <Button href={`/products/${p.handle}`} onClick={onNavigate} variant="secondary" size="sm" block>
+                    Choose
+                  </Button>
+                )}
+              </span>
+            </li>
+          );
+        })}
+      </ul>
     </div>
   );
 }
@@ -130,6 +180,7 @@ export function CartDrawer({
                   />
                 ))}
               </ul>
+              {Number(totals.total.amount) < sampleStore.freeDeliveryMin && <Suggestions products={featured} inCart={lines.map((l) => l.handle)} onNavigate={closeCart} />}
 
               {hasMixedFulfilment(lines) && (
                 <InfoCard variant="amber" title="Ready and made-to-order items" className="mt-2">

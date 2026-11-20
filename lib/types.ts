@@ -36,6 +36,8 @@ export type ProductVariant = {
   price: Money;
   compareAt?: Money | null;
   availableForSale: boolean;
+  /** The photo for this variant (for example the pink one). The gallery jumps to it when the variant is picked. */
+  imageSrc?: string;
   /** Only for tracked ready-stock items. */
   quantityAvailable?: number;
   weightG?: number;

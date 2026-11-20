@@ -1,7 +1,5 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { NumberedSteps } from "@/components/content/NumberedSteps";
-import { WhatsAppButton } from "@/components/enquiry/WhatsAppButton";
 import { ProductCard } from "@/components/product/ProductCard";
 import { StatePanel } from "@/components/ui/StatePanel";
 import { CUSTOM_ORDERS_HANDLE, categoryHref, categoryImage } from "@/lib/categories";
@@ -12,14 +10,10 @@ import { ArrowRight } from "@/components/ui/Icons";
 import { Button } from "@/components/ui/Button";
 import { ImagePlaceholder } from "@/components/ui/ImagePlaceholder";
 import { HeroCarousel, type HeroSlide } from "@/components/home/HeroCarousel";
-import { InfoCard } from "@/components/ui/InfoCard";
-import { customSteps } from "@/lib/custom-orders";
-import { sampleStore } from "@/lib/sample-data";
-import { generalEnquiryMessage } from "@/lib/whatsapp";
 
 export const metadata: Metadata = { title: "Yatsar 3D" };
 
-const section = "reveal mt-16 lg:mt-24";
+const section = "mt-16 lg:mt-24";
 
 /**
  * Sections: hero (product banners), categories, featured products, delivery area, custom-print steps.
@@ -35,12 +29,7 @@ export default function HomePage() {
         <Hero />
       </Suspense>
 
-      {/* Shop by category */}
-      <Suspense fallback={<CategoriesSkeleton />}>
-        <Categories />
-      </Suspense>
-
-      {/* Featured */}
+      {/* Featured: products first */}
       <section className={section} aria-labelledby="featured">
         <div className="flex items-baseline justify-between gap-4">
           <h2 id="featured" className="t-h2 text-ink">
@@ -55,31 +44,22 @@ export default function HomePage() {
         </Suspense>
       </section>
 
-      {/* Delivery area */}
-      <section className={section} aria-label="Delivery area">
-        <div className="max-w-[720px]">
-          <InfoCard variant="slate" title="Delivery area">
-            {sampleStore.deliveryAreaText} {sampleStore.freeDeliveryText} Most orders arrive within a few days of dispatch.
-            <Link href="/delivery" className="-mb-3 flex min-h-11 items-center font-medium text-ink underline underline-offset-[3px]">
-              How delivery works
-            </Link>
-          </InfoCard>
-        </div>
-      </section>
+      {/* Shop by category */}
+      <Suspense fallback={<CategoriesSkeleton />}>
+        <Categories />
+      </Suspense>
 
-      {/* Custom printing */}
-      <section className={section} aria-labelledby="custom">
-        <h2 id="custom" className="t-h2 text-ink">
-          How custom printing works
-        </h2>
-        <NumberedSteps steps={customSteps} className="mt-8" />
-        <div className="mt-8 max-w-[420px]">
-          <WhatsAppButton number={sampleStore.whatsappNumber} message={generalEnquiryMessage} />
-          <p className="mt-3 t-small text-graphite">No payment before you approve the quote.</p>
-          <Link href="/custom-print" className="mt-1 inline-flex min-h-11 items-center t-label text-ink underline underline-offset-[3px]">
-            See what we can make
-          </Link>
+      {/* Custom orders: one slim banner */}
+      <section className={`${section} flex flex-col gap-4 rounded-card bg-mist p-6 md:flex-row md:items-center md:justify-between md:p-8`} aria-labelledby="custom">
+        <div>
+          <h2 id="custom" className="t-h3 text-ink">
+            Want something made just for you?
+          </h2>
+          <p className="mt-1 t-body text-graphite">Tell us your idea. We send a price before you pay.</p>
         </div>
+        <Button href="/custom-print" className="md:shrink-0">
+          Get a quote
+        </Button>
       </section>
     </main>
   );
@@ -175,7 +155,8 @@ async function Hero() {
       </section>
     );
   }
-  return <HeroCarousel slides={slides} />;
+  // One product, big. No cycling banners: they hide products behind arrows.
+  return <HeroCarousel slides={slides.slice(0, 1)} />;
 }
 
 function HeroSkeleton() {

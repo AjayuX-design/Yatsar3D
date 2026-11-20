@@ -22,7 +22,7 @@ export type HeroSlide = {
 };
 
 // One soft tint per banner, from the palette.
-const tints = ["bg-mist", "bg-amber-tint", "bg-slate-tint", "bg-moss-tint"];
+const tints = ["bg-mist", "bg-amber-tint", "bg-kiln/[0.08]", "bg-mist"];
 const SECONDS = 5;
 
 const reducedQuery = "(prefers-reduced-motion: reduce)";
@@ -104,7 +104,7 @@ export function HeroCarousel({ slides }: { slides: HeroSlide[] }) {
             inert={i !== index ? true : undefined}
             className={cn("grid w-full shrink-0 snap-center md:grid-cols-2", tints[i % tints.length])}
           >
-            <div className="relative aspect-[5/4] md:order-2 md:aspect-auto md:min-h-[440px] lg:min-h-[480px]">
+            <div className={cn("relative md:order-2 md:aspect-auto md:min-h-[440px] lg:min-h-[480px]", many ? "aspect-[5/4]" : "aspect-[4/3]")}>
               <ImagePlaceholder
                 src={s.image?.src}
                 alt={s.image?.alt ?? s.title}
@@ -115,7 +115,7 @@ export function HeroCarousel({ slides }: { slides: HeroSlide[] }) {
                 whole
               />
             </div>
-            <div className="flex flex-col justify-center px-6 pb-14 pt-6 md:order-1 md:px-10 md:py-12 lg:px-14">
+            <div className={cn("flex flex-col justify-center px-6 pt-6 md:order-1 md:px-10 md:py-12 lg:px-14", many ? "pb-14" : "pb-6")}>
               {/* The discount sits with the text, above the name, so it never floats over the photo. */}
               {!s.from && percentOff(s.price, s.compareAt) !== null && (
                 <span className="mb-4 self-start">

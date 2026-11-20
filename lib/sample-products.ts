@@ -27,6 +27,8 @@ const para = [
   "Placeholder detail. Final product copy comes from the product description in Shopify.",
 ];
 
+const potImages = images("Planter pot", "planter-pot");
+
 export const sampleProducts: Product[] = [
   {
     handle: "fear-not-fridge-magnet",
@@ -166,7 +168,8 @@ export const sampleProducts: Product[] = [
       { name: "Size", values: ["Small", "Medium", "Large"] },
       { name: "Colour", values: ["White", "Grey"], swatches: { White: "#f4f2ee", Grey: "#9a9a98" } },
     ],
-    images: images("Planter pot", "planter-pot"),
+    images: potImages,
+    // Each colour points at its own photo, so the gallery switches when the colour changes.
     variants: [
       v("small-white", "Small", "White", "899", true, { l: 100, w: 100, h: 110 }, 280),
       v("small-grey", "Small", "Grey", "899", true, { l: 100, w: 100, h: 110 }, 280),
@@ -174,7 +177,7 @@ export const sampleProducts: Product[] = [
       v("medium-grey", "Medium", "Grey", "1199", true, { l: 150, w: 150, h: 165 }, 520),
       v("large-white", "Large", "White", "1599", true, { l: 200, w: 200, h: 220 }, 880),
       v("large-grey", "Large", "Grey", "1599", false, { l: 200, w: 200, h: 220 }, 880),
-    ],
+    ].map((x) => ({ ...x, imageSrc: x.selectedOptions.some((o) => o.value === "Grey") ? potImages[1]?.src : potImages[0]?.src })),
   },
   {
     handle: "phone-stand",

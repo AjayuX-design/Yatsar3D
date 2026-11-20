@@ -41,7 +41,7 @@ export function lineFromProduct(product: Product, variant: ProductVariant, quant
     handle: product.handle,
     title: product.title,
     variantTitle: product.options.length ? variant.title : undefined,
-    imageSrc: hero?.src,
+    imageSrc: variant.imageSrc ?? hero?.src,
     imageAlt: hero?.alt ?? product.title,
     price: variant.price,
     compareAt: variant.compareAt,

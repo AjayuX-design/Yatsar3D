@@ -21,7 +21,20 @@ const labels: Record<ProductImage["kind"], string> = {
  * Swipe track (scroll snap) with dots and a counter. 4:5.
  * On desktop, vertical thumbnails sit to the left.
  */
-export function ProductGallery({ images, title, percent, status }: { images: ProductImage[]; title: string; percent?: number | null; status?: Status }) {
+export function ProductGallery({
+  images,
+  title,
+  percent,
+  status,
+  focusSrc,
+}: {
+  images: ProductImage[];
+  title: string;
+  percent?: number | null;
+  status?: Status;
+  /** The picked variant's photo. When it changes, the gallery shows that photo. */
+  focusSrc?: string;
+}) {
   const track = useRef<HTMLDivElement>(null);
   const [index, setIndex] = useState(0);
   const [zoomAt, setZoomAt] = useState<number | null>(null);
@@ -30,6 +43,18 @@ export function ProductGallery({ images, title, percent, status }: { images: Pro
     const el = track.current;
     if (el) el.scrollTo({ left: i * el.clientWidth, behavior: "smooth" });
   };
+
+  // Picking a colour (or any option with its own photo) shows that photo. Not on first load.
+  const lastFocus = useRef(focusSrc);
+  useEffect(() => {
+    if (focusSrc === lastFocus.current) return;
+    lastFocus.current = focusSrc;
+    if (!focusSrc) return;
+    const bare = (u?: string) => u?.split("?")[0];
+    const at = images.findIndex((im) => bare(im.src) === bare(focusSrc));
+    if (at >= 0) goTo(at);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [focusSrc]);
 
   if (!images.length) {
     return (

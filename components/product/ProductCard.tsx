@@ -7,6 +7,8 @@ import { percentOff } from "@/lib/format/discount";
 import { longestSideCm } from "@/lib/format/dimensions";
 import { cn } from "@/lib/cn";
 import { Stars } from "@/components/reviews/Stars";
+import { QuickAdd } from "@/components/product/QuickAdd";
+import { quickVariant } from "@/lib/product/quick";
 import type { Rating } from "@/lib/reviews/types";
 import type { Product } from "@/lib/types";
 
@@ -48,15 +50,19 @@ export function ProductCard({
   const size = longestSideCm(product.dimensions);
   const spec = size ? `${size} cm` : "";
 
+  // One option: add in a tap. Several options or sold out: the card opens the product.
+  const quick = quickVariant(product);
+  const needsChoice = product.variants.length > 1 && !soldOut;
+
   return (
-    <Link
-      href={`/products/${product.handle}`}
+    <div
       className={cn(
-        "group flex h-full flex-col rounded-card outline-offset-4 transition-[transform,box-shadow] duration-200 ease-out active:scale-[0.99]",
+        "group flex h-full flex-col rounded-card transition-[transform,box-shadow] duration-200 ease-out",
         // Every card sits in a soft box that lifts on hover.
         "border border-line bg-surface p-2 shadow-[0_1px_2px_rgba(23,23,23,0.05)] [@media(hover:hover)]:hover:-translate-y-1 [@media(hover:hover)]:hover:shadow-[0_12px_28px_-12px_rgba(23,23,23,0.28)]",
       )}
     >
+    <Link href={`/products/${product.handle}`} className="flex flex-1 flex-col rounded-ctl outline-offset-4 active:scale-[0.99]">
       <div className="relative aspect-square overflow-hidden rounded-ctl bg-mist">
         <div
           className={cn(
@@ -96,17 +102,25 @@ export function ProductCard({
           price={lowest.price}
           compareAt={hasRange ? null : lowest.compareAt}
         />
-        {/* Looks like a button, but the whole card is the link, so it is a span. */}
-        <span
-          aria-hidden="true"
-          className={cn(
-            "mt-3 inline-flex h-10 w-full items-center justify-center rounded-ctl text-[15px] font-semibold transition-colors duration-150",
-            soldOut ? "border border-line bg-mist text-graphite" : "bg-kiln text-surface group-hover:bg-kiln-deep",
-          )}
-        >
-          View product
-        </span>
+        {/* Looks like a button, but the card is the link, so it is a span. Products that can be added in one tap get a real button below. */}
+        {!quick && (
+          <span
+            aria-hidden="true"
+            className={cn(
+              "mt-3 inline-flex h-10 w-full items-center justify-center rounded-ctl whitespace-nowrap px-4 text-[16px] font-semibold leading-6 transition-colors duration-150",
+              soldOut ? "border border-line bg-mist text-graphite" : "bg-kiln text-surface group-hover:bg-kiln-deep",
+            )}
+          >
+            {needsChoice ? "Choose" : "View product"}
+          </span>
+        )}
       </div>
     </Link>
+    {quick && (
+      <div className="px-1 pb-1 pt-3">
+        <QuickAdd product={product} variant={quick} />
+      </div>
+    )}
+    </div>
   );
 }

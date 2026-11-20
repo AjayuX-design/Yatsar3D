@@ -200,7 +200,7 @@ export function ProductDetail({ product, store, rating }: { product: Product; st
       <div className="md:grid md:grid-cols-2 md:items-start md:gap-8 lg:gap-12 xl:gap-16">
         <div>
           <div className="md:sticky md:top-20 lg:top-24">
-            <ProductGallery images={product.images} title={product.title} percent={canBuy && variant ? percentOff(variant.price, variant.compareAt) : null} status={status} />
+            <ProductGallery images={product.images} focusSrc={variant?.imageSrc} title={product.title} percent={canBuy && variant ? percentOff(variant.price, variant.compareAt) : null} status={status} />
           </div>
         </div>
 
