@@ -253,8 +253,6 @@ export function ProductDetail({ product, store, rating }: { product: Product; st
             productionDays={variant?.productionDays ?? product.productionDays}
             deliveryDays={product.deliveryDays}
             defaultDeliveryDays={store.defaultDeliveryDays}
-            deliveryAreaText={store.deliveryAreaText}
-            freeDeliveryText={store.freeDeliveryText}
             whatsappNumber={store.whatsappNumber}
           />
 

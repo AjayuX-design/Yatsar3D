@@ -456,7 +456,6 @@ export default function PreviewPage() {
                 fulfilment="ready_stock"
                 productionDays={{ min: 1, max: 1 }}
                 deliveryDays={{ min: 1, max: 2 }}
-                deliveryAreaText={sampleStore.deliveryAreaText}
                 whatsappNumber={sampleStore.whatsappNumber}
               />
             </Demo>
@@ -465,7 +464,6 @@ export default function PreviewPage() {
                 fulfilment="made_to_order"
                 productionDays={{ min: 2, max: 3 }}
                 deliveryDays={{ min: 1, max: 2 }}
-                deliveryAreaText={sampleStore.deliveryAreaText}
                 whatsappNumber={sampleStore.whatsappNumber}
               />
             </Demo>
@@ -474,7 +472,6 @@ export default function PreviewPage() {
                 fulfilment="made_to_order"
                 productionDays={{ min: 3, max: 5 }}
                 defaultDeliveryDays={sampleStoreDefaults.deliveryDays}
-                deliveryAreaText={sampleStore.deliveryAreaText}
                 whatsappNumber={sampleStore.whatsappNumber}
               />
             </Demo>

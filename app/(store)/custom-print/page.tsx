@@ -4,7 +4,7 @@ import { EnquiryCta } from "@/components/enquiry/EnquiryCta";
 import { WhatsAppButton } from "@/components/enquiry/WhatsAppButton";
 import { Accordion } from "@/components/ui/Accordion";
 import { Breadcrumb } from "@/components/ui/Breadcrumb";
-import { Archive, Briefcase, Lightbulb, PackageCheck, PenLine, ReceiptText, Send, ShieldCheck } from "@/components/ui/Icons";
+import { Archive, Briefcase, Lightbulb, PackageCheck, PenLine, ReceiptText, Send } from "@/components/ui/Icons";
 import { isCustomOrderFormReady } from "@/app/(store)/custom-print/actions";
 import { customFaq, customOptions, nextSteps } from "@/lib/custom-orders";
 import { sampleStore } from "@/lib/sample-data";
@@ -32,15 +32,14 @@ export default async function CustomPrintPage() {
       <header className="mt-2 max-w-[640px]">
         <h1 className="t-h1 text-ink">Custom orders</h1>
         <p className="mt-3 t-body-l text-graphite">Tell us what you need. We send you a price. You pay only if you like it.</p>
-        <p className="mt-2 t-body text-graphite">Drawers made to fit, names and logos, business orders, or an idea of your own. If it is not on the list, choose &quot;Something else&quot;.</p>
       </header>
 
-      <ol aria-label="How it works" className="mt-6 grid gap-3 sm:grid-cols-3">
+      <ol aria-label="How it works" className="mt-6 grid sm:grid-cols-3 sm:gap-3 max-sm:divide-y max-sm:divide-line max-sm:rounded-card max-sm:bg-mist">
         {nextSteps.map((s, i) => {
           const Icon = stepIcons[s.icon];
           return (
-            <li key={s.title} className="flex items-start gap-4 rounded-card bg-mist p-4">
-              <span aria-hidden="true" className="grid size-10 shrink-0 place-items-center rounded-pill bg-kiln/10 text-kiln-deep">
+            <li key={s.title} className="flex items-start gap-4 p-4 sm:rounded-card sm:bg-mist">
+              <span aria-hidden="true" className="hidden size-10 shrink-0 place-items-center rounded-pill bg-kiln/10 text-kiln-deep sm:grid">
                 <Icon className="size-5" />
               </span>
               <div>
@@ -81,11 +80,6 @@ export default async function CustomPrintPage() {
         </div>
 
         <aside className="space-y-6 lg:sticky lg:top-24 lg:col-span-5 lg:self-start" aria-label="Reassurance and help">
-          <p className="flex gap-3 rounded-card bg-mist p-4 t-small text-ink">
-            <ShieldCheck className="mt-0.5 size-5 shrink-0 text-moss" aria-hidden="true" />
-            Nothing is printed or charged until you approve the quote.
-          </p>
-
           <div className="rounded-card border border-line p-4">
             <p className="t-label text-ink">Prefer to chat?</p>
             <p className="mt-1 t-small text-graphite">Message us on WhatsApp instead. {sampleStore.responseHours}</p>

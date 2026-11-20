@@ -84,10 +84,13 @@ async function CollectionContent({
 
   return (
     <>
-      <Breadcrumb items={[{ label: "Home", href: "/" }, { label: collection.title }]} />
-      <header className="mt-2 pb-4">
+      {/* Phones skip the breadcrumb and the intro line, so the first products sit higher. */}
+      <div className="hidden md:block">
+        <Breadcrumb items={[{ label: "Home", href: "/" }, { label: collection.title }]} />
+      </div>
+      <header className="pb-4 pt-4 md:mt-2 md:pt-0">
         <h1 className="t-h1 text-ink">{collection.title}</h1>
-        <p className="mt-2 max-w-[560px] t-body text-graphite">{collection.description}</p>
+        <p className="mt-2 hidden max-w-[560px] t-body text-graphite md:block">{collection.description}</p>
       </header>
 
       <CategoryChips collections={categories} current={collection.handle} />

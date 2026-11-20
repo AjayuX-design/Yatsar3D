@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { Button } from "@/components/ui/Button";
 import { InfoCard } from "@/components/ui/InfoCard";
 import { Sheet } from "@/components/ui/Sheet";
@@ -63,7 +64,7 @@ function Suggestions({ products, inCart, onNavigate }: { products: Product[]; in
   const picks = products
     .filter((p) => !inCart.includes(p.handle) && p.variants.some((v) => v.availableForSale))
     .sort((a, b) => lowest(a) - lowest(b))
-    .slice(0, 2);
+    .slice(0, 1); // one idea, not a list
   if (!picks.length) return null;
   return (
     <div className="mt-4">
@@ -121,6 +122,8 @@ export function CartDrawer({
   const { lines, discount, totals, open, closeCart, updating, removed, error, checkoutUrl: cartCheckoutUrl, setQuantity, remove, undoRemove, applyCode, removeCode } =
     useCart();
   const empty = lines.length === 0;
+  // The code field stays out of the way until asked for, unless a code is already applied.
+  const [codeOpen, setCodeOpen] = useState(false);
 
   return (
     <Sheet open={open} onClose={closeCart} label="Cart" variant="cart">
@@ -188,8 +191,18 @@ export function CartDrawer({
                 </InfoCard>
               )}
 
-              <div className="py-6">
-                <DiscountField discount={discount} onApply={applyCode} onRemove={removeCode} />
+              <div className="py-4">
+                {discount || codeOpen ? (
+                  <DiscountField discount={discount} onApply={applyCode} onRemove={removeCode} />
+                ) : (
+                  <button
+                    type="button"
+                    onClick={() => setCodeOpen(true)}
+                    className="inline-flex min-h-11 items-center t-label text-ink underline underline-offset-[3px]"
+                  >
+                    Have a discount code?
+                  </button>
+                )}
               </div>
             </>
           )}

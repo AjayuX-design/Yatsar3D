@@ -1,24 +1,13 @@
-import { Clock, MapPin, PackageCheck, Truck, WhatsAppIcon } from "@/components/ui/Icons";
+import { Clock, Truck, WhatsAppIcon } from "@/components/ui/Icons";
 import { formatDays } from "@/lib/format/leadtime";
 import { buildWhatsAppUrl, generalEnquiryMessage } from "@/lib/whatsapp";
 import type { Days, Fulfilment } from "@/lib/types";
 
-/** One row: icon in a 36px disc, small label, then a clear value. */
-function Row({
-  icon,
-  label,
-  children,
-}: {
-  icon: React.ReactNode;
-  label: string;
-  children: React.ReactNode;
-}) {
+/** One cell: a small icon, a small label, then a clear value. */
+function Cell({ icon, label, children }: { icon: React.ReactNode; label: string; children: React.ReactNode }) {
   return (
-    <div className="flex items-center gap-4 px-4 py-3">
-      <span
-        aria-hidden="true"
-        className="grid size-9 shrink-0 place-items-center rounded-pill bg-kiln/10 text-kiln-deep"
-      >
+    <div className="flex flex-col gap-2 px-4 py-3">
+      <span aria-hidden="true" className="grid size-8 place-items-center rounded-pill bg-kiln/10 text-kiln-deep">
         {icon}
       </span>
       <div className="min-w-0">
@@ -30,75 +19,57 @@ function Row({
 }
 
 /**
- * Two clocks, always separate: production (or dispatch) time, then delivery
- * time after dispatch. Then the delivery area. No pincode checker.
- * Delivery days fall back to the store default when the product has none.
- * The WhatsApp link is deliberately quiet: small moss text, no button.
+ * Two clocks, always separate and side by side: production (or dispatch) time, then
+ * delivery time after dispatch. Delivery days fall back to the store default when the product has none.
+ * The free-delivery limit and the delivery area live in the top bar, the cart and the delivery page,
+ * so they are not repeated here. One quiet WhatsApp line is the only extra.
  */
 export function FulfilmentBox({
   fulfilment,
   productionDays,
   deliveryDays,
   defaultDeliveryDays,
-  deliveryAreaText,
-  freeDeliveryText,
   whatsappNumber,
 }: {
   fulfilment: Fulfilment;
   productionDays?: Days;
   deliveryDays?: Days;
   defaultDeliveryDays?: Days;
-  deliveryAreaText: string;
-  freeDeliveryText?: string;
   whatsappNumber?: string;
 }) {
   const delivery = deliveryDays ?? defaultDeliveryDays;
   const whatsappUrl = buildWhatsAppUrl(whatsappNumber, generalEnquiryMessage);
+  const cells = [
+    productionDays && (
+      <Cell key="prod" icon={<Clock className="size-[16px]" />} label={fulfilment === "ready_stock" ? "Ships in" : "Production time"}>
+        {formatDays(productionDays)}
+      </Cell>
+    ),
+    delivery && (
+      <Cell key="del" icon={<Truck className="size-[16px]" />} label="Delivery time">
+        {formatDays(delivery)} after dispatch
+      </Cell>
+    ),
+  ].filter(Boolean);
+  if (!cells.length) return null;
   return (
-    <section
-      aria-label="Production and delivery"
-      className="divide-y divide-line overflow-hidden rounded-card border border-line bg-surface"
-    >
-      {productionDays && (
-        <Row
-          icon={<Clock className="size-[18px]" />}
-          label={fulfilment === "ready_stock" ? "Ships in" : "Production time"}
-        >
-          {formatDays(productionDays)}
-        </Row>
-      )}
-      {delivery && (
-        <Row icon={<Truck className="size-[18px]" />} label="Delivery time">
-          {formatDays(delivery)} after dispatch
-        </Row>
-      )}
-      {freeDeliveryText && (
-        <Row icon={<PackageCheck className="size-[18px]" />} label="Delivery charge">
-          {freeDeliveryText.replace(/\.$/, "")}
-        </Row>
-      )}
-      <div className="flex gap-4 bg-mist/60 px-4 py-3">
-        <span
-          aria-hidden="true"
-          className="grid size-9 shrink-0 place-items-center rounded-pill bg-slate-tint text-slate"
-        >
-          <MapPin className="size-[18px]" />
-        </span>
-        <div className="min-w-0 self-center">
-          <p className="t-small text-ink">{deliveryAreaText}</p>
-          {whatsappUrl && (
-            <a
-              href={whatsappUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="-mb-3 mt-1 inline-flex min-h-11 items-center gap-2 t-label text-moss underline-offset-[3px] hover:underline"
-            >
-              <WhatsAppIcon className="size-4" />
-              Other area? Ask on WhatsApp
-            </a>
-          )}
-        </div>
+    <section aria-label="Production and delivery">
+      <div
+        className={`grid divide-x divide-line overflow-hidden rounded-card border border-line bg-surface ${cells.length > 1 ? "grid-cols-2" : "grid-cols-1"}`}
+      >
+        {cells}
       </div>
+      {whatsappUrl && (
+        <a
+          href={whatsappUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="-mb-3 mt-1 inline-flex min-h-11 items-center gap-2 t-label text-moss underline-offset-[3px] hover:underline"
+        >
+          <WhatsAppIcon className="size-4" />
+          Not sure about your area? Ask on WhatsApp
+        </a>
+      )}
     </section>
   );
 }
