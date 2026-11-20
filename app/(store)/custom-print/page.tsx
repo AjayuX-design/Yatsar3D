@@ -34,7 +34,7 @@ export default async function CustomPrintPage() {
         <p className="mt-3 t-body-l text-graphite">Tell us what you need. We send you a price. You pay only if you like it.</p>
       </header>
 
-      <ol aria-label="How it works" className="mt-6 grid sm:grid-cols-3 sm:gap-3 max-sm:divide-y max-sm:divide-line max-sm:rounded-card max-sm:bg-mist">
+      <ol aria-label="How it works" className="mt-8 grid sm:grid-cols-3 sm:gap-3 max-sm:divide-y max-sm:divide-line max-sm:rounded-card max-sm:bg-mist">
         {nextSteps.map((s, i) => {
           const Icon = stepIcons[s.icon];
           return (
@@ -88,7 +88,7 @@ export default async function CustomPrintPage() {
         </aside>
       </div>
 
-      <section className="mt-14 lg:mt-20" aria-labelledby="faq">
+      <section className="mt-12 lg:mt-16" aria-labelledby="faq">
         <h2 id="faq" className="t-h2 text-ink">
           Common questions
         </h2>

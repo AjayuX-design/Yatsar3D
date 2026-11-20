@@ -32,7 +32,7 @@ export default async function PolicyPage(props: PageProps<"/policies/[slug]">) {
           <p className="mt-3 t-small text-graphite">Last updated {POLICY_UPDATED}</p>
         </header>
 
-        <div className="mt-10 space-y-10">
+        <div className="mt-8 space-y-10">
           {policy.sections.map((s) => (
             <section key={s.heading} aria-labelledby={`s-${s.heading.replace(/\W+/g, "-").toLowerCase()}`}>
               <h2 id={`s-${s.heading.replace(/\W+/g, "-").toLowerCase()}`} className="t-h3 text-ink">
@@ -58,7 +58,7 @@ export default async function PolicyPage(props: PageProps<"/policies/[slug]">) {
         </div>
       </article>
 
-      <nav aria-label="Other policies" className="mt-12 max-w-[720px] border-t border-line pt-6">
+      <nav aria-label="Other policies" className="mt-12 max-w-[720px] border-t border-line pt-6 lg:mt-16">
         <h2 className="t-label text-graphite">Other policies</h2>
         <ul className="mt-2 flex flex-wrap gap-x-6">
           {policies

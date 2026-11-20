@@ -79,7 +79,7 @@ function Results({ query, products }: { query: string; products: Product[] }) {
   const found = searchProducts(products, query);
   if (!found.length) {
     return (
-      <div className="mt-10 max-w-[480px]">
+      <div className="mt-8 max-w-[480px]">
         <p className="t-h3 text-ink">No products match “{query}”</p>
         <p className="mt-2 t-small text-graphite">Check the spelling, try a shorter word, or browse everything we make.</p>
         <Button href="/collections/all" className="mt-6">

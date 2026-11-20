@@ -10,6 +10,7 @@ import { EnquiryCta } from "@/components/enquiry/EnquiryCta";
 import { ProductCard } from "@/components/product/ProductCard";
 import { Breadcrumb } from "@/components/ui/Breadcrumb";
 import { Button } from "@/components/ui/Button";
+import { Box } from "@/components/ui/Icons";
 import { activeFilterCount, filterProducts, parseFilters } from "@/lib/product/filter";
 import { isSortKey, sortProducts } from "@/lib/product/sort";
 import { StatePanel } from "@/components/ui/StatePanel";
@@ -80,7 +81,13 @@ async function CollectionContent({
   const count = products.length;
   const filtering = activeFilterCount(filters) > 0;
   const total = collection.products.length;
-  const ratings = await ratingsFor(products.map((p) => p.handle));
+  // An empty category should not dead-end: show what can be ordered now.
+  let popular: typeof products = [];
+  if (total === 0) {
+    const all = await getCollection("all");
+    if (all.state === "ok" && all.data) popular = all.data.products.filter((p) => p.variants.some((v) => v.availableForSale)).slice(0, 4);
+  }
+  const ratings = await ratingsFor([...products, ...popular].map((p) => p.handle));
 
   return (
     <>
@@ -110,14 +117,33 @@ async function CollectionContent({
       {total > 0 && <ActiveFilters filters={filters} sort={sort} path={`/collections/${collection.handle}`} />}
 
       {total === 0 ? (
-        <div className="mx-auto max-w-[480px] py-16 text-center">
-          <p className="t-h3 text-ink">Nothing here yet</p>
-          <p className="mt-2 t-small text-graphite">Products in this category are coming soon.</p>
-          <Button href="/collections/all" className="mt-6">
-            Shop all products
-          </Button>
-          <EnquiryCta variant="link" className="mt-2" number={sampleStore.whatsappNumber} message={generalEnquiryMessage} />
-        </div>
+        <>
+          <div className="mt-6 flex flex-col items-center panel px-6 py-10 text-center lg:py-12">
+            <span aria-hidden="true" className="grid size-12 place-items-center rounded-pill bg-kiln/10 text-kiln-deep">
+              <Box className="size-6" />
+            </span>
+            <h2 className="mt-4 t-h3 text-ink">{collection.title} is coming soon</h2>
+            <p className="mt-2 max-w-[400px] t-body text-graphite">Have a look at what is ready to order, or ask us for something made for you.</p>
+            <div className="mt-6 flex w-full flex-col items-center gap-3 sm:w-auto sm:flex-row">
+              <Button href="/collections/all" block className="sm:w-auto">
+                Shop all products
+              </Button>
+              <EnquiryCta variant="link" number={sampleStore.whatsappNumber} message={generalEnquiryMessage} label="Ask for a custom order" />
+            </div>
+          </div>
+          {popular.length > 0 && (
+            <section aria-labelledby="popular" className="mt-12">
+              <h2 id="popular" className="t-h2 text-ink">
+                Popular right now
+              </h2>
+              <div className="mt-6 grid grid-cols-2 gap-x-3 gap-y-8 md:grid-cols-4 lg:gap-x-6">
+                {popular.map((p) => (
+                  <ProductCard key={p.handle} product={p} rating={ratings[p.handle]} />
+                ))}
+              </div>
+            </section>
+          )}
+        </>
       ) : count === 0 && filtering ? (
         <div className="mx-auto max-w-[480px] py-16 text-center">
           <p className="t-h3 text-ink">No products match these filters</p>
